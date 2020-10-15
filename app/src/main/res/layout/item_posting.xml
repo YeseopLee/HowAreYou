@@ -32,12 +32,51 @@
 
     <TextView
         android:id="@+id/item_textview_number"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:text="#000"
         app:layout_constraintBottom_toTopOf="@+id/item_imageview_content"
         app:layout_constraintStart_toStartOf="@+id/item_imageview_content"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/item_button_favorite"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/ic_favorite_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_textview_favorite" />
+
+    <Button
+        android:id="@+id/item_button_comment"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/ic_chat_black"
+        app:layout_constraintBottom_toBottomOf="@+id/item_textview_comment"
+        app:layout_constraintEnd_toStartOf="@+id/item_textview_comment" />
+
+    <TextView
+        android:id="@+id/item_textview_favorite"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:gravity="center"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="@+id/item_textview_comment"
+        app:layout_constraintEnd_toStartOf="@+id/item_button_comment" />
+
+    <TextView
+        android:id="@+id/item_textview_comment"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
