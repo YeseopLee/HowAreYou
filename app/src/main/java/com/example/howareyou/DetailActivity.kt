@@ -1,27 +1,41 @@
 package com.example.howareyou
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import kotlinx.android.synthetic.main.activity_signin.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.howareyou.Model.CommentDTO
+import kotlinx.android.synthetic.main.activity_detail.*
+import java.util.*
 
-class SigninActivity : AppCompatActivity() {
+
+class DetailActivity : AppCompatActivity() {
+
+    lateinit var detailAdapter: DetailAdapter
+
+    var commentDTOlist : ArrayList<CommentDTO> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_signin)
 
-        signin_button_signin.setOnClickListener {
-            startActivity(Intent(this,MainActivity::class.java))
-        }
+        setContentView(R.layout.activity_detail)
 
-        signin_button_signup.setOnClickListener {
-            startActivity(Intent(this,SignupActivity::class.java))
-        }
+        detail_textview_content.text = intent.getStringExtra("content")
+
+        commentDTOlist.add(CommentDTO(0,0,0,"hi"))
+        commentDTOlist.add(CommentDTO(0,0,0,"hi2"))
+        commentDTOlist.add(CommentDTO(0,0,0,"hi3"))
+
+        detailAdapter = DetailAdapter(this,commentDTOlist)
+        detail_recyclerview.adapter = detailAdapter
+
+        val lm = LinearLayoutManager(this)
+        detail_recyclerview.layoutManager = lm
+        detail_recyclerview.setHasFixedSize(true)
+
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -41,6 +55,4 @@ class SigninActivity : AppCompatActivity() {
         }
         return super.dispatchTouchEvent(ev)
     }
-
-
 }
