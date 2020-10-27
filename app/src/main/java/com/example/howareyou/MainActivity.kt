@@ -3,13 +3,9 @@ package com.example.howareyou
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.howareyou.Model.PostingDTO
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_posting.*
-import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -47,7 +43,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
 
             R.id.action_search -> {
-                var FragmentB = AccountFragment()
+                var FragmentB = MenuFragment()
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.main_framelayout, FragmentB).commit()
 
@@ -55,6 +51,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
 
             R.id.action_account -> {
+                var FragmentC = AccountFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_framelayout, FragmentC).commit()
                 return true
             }
         }
