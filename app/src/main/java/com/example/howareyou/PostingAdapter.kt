@@ -60,7 +60,7 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
             view.posting_textview_content.text = text_content
         }
 
-        view.posting_textview_number.text = "#"+postingDTOfilter[position].number.toString()
+        view.posting_textview_name.text = "#"+postingDTOfilter[position].name.toString()
 
         view.setOnClickListener{
             val intent = Intent(context,DetailActivity::class.java)

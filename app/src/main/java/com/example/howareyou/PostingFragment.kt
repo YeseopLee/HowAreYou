@@ -25,7 +25,7 @@ class PostingFragment : Fragment() {
 
         // 임시 데이터
         var postingDTOlist : ArrayList<PostingDTO> = arrayListOf()
-        postingDTOlist.add(PostingDTO(0,1,"sample","#HowAreYouHowAreYouHowAre" +
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYouHowAreYouHowAre" +
                 "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
                 "AreYouHowAreYouHowAreYou?YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
                 "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
@@ -36,10 +36,17 @@ class PostingFragment : Fragment() {
                 "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
                 "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
                 "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n"))
-        postingDTOlist.add(PostingDTO(0,2,"sample","#HowAreYou??"))
-        postingDTOlist.add(PostingDTO(0,3,"sample","#HowAreYou???"))
-        postingDTOlist.add(PostingDTO(0,4,"sample","#HowAreYou????"))
-        postingDTOlist.add(PostingDTO(0,5,"sample","#HowAreYou?????"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou??"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou???"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou????"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
+        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
+
 
         // 리사이클러뷰 어댑터 연결
         view.posting_recyclerview.adapter = PostingAdapter(activity!!,postingDTOlist)

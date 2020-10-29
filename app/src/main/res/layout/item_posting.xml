@@ -4,42 +4,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="220dp">
-
-    <ImageView
-        android:id="@+id/posting_imageview_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="5dp"
-        android:layout_width="200dp"
-        android:layout_height="0dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/image_sample" />
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/posting_textview_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginRight="5dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="left"
         android:text="#How are you?"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/posting_imageview_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/posting_textview_name" />
 
     <TextView
-        android:id="@+id/posting_textview_number"
+        android:id="@+id/posting_textview_name"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:text="#000"
-        app:layout_constraintBottom_toTopOf="@+id/posting_imageview_content"
-        app:layout_constraintStart_toStartOf="@+id/posting_imageview_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -47,16 +34,16 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:background="@drawable/ic_favorite_border"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/posting_textview_favorite" />
+        app:layout_constraintEnd_toStartOf="@+id/posting_textview_favorite"
+        app:layout_constraintTop_toBottomOf="@+id/posting_textview_content" />
 
     <Button
         android:id="@+id/posting_button_comment"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:background="@drawable/ic_chat_black"
-        app:layout_constraintBottom_toBottomOf="@+id/posting_textview_comment"
-        app:layout_constraintEnd_toStartOf="@+id/posting_textview_comment" />
+        app:layout_constraintEnd_toStartOf="@+id/posting_textview_comment"
+        app:layout_constraintTop_toBottomOf="@+id/posting_textview_content" />
 
     <TextView
         android:id="@+id/posting_textview_favorite"
@@ -64,8 +51,8 @@
         android:layout_height="25dp"
         android:gravity="center"
         android:text="0"
-        app:layout_constraintBottom_toBottomOf="@+id/posting_textview_comment"
-        app:layout_constraintEnd_toStartOf="@+id/posting_button_comment" />
+        app:layout_constraintEnd_toStartOf="@+id/posting_button_comment"
+        app:layout_constraintTop_toBottomOf="@+id/posting_textview_content" />
 
     <TextView
         android:id="@+id/posting_textview_comment"
@@ -74,10 +61,28 @@
         android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/posting_textview_content" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorDivision"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"></LinearLayout>
 
-
+    <TextView
+        android:id="@+id/posting_textview_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="태그"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/posting_textview_content" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
