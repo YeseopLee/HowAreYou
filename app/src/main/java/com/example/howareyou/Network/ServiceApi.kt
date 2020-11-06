@@ -8,7 +8,7 @@ import retrofit2.http.POST
 
 interface ServiceApi {
 
-    @POST("/auth/join")
+    @POST("/auth/local/register")
     fun userJoin(@Body data: SignupDTO?): Call<SignupResponseDTO?>?
 
     @POST("/auth/login")

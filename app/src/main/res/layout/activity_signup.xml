@@ -33,13 +33,30 @@
         android:layout_marginRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_textinputlayout_email">
+        app:layout_constraintTop_toBottomOf="@+id/signup_textinputlayout_username">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signup_edittext_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/signup_textinputlayout_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signup_textinputlayout_email">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signup_edittext_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

@@ -2,21 +2,28 @@ package com.example.howareyou
 
 import android.content.Context
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.JsonReader
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.gagaotalk.Model.SignupDTO
 import com.example.gagaotalk.Model.SignupResponseDTO
 import com.example.gagaotalk.network.RetrofitClient
 import com.example.gagaotalk.network.ServiceApi
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_signup.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
+import java.io.StringReader
+
 
 class SignupActivity : AppCompatActivity() {
 
@@ -28,8 +35,6 @@ class SignupActivity : AppCompatActivity() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        Log.e("service???",service.toString())
-
         signup_button_signup.setOnClickListener {
             attemptJoin()
         }
@@ -40,6 +45,7 @@ class SignupActivity : AppCompatActivity() {
         signup_textinputlayout_email.error = null
         signup_textinputlayout_password.error = null
         val email: String = signup_edittext_email.text.toString()
+        val username: String = signup_edittext_username.text.toString()
         val password: String = signup_edittext_password.text.toString()
         var cancel = false
         var focusView: View? = null
@@ -63,10 +69,18 @@ class SignupActivity : AppCompatActivity() {
             focusView = signup_edittext_email
             cancel = true
         }
+
+        // 닉네임의 유효성 검사
+        if (username.isEmpty()){
+            signup_edittext_username.error = "닉네임을 입력해주세요."
+            focusView = signup_edittext_username
+            cancel = true
+        }
+
         if (cancel) {
             focusView?.requestFocus()
         } else {
-            startJoin(SignupDTO(email, password))
+            startJoin(SignupDTO(email, username, password))
             showProgress(true)
         }
     }
@@ -77,12 +91,30 @@ class SignupActivity : AppCompatActivity() {
                 call: Call<SignupResponseDTO?>?,
                 response: Response<SignupResponseDTO?>
             ) {
-                val result: SignupResponseDTO = response.body()!!
-                val t1 = Toast.makeText(applicationContext,result.message, Toast.LENGTH_SHORT)
-                t1.show()
-                showProgress(false)
-                if (result.code === 200) {
+                Log.e("???","?????")
+                if(response.isSuccessful) {
+                    val result: SignupResponseDTO = response.body()!!
+                    showProgress(false)
                     finish()
+                }
+                else if (response.code() == 400) {
+                    val gson = Gson()
+                    val adapter: TypeAdapter<SignupResponseDTO> = gson.getAdapter<SignupResponseDTO>(
+                        SignupResponseDTO::class.java
+                    )
+                    try {
+                        if (response.errorBody() != null) {
+                            showProgress(false)
+                            val result :SignupResponseDTO = adapter.fromJson(response.errorBody()!!.string())
+                            System.out.println("hihihihi"+result)
+                            val errMessage : String = result.message[0].messages[0].message
+
+                            Toast.makeText(applicationContext, errMessage, Toast.LENGTH_SHORT).show()
+
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
                 }
             }
 

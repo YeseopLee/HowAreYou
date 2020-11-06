@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitClient : AppCompatActivity() {
-    private const val BASE_URL = "192.168.25.5:8001"
+    private const val BASE_URL = "http://211.208.220.233:1337"
     private var retrofit: Retrofit? = null
 
     val client: Retrofit?
