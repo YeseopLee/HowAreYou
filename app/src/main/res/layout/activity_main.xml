@@ -5,13 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/main_imageview_logo"
+    <TextView
+        android:id="@+id/main_textview_logo"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="30dp"
+        android:text="LIFO"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"
+        android:gravity="center_vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/howareyou" />
@@ -24,27 +29,368 @@
         android:background="@color/colorDivision"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_imageview_logo"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/main_textview_logo"></LinearLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_navigationview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/colorWhite"
-        app:menu="@menu/bottom_navigation_main">
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    <FrameLayout
-        android:id="@+id/main_framelayout"
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/main_navigationview"
+        android:background="@color/colorBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_imageview_logo">
+        app:layout_constraintTop_toBottomOf="@+id/main_division_TopBarDivision">
 
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:background="@drawable/round_border"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/main_textview_hot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:text="실시간 인기글"
+                    android:gravity="center_vertical"
+                    app:layout_constraintHeight_default="percent"
+                    app:layout_constraintHeight_percent="0.1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></TextView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/main_conslayout_hot1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintHeight_default="percent"
+                    app:layout_constraintHeight_percent="0.45"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/main_textview_hot">
+
+                    <ImageView
+                        android:id="@+id/main_imageview_user1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_profile"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/main_textview_user1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="임시이름"
+                        app:layout_constraintBottom_toBottomOf="@+id/main_imageview_user1"
+                        app:layout_constraintStart_toEndOf="@id/main_imageview_user1"
+                        app:layout_constraintTop_toTopOf="@id/main_imageview_user1" />
+
+                    <TextView
+                        android:id="@+id/main_textview_date1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:text="임시날짜"
+                        app:layout_constraintBottom_toBottomOf="@+id/main_imageview_user1"
+                        app:layout_constraintTop_toTopOf="@id/main_imageview_user1"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/main_textview_title1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="임시제목"
+                        app:layout_constraintTop_toBottomOf="@id/main_imageview_user1"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/main_textview_content1"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:text="임시본문"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/main_textview_title1"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/main_conslayout_hot2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintHeight_default="percent"
+                    app:layout_constraintHeight_percent="0.45"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/main_conslayout_hot1">
+
+                    <ImageView
+                        android:id="@+id/main_imageview_user2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_profile"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/main_textview_user2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="임시이름"
+                        app:layout_constraintBottom_toBottomOf="@+id/main_imageview_user2"
+                        app:layout_constraintStart_toEndOf="@id/main_imageview_user2"
+                        app:layout_constraintTop_toTopOf="@id/main_imageview_user2" />
+
+                    <TextView
+                        android:id="@+id/main_textview_date2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:text="임시날짜"
+                        app:layout_constraintBottom_toBottomOf="@+id/main_imageview_user2"
+                        app:layout_constraintTop_toTopOf="@id/main_imageview_user2"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/main_textview_title2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="임시제목"
+                        app:layout_constraintTop_toBottomOf="@id/main_imageview_user2"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/main_textview_content2"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:text="임시본문"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/main_textview_title2"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginTop="5dp"
+                android:background="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="대범한 광고"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:background="@drawable/round_border"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/main_textview_board"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="게시판"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/main_textview_freeboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="자유게시판"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/main_textview_board"/>
+
+                <TextView
+                    android:id="@+id/main_textview_freeboard_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text=" 자유게시판 본문"
+                    app:layout_constraintTop_toTopOf="@id/main_textview_freeboard"
+                    app:layout_constraintStart_toEndOf="@id/main_textview_freeboard" />
+
+                <ImageView
+                    android:id="@+id/main_imageview_freeboard_new"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/ic_new"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/main_textview_freeboard"/>
+
+                <TextView
+                    android:id="@+id/main_textview_qabaord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Q&amp;A"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/main_textview_freeboard"/>
+
+                <TextView
+                    android:id="@+id/main_textview_qaboard_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text=" Q&amp;A 본문"
+                    app:layout_constraintTop_toBottomOf="@id/main_textview_freeboard"
+                    app:layout_constraintStart_toEndOf="@id/main_textview_qabaord" />
+
+                <ImageView
+                    android:id="@+id/main_imageview_qaboard_new"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/ic_new"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/main_textview_qabaord"/>
+
+                <TextView
+                    android:id="@+id/main_textview_tipsboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tips"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/main_textview_qabaord"/>
+
+                <TextView
+                    android:id="@+id/main_textview_tipsboard_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text=" Tips 본문"
+                    app:layout_constraintTop_toBottomOf="@id/main_textview_qaboard_content"
+                    app:layout_constraintStart_toEndOf="@id/main_textview_tipsboard" />
+
+                <ImageView
+                    android:id="@+id/main_imageview_tipsboard_new"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/ic_new"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/main_textview_tipsboard"/>
+
+                <TextView
+                    android:id="@+id/main_textview_courseboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="진로게시판"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/main_textview_tipsboard"/>
+
+                <TextView
+                    android:id="@+id/main_textview_courseboard_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text=" 진로게시판 본문"
+                    app:layout_constraintTop_toBottomOf="@id/main_textview_tipsboard_content"
+                    app:layout_constraintStart_toEndOf="@id/main_textview_courseboard" />
+
+                <ImageView
+                    android:id="@+id/main_imageview_courseboard_new"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/ic_new"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/main_textview_courseboard"/>
+
+                <TextView
+                    android:id="@+id/main_textview_studyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="스터디/모임"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/main_textview_courseboard"/>
+
+                <TextView
+                    android:id="@+id/main_textview_studyboard_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text=" 스터디모임 본문"
+                    app:layout_constraintTop_toBottomOf="@id/main_textview_courseboard_content"
+                    app:layout_constraintStart_toEndOf="@id/main_textview_studyboard" />
+
+                <ImageView
+                    android:id="@+id/main_imageview_studyboard_new"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/ic_new"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/main_textview_studyboard"/>
+
+                <TextView
+                    android:id="@+id/main_textview_bestboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BEST 게시글"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/main_textview_studyboard"/>
+
+                <TextView
+                    android:id="@+id/main_textview_bestboard_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text=" BEST 게시글본문"
+                    app:layout_constraintTop_toBottomOf="@id/main_textview_studyboard_content"
+                    app:layout_constraintStart_toEndOf="@id/main_textview_bestboard" />
+
+                <ImageView
+                    android:id="@+id/main_imageview_bestboard_new"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="@drawable/ic_new"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/main_textview_bestboard"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginTop="5dp"
+                android:background="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="대범한 광고"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
