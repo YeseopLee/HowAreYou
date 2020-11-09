@@ -12,6 +12,7 @@
     <color name="colorPrimaryDark">#B63716</color>
     <color name="colorBackground">#E2E2E2</color>
     <color name="colorText">#FFFFFF</color>
+    <color name="colorGray">#868E96</color>
 
 
     <color name="colorGoogleSignIn">#d34836</color>

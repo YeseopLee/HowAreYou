@@ -3,26 +3,23 @@ package com.example.howareyou
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.JsonReader
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.gagaotalk.Model.SignupDTO
-import com.example.gagaotalk.Model.SignupResponseDTO
-import com.example.gagaotalk.network.RetrofitClient
-import com.example.gagaotalk.network.ServiceApi
+import com.example.howareyou.network.RetrofitClient
+import com.example.howareyou.network.ServiceApi
+import com.example.howareyou.Model.SignupDTO
+import com.example.howareyou.Model.SignupResponseDTO
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_signup.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.io.StringReader
 
 
 class SignupActivity : AppCompatActivity() {
@@ -95,6 +92,8 @@ class SignupActivity : AppCompatActivity() {
                 if(response.isSuccessful) {
                     val result: SignupResponseDTO = response.body()!!
                     showProgress(false)
+                    val T1 = Toast.makeText(applicationContext, "환영합니다.",Toast.LENGTH_SHORT)
+                    T1.show()
                     finish()
                 }
                 else if (response.code() == 400) {
@@ -105,8 +104,7 @@ class SignupActivity : AppCompatActivity() {
                     try {
                         if (response.errorBody() != null) {
                             showProgress(false)
-                            val result :SignupResponseDTO = adapter.fromJson(response.errorBody()!!.string())
-                            System.out.println("hihihihi"+result)
+                            val result : SignupResponseDTO = adapter.fromJson(response.errorBody()!!.string())
                             val errMessage : String = result.message[0].messages[0].message
 
                             Toast.makeText(applicationContext, errMessage, Toast.LENGTH_SHORT).show()

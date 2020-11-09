@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.howareyou.Model.PostingDTO
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.synthetic.main.activity_posting.*
-import kotlinx.android.synthetic.main.fragment_posting.view.*
 import java.util.ArrayList
 
 class PostingActivity : AppCompatActivity() {
@@ -15,31 +15,23 @@ class PostingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posting)
 
+//        @SerializedName("Email") val Email: String,
+//        @SerializedName("Board_category") val Board_category: String,
+//        @SerializedName("Header") val Header: String,
+//        @SerializedName("Title") val Title: String,
+//        @SerializedName("Author") val Author: String,
+//        @SerializedName("Content") val Content: String,
+//        @SerializedName("Liked") val Liked: Int,
+//        @SerializedName("Image") val Image: String,
+//        @SerializedName("Views") val Views_: Int,
+//        @SerializedName("Reported") val Reported: Int,
+//        @SerializedName("Is_deleted") val Is_deleted: Int,
+//        @SerializedName("Comments_no") val Comments_no: Int
+
         // 임시 데이터
         var postingDTOlist : ArrayList<PostingDTO> = arrayListOf()
         postingDTOlist.add(
-            PostingDTO(0,"이예섭","sample","#HowAreYouHowAreYouHowAre" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "AreYouHowAreYouHowAreYou?YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n" +
-                    "YouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\nYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHowAreYouHow\n")
-        )
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou??"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou???"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou????"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
-        postingDTOlist.add(PostingDTO(0,"이예섭","sample","#HowAreYou?????"))
+            PostingDTO("xboyss@naver.com","01","01","리액트는 정말 구립니다","Seoplee","리액트 너무 꾸려요옷",5,10,0,false,0,""))
 
         posting_recyclerview.adapter = PostingAdapter(this,postingDTOlist)
         val lm = LinearLayoutManager(this)

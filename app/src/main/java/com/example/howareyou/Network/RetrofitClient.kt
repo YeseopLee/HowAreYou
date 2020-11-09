@@ -1,4 +1,4 @@
-package com.example.gagaotalk.network
+package com.example.howareyou.network
 
 import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Retrofit

@@ -1,11 +1,11 @@
-package com.example.gagaotalk.Model
+package com.example.howareyou.Model
 
 import com.google.gson.annotations.SerializedName
 
 
 data class SigninDTO(
 
-    @SerializedName("userID") val userEmail: String,
-    @SerializedName("userPwd") val userPwd: String
+    @SerializedName("identifier") val identifier: String,
+    @SerializedName("password") val password: String
 
 )

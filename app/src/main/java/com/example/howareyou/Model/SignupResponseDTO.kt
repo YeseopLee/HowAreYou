@@ -1,4 +1,4 @@
-package com.example.gagaotalk.Model
+package com.example.howareyou.Model
 
 import com.google.gson.annotations.SerializedName
 

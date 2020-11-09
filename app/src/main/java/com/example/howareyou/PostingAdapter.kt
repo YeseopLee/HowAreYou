@@ -2,8 +2,6 @@ package com.example.howareyou
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,10 +39,6 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
         return postingDTOfilter.size
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return postingDTOfilter[position].type
-    }
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         var view = holder.itemView
@@ -60,7 +54,11 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
             view.posting_textview_content.text = text_content
         }
 
-        view.posting_textview_name.text = "#"+postingDTOfilter[position].name.toString()
+        view.posting_textview_title.text = postingDTOfilter[position].title
+        view.posting_textview_author.text = postingDTOfilter[position].author
+        //view.posting_textview_date.text = postingDTOfilter[position].created_at
+        view.posting_textview_favorite.text = postingDTOfilter[position].liked.toString()
+        view.posting_textview_comment.text = postingDTOfilter[position].comments_no.toString()
 
         view.setOnClickListener{
             val intent = Intent(context,DetailActivity::class.java)
@@ -87,9 +85,11 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
                 } else {
                     val resultList = ArrayList<PostingDTO>()
                     for (row in postingDTO)
-                        if (row.content.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                        if (row.title.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
                             resultList.add(row)
-                    }
+                    } else if (row.content.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                            resultList.add(row)
+                        }
                     postingDTOfilter = resultList
                 }
                 val filterResults = FilterResults()
