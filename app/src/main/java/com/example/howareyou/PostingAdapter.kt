@@ -2,8 +2,6 @@ package com.example.howareyou
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +15,9 @@ import kotlin.collections.ArrayList
 
 class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),Filterable{
 
-    var friendDTOfilter = ArrayList<PostingDTO>()
-
+    var postingDTOfilter = ArrayList<PostingDTO>()
     init {
-        friendDTOfilter = postingDTO
+        postingDTOfilter = postingDTO
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -39,18 +36,35 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
     inner class CustomViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
     override fun getItemCount(): Int {
-        return friendDTOfilter.size
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return friendDTOfilter[position].type
+        return postingDTOfilter.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         var view = holder.itemView
-        view.item_textview_content.text = friendDTOfilter[position].content
-        view.item_textview_number.text = "#"+friendDTOfilter[position].number.toString()
+        var text_content = postingDTOfilter[position].content
+        var pre_text_content : String
+
+        if(text_content.length >= 100){
+            pre_text_content = text_content.substring(0,100) + "..."
+
+            view.posting_textview_content.text = pre_text_content
+        }
+        else {
+            view.posting_textview_content.text = text_content
+        }
+
+        view.posting_textview_title.text = postingDTOfilter[position].title
+        view.posting_textview_author.text = postingDTOfilter[position].author
+        //view.posting_textview_date.text = postingDTOfilter[position].created_at
+        view.posting_textview_favorite.text = postingDTOfilter[position].liked.toString()
+        view.posting_textview_comment.text = postingDTOfilter[position].comments_no.toString()
+
+        view.setOnClickListener{
+            val intent = Intent(context,DetailActivity::class.java)
+            intent.putExtra("content",text_content)
+            context.startActivity(intent)
+        }
 
 //        view.profile_layout.setOnClickListener {
 //            val iT = Intent(context,ProfileActivity::class.java)
@@ -67,23 +81,25 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charSearch = constraint.toString()
                 if (charSearch.isEmpty()) {
-                    friendDTOfilter = postingDTO
+                    postingDTOfilter = postingDTO
                 } else {
                     val resultList = ArrayList<PostingDTO>()
                     for (row in postingDTO)
-                        if (row.content.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                        if (row.title.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
                             resultList.add(row)
-                    }
-                    friendDTOfilter = resultList
+                    } else if (row.content.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                            resultList.add(row)
+                        }
+                    postingDTOfilter = resultList
                 }
                 val filterResults = FilterResults()
-                filterResults.values = friendDTOfilter
+                filterResults.values = postingDTOfilter
                 return filterResults
             }
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                friendDTOfilter = results?.values as ArrayList<PostingDTO>
+                postingDTOfilter = results?.values as ArrayList<PostingDTO>
                 notifyDataSetChanged()
             }
 
