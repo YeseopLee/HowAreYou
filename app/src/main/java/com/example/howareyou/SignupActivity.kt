@@ -88,7 +88,6 @@ class SignupActivity : AppCompatActivity() {
                 call: Call<SignupResponseDTO?>?,
                 response: Response<SignupResponseDTO?>
             ) {
-                Log.e("???","?????")
                 if(response.isSuccessful) {
                     val result: SignupResponseDTO = response.body()!!
                     showProgress(false)

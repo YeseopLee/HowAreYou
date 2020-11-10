@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginLeft="30dp"
-        android:text="LIFO"
+        android:text="@string/app_name"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="@color/colorWhite"
@@ -102,7 +102,7 @@
                     android:gravity="center_vertical"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:text="실시간 인기글"
+                    android:text="@string/hotboard"
                     app:layout_constraintHeight_default="percent"
                     app:layout_constraintHeight_percent="0.1"
                     app:layout_constraintStart_toStartOf="parent"
@@ -133,7 +133,7 @@
                         android:layout_marginLeft="5dp"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:text="임시이름"
+                        android:text="@string/none"
                         app:layout_constraintBottom_toBottomOf="@+id/main_imageview_user1"
                         app:layout_constraintStart_toEndOf="@id/main_imageview_user1"
                         app:layout_constraintTop_toTopOf="@id/main_imageview_user1" />
@@ -145,7 +145,7 @@
                         android:layout_marginRight="5dp"
                         android:textSize="16sp"
                         android:textColor="#868296"
-                        android:text="임시날짜"
+                        android:text="@string/none"
                         app:layout_constraintBottom_toBottomOf="@+id/main_imageview_user1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/main_imageview_user1" />
@@ -156,7 +156,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:text="임시제목"
+                        android:text="@string/none"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/main_imageview_user1" />
 
@@ -165,7 +165,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:textSize="13sp"
-                        android:text="임시본문"
+                        android:text="@string/none"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -198,7 +198,7 @@
                         android:layout_marginLeft="5dp"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:text="임시이름"
+                        android:text="@string/none"
                         app:layout_constraintBottom_toBottomOf="@+id/main_imageview_user2"
                         app:layout_constraintStart_toEndOf="@id/main_imageview_user2"
                         app:layout_constraintTop_toTopOf="@id/main_imageview_user2" />
@@ -210,7 +210,7 @@
                         android:layout_marginRight="5dp"
                         android:textSize="16sp"
                         android:textColor="#868E96"
-                        android:text="임시날짜"
+                        android:text="@string/none"
                         app:layout_constraintBottom_toBottomOf="@+id/main_imageview_user2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/main_imageview_user2" />
@@ -221,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="16sp"
-                        android:text="임시제목"
+                        android:text="@string/none"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/main_imageview_user2" />
 
@@ -230,7 +230,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:textSize="13sp"
-                        android:text="임시본문"
+                        android:text="@string/none"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -272,7 +272,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textSize="20dp"
-                    android:text="게시판"
+                    android:text="@string/board"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -282,7 +282,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textSize="16sp"
-                    android:text="자유게시판"
+                    android:text="@string/freeboard"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/main_textview_board" />
 
@@ -291,7 +291,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text=" 자유게시판 본문"
+                    android:text="@string/none"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/main_textview_freeboard"
                     app:layout_constraintStart_toEndOf="@id/main_textview_freeboard"
@@ -310,7 +310,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="Q&amp;A"
+                    android:text="@string/qna"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/main_textview_freeboard" />
 
@@ -319,7 +319,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text=" Q&amp;A 본문"
+                    android:text="@string/none"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/main_textview_qabaord"
                     app:layout_constraintStart_toEndOf="@id/main_textview_qabaord"
@@ -337,7 +337,7 @@
                     android:id="@+id/main_textview_tipsboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tips"
+                    android:text="@string/tipsboard"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/main_textview_qabaord" />
@@ -347,7 +347,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text=" Tips 본문"
+                    android:text="@string/none"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/main_textview_tipsboard"
                     app:layout_constraintStart_toEndOf="@id/main_textview_tipsboard"
@@ -366,7 +366,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="진로게시판"
+                    android:text="@string/courseboard"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/main_textview_tipsboard" />
 
@@ -375,7 +375,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text=" 진로게시판 본문"
+                    android:text="@string/none"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/main_textview_courseboard"
                     app:layout_constraintStart_toEndOf="@id/main_textview_courseboard"
@@ -394,7 +394,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="스터디/모임"
+                    android:text="@string/studyboard"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/main_textview_courseboard" />
 
@@ -403,7 +403,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text=" 스터디모임 본문"
+                    android:text="@string/none"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/main_textview_studyboard"
                     app:layout_constraintStart_toEndOf="@id/main_textview_studyboard"
@@ -421,7 +421,7 @@
                     android:id="@+id/main_textview_bestboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BEST 게시글"
+                    android:text="@string/bestboard"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/main_textview_studyboard" />
@@ -431,7 +431,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text=" BEST 게시글본문"
+                    android:text="@string/none"
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/main_textview_bestboard"
                     app:layout_constraintStart_toEndOf="@id/main_textview_bestboard"
@@ -487,7 +487,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="내가 쓴 글"
+                    android:text="@string/mypost"
                     app:layout_constraintBottom_toBottomOf="@id/main_imageview_mypost"
                     app:layout_constraintStart_toEndOf="@id/main_imageview_mypost"
                     app:layout_constraintTop_toTopOf="@id/main_imageview_mypost" />
@@ -514,7 +514,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="댓글 단 글"
+                    android:text="@string/mycomment"
                     app:layout_constraintBottom_toBottomOf="@id/main_imageview_mycomment"
                     app:layout_constraintStart_toEndOf="@id/main_imageview_mycomment"
                     app:layout_constraintTop_toTopOf="@id/main_imageview_mycomment" />
@@ -541,7 +541,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="스크랩"
+                    android:text="@string/scrap"
                     app:layout_constraintBottom_toBottomOf="@id/main_imageview_scrap"
                     app:layout_constraintStart_toEndOf="@id/main_imageview_scrap"
                     app:layout_constraintTop_toTopOf="@id/main_imageview_scrap" />

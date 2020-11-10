@@ -5,18 +5,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".PostingActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/posting_recyclerview"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/posting_textview_boardname"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:text="@string/board"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/basic"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toTopOf="@id/posting_linearlayout_division"
+        app:layout_constraintStart_toEndOf="@+id/posting_button_back"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/posting_button_back"
+        android:layout_width="30dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toTopOf="@id/posting_linearlayout_division"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/posting_textview_boardname" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/posting_button_search"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ic_search_white"
+        app:layout_constraintBottom_toTopOf="@id/posting_linearlayout_division"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/posting_button_post"
@@ -28,43 +57,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/posting_textview_boardname"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:gravity="center_vertical"
-        android:text="null"
-        app:layout_constraintBottom_toBottomOf="@+id/posting_button_back"
-        app:layout_constraintStart_toEndOf="@+id/posting_button_back"
-        app:layout_constraintTop_toTopOf="@+id/posting_button_back" />
-
-    <Button
-        android:id="@+id/posting_button_back"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/ic_arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/posting_button_search"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/ic_search"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/posting_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/posting_linearlayout_division" />
+
+    <ProgressBar
+        android:id="@+id/posting_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/posting_button_post"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/posting_recyclerview" />
+
 
     <LinearLayout
+        android:id="@+id/posting_linearlayout_division"
         android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:orientation="vertical"
+        android:layout_height="0dp"
         android:background="@color/colorDivision"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/posting_button_back"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/posting_textview_boardname"></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

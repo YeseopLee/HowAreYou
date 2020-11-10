@@ -87,7 +87,6 @@ class SigninActivity : AppCompatActivity() {
                     Log.e("로그인 정보 확인 by email",result.toString())
                     moveMainpage()
                 }else {
-                    System.out.println("로그인 실패")
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
                     val adapter: TypeAdapter<SigninResponseDTO> = gson.getAdapter<SigninResponseDTO>(
