@@ -1,6 +1,7 @@
 package com.example.howareyou
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.example.howareyou.LocalDB.App
 import com.example.howareyou.Model.PostingDTO
 import com.example.howareyou.Model.PostingResponseDTO
 import com.example.howareyou.Model.SigninDTO
@@ -62,13 +64,14 @@ class WritingActivity : AppCompatActivity() {
         if (cancel) {
             focusView?.requestFocus()
         } else {
+            System.out.println(App.prefs.myEmail)
             startPost(PostingDTO(
-                "email","category","header",title,"author",content,0,0,0,false,0,""))
+                App.prefs.myEmail,"01","01",title,App.prefs.myName,content,0,0,0,false,0,"nope"))
         }
     }
 
     private fun startPost(data: PostingDTO) {
-        service?.userPost(data)?.enqueue(object : Callback<PostingResponseDTO?> {
+        service?.userPost("Bearer "+App.prefs.myJwt,data)?.enqueue(object : Callback<PostingResponseDTO?> {
             override fun onResponse(
                 call: Call<PostingResponseDTO?>?,
                 response: Response<PostingResponseDTO?>
@@ -77,14 +80,10 @@ class WritingActivity : AppCompatActivity() {
                 if(response.isSuccessful)
                 {
                     val result: PostingResponseDTO = response.body()!!
-                    System.out.println("????11?")
-                    System.out.println(result.toString())
+                    movePostingPage()
+                    finish()
 
                 }else {
-                    System.out.println(response.code().toString())
-                    System.out.println(response.message().toString())
-                    System.out.println(response.body().toString())
-                    System.out.println(response.errorBody().toString())
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
                     val adapter: TypeAdapter<PostingResponseDTO> = gson.getAdapter<PostingResponseDTO>(
@@ -113,6 +112,10 @@ class WritingActivity : AppCompatActivity() {
 
     private fun showProgress(show: Boolean) {
         writing_progressbar.visibility = (if (show) View.VISIBLE else View.GONE)
+    }
+
+    private fun movePostingPage() {
+        startActivity(Intent(applicationContext,PostingActivity::class.java))
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

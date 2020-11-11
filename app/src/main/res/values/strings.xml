@@ -1,18 +1,35 @@
 <resources>
-    <string name="app_name">HowAreYou</string>
+    <string name="app_name">LIFO</string>
 
-    <!-- Bottom Navigation View -->
-    <string name="home">home</string>
-    <string name="search">Search</string>
-    <string name="gallery">Gallery</string>
-    <string name="favorite">Favorite</string>
-    <string name="account">Account</string>
-    <string name="setting">Setting</string>
+    <string name="none">null</string>
 
-    <!-- Board -->
+    <!-- Auth -->
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="signin">로그인</string>
+    <string name="signup">회원가입</string>
+    <string name="author">닉네임</string>
+
+    <!-- BoardName -->
+    <string name="board">게시판</string>
+    <string name="freeboard">자유게시판</string>
+    <string name="tipsboard">Tips</string>
+    <string name="courseboard">진로게시판</string>
     <string name="qna">Q&amp;A</string>
+    <string name="studyboard">스터디/모임</string>
+    <string name="bestboard">BEST 게시글</string>
+    <string name="hotboard">실시간 인기글</string>
 
-    <!-- Hint -->
+    <string name="mypost">내가 쓴 글</string>
+    <string name="mycomment">댓글 단 글</string>
+    <string name="scrap">스크랩</string>
+
+    <!-- Act -->
+    <string name="posting">글쓰기</string>
+    <string name="search">검색</string>
+
+    <!-- Auth -->
+    <string name="title">제목</string>
     <string name="writing_guide">글 내용을 입력해주세요.\n\n주의사항: 질문 글의 경우 댓글이 달릴 때는삭제 할 수 없습니다. 또한, 신고 받는 경우 일정기간 이용이 정지될 수 있습니다.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
