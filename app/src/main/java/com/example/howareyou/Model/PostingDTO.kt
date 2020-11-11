@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PostingDTO(
 
-    @SerializedName("email") val email: String,
+    @SerializedName("email") val email: String?, // email은 private 설정을 하여서 null값으로 넘어올 수 있음.
     @SerializedName("board_category") val board_category: String,
     @SerializedName("header") val header: String,
     @SerializedName("title") val title: String,

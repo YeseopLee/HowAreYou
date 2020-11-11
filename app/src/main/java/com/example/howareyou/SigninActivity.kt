@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.example.howareyou.LocalDB.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.Model.SigninDTO
@@ -25,11 +26,15 @@ class SigninActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
 
+    lateinit var prefs: PreferenceUtil
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
+
+        prefs = PreferenceUtil(applicationContext)
 
         signin_button_signin.setOnClickListener {
             attemptLogin()
@@ -84,7 +89,12 @@ class SigninActivity : AppCompatActivity() {
                 if(response.isSuccessful)
                 {
                     val result: SigninResponseDTO = response.body()!!
-                    Log.e("로그인 정보 확인 by email",result.toString())
+                    //jwt 토큰 저장
+                    App.prefs.myEmail = result.user.email
+                    App.prefs.myJwt = result.jwt
+                    App.prefs.myName = result.user.username
+                    Log.e("로그인 토큰 확인",App.prefs.myEmail+","+App.prefs.myJwt)
+                    Log.e("유저 정보 확인", result.user.username+","+result.user.id)
                     moveMainpage()
                 }else {
                     // 실패시 resopnse.errorbody를 객체화

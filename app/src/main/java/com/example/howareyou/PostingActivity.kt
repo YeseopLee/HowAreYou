@@ -36,8 +36,7 @@ class PostingActivity : AppCompatActivity() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        // 데이터를 받아서 postingDTOlist에 넣으면 됨.
-
+        //어댑터 연결
         posting_recyclerview.adapter = mAdapter
         val lm = LinearLayoutManager(this)
         posting_recyclerview.layoutManager = lm
@@ -50,8 +49,8 @@ class PostingActivity : AppCompatActivity() {
         loadPosting()
 
         posting_button_post.setOnClickListener {
-            System.out.println(postingDTOlist)
             startActivity(Intent(this,WritingActivity::class.java))
+            finish()
         }
 
     }
@@ -66,13 +65,15 @@ class PostingActivity : AppCompatActivity() {
                 if(response.isSuccessful)
                 {
                     val result: LoadPostDTO = response.body()!!
+                    System.out.println(result.toString())
                     val postSize : Int = result.size
                     for (i in 1..postSize){
                         postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
                             result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
                     }
-                    mAdapter.notifyDataSetChanged()
+                    // 리사이클러뷰 데이터 갱신
                     showProgress(false)
+                    mAdapter.notifyDataSetChanged()
 
                 }else {
                     // 실패시 resopnse.errorbody를 객체화
@@ -98,17 +99,6 @@ class PostingActivity : AppCompatActivity() {
             }
         })
 
-    }
-
-    private fun loadRecyclerview() {
-        posting_recyclerview.adapter = PostingAdapter(this,postingDTOlist)
-        val lm = LinearLayoutManager(this)
-        posting_recyclerview.layoutManager = lm
-        posting_recyclerview.setHasFixedSize(true)
-
-        // 리사이클러뷰 역순 출력
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
     }
 
     private fun showProgress(show: Boolean) {

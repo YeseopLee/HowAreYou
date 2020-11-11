@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_home"
-        android:icon="@drawable/ic_home"
-        android:enabled="true"
-        android:title="@string/home"/>
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_account"
-        android:enabled="true"
-        android:title="@string/account"/>
-    <item
-        android:id="@+id/action_account"
-        android:icon="@drawable/ic_setting"
-        android:enabled="true"
-        android:title="@string/setting"/>
+
 </menu>

@@ -5,8 +5,16 @@ import com.google.gson.annotations.SerializedName
 data class SigninResponseDTO(
 
     @SerializedName("jwt") val jwt : String,
+    @SerializedName("user") val user: User,
     @SerializedName("message") val message : List<Message>
 
+)
+
+data class User(
+    val blocked: Any,
+    val email: String,
+    val id: Int,
+    val username: String
 )
 
 

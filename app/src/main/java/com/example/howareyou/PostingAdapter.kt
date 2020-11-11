@@ -42,8 +42,10 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         var view = holder.itemView
-        var text_content = postingDTOfilter[position].content
+        var text_content = postingDTOfilter[position].content+"" // Null Exception을 막기위해 공백의 string 추가
         var pre_text_content : String
+
+        view.posting_textview_content.text = text_content
 
         if(text_content.length >= 100){
             pre_text_content = text_content.substring(0,100) + "..."
@@ -56,9 +58,9 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
 
         view.posting_textview_title.text = postingDTOfilter[position].title
         view.posting_textview_author.text = postingDTOfilter[position].author
-        //view.posting_textview_date.text = postingDTOfilter[position].created_at
         view.posting_textview_favorite.text = postingDTOfilter[position].liked.toString()
         view.posting_textview_comment.text = postingDTOfilter[position].comments_no.toString()
+        view.posting_textview_date.text = postingDTOfilter[position].created_at
 
         view.setOnClickListener{
             val intent = Intent(context,DetailActivity::class.java)
@@ -85,9 +87,9 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO
                 } else {
                     val resultList = ArrayList<PostingDTO>()
                     for (row in postingDTO)
-                        if (row.title.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                        if (row.title!!.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
                             resultList.add(row)
-                    } else if (row.content.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                    } else if (row.content!!.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
                             resultList.add(row)
                         }
                     postingDTOfilter = resultList
