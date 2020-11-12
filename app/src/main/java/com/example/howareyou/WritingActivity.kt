@@ -9,16 +9,14 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.example.howareyou.LocalDB.App
+import com.example.howareyou.Util.App
 import com.example.howareyou.Model.PostingDTO
 import com.example.howareyou.Model.PostingResponseDTO
-import com.example.howareyou.Model.SigninDTO
-import com.example.howareyou.Model.SigninResponseDTO
+import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
-import kotlinx.android.synthetic.main.activity_signin.*
 import kotlinx.android.synthetic.main.activity_writing.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,8 +26,7 @@ import java.io.IOException
 class WritingActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
-
-    lateinit var date: String
+    lateinit var board_category: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +34,14 @@ class WritingActivity : AppCompatActivity() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        writing_button_check.setOnClickListener {
-            attemptPost()
-        }
+
+
+        // button 관리
+        writing_button_check.setOnClickListener (object : OnSingleClickListener(){
+            override fun onSingleClick(view: View) {
+                attemptPost()
+            }
+        })
     }
 
     private fun attemptPost() {
@@ -93,7 +95,6 @@ class WritingActivity : AppCompatActivity() {
                         if (response.errorBody() != null) {
                             showProgress(false)
                             val result : PostingResponseDTO = adapter.fromJson(response.errorBody()!!.string())
-                            System.out.println(result.toString())
 
                         }
                     } catch (e: IOException) {
@@ -104,7 +105,6 @@ class WritingActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostingResponseDTO?>?, t: Throwable) {
-                System.out.println("????sdfsdf?")
                 Log.e("로그인 에러 발생", t.message!!)
             }
         })

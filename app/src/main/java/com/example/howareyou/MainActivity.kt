@@ -17,10 +17,33 @@ class MainActivity : AppCompatActivity() {
 
         /* 버튼 관리 */
         main_textview_freeboard.setOnClickListener {
-            startActivity(Intent(this,PostingActivity::class.java))
+            moveBoards("01")
+        }
+        main_textview_qabaord.setOnClickListener {
+            moveBoards("02")
+        }
+        main_textview_tipsboard.setOnClickListener {
+            moveBoards("03")
+        }
+        main_textview_courseboard.setOnClickListener {
+            moveBoards("04")
+        }
+        main_textview_studyboard.setOnClickListener {
+            moveBoards("05")
+        }
+        main_textview_bestboard.setOnClickListener {
+            moveBoards("06")
         }
 
+        // 내가쓴글, 댓글단글, 스크랩
 
+
+    }
+
+    private fun moveBoards(board_category: String){
+        var IT = Intent(applicationContext,PostingActivity::class.java)
+        IT.putExtra("board_category",board_category)
+        startActivity(IT)
     }
 
 

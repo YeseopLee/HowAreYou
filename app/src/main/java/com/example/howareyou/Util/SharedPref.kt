@@ -1,4 +1,4 @@
-package com.example.howareyou.LocalDB
+package com.example.howareyou.Util
 
 import android.content.Context
 import android.content.SharedPreferences
