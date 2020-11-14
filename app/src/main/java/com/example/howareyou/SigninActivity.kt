@@ -39,6 +39,9 @@ class SigninActivity : AppCompatActivity() {
         // sharedpref 연결
         prefs = PreferenceUtil(applicationContext)
 
+        // 자동로그인 시도
+        moveMainpage()
+
         // button 관리
         signin_button_signin.setOnClickListener(object: OnSingleClickListener(){
             override fun onSingleClick(view: View) {
@@ -143,8 +146,10 @@ class SigninActivity : AppCompatActivity() {
     }
 
     private fun moveMainpage() {
-        startActivity(Intent(this,MainActivity::class.java))
-        finish()
+        if(App.prefs.myJwt != "jwt"){
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
     }
 
     private fun moveSignupPage() {

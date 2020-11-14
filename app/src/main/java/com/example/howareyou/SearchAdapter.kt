@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_posting.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PostingAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),Filterable{
+class SearchAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),Filterable{
 
     var postingDTOfilter = ArrayList<PostingDTO>()
     init {

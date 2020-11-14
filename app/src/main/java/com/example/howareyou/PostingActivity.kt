@@ -22,7 +22,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.util.ArrayList
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PostingActivity : AppCompatActivity() {
 
@@ -48,7 +49,7 @@ class PostingActivity : AppCompatActivity() {
         lm.reverseLayout = true
         lm.stackFromEnd = true
 
-        loadingBranch()
+        loadBranch()
 
         posting_button_post.setOnClickListener {
             startActivity(Intent(this,WritingActivity::class.java))
@@ -57,7 +58,7 @@ class PostingActivity : AppCompatActivity() {
 
     }
 
-    private fun loadingBranch(){
+    private fun loadBranch(){
         when(board_category){
             "01" -> loadFreePosting()
             "02" -> loadQAposting()
@@ -78,7 +79,7 @@ class PostingActivity : AppCompatActivity() {
                 if(response.isSuccessful)
                 {
                     val result: LoadPostDTO = response.body()!!
-                    System.out.println(result.toString())
+
                     val postSize : Int = result.size
                     for (i in 1..postSize){
                         postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
