@@ -9,11 +9,12 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.example.howareyou.LocalDB.App
+import com.example.howareyou.Util.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.Model.SigninDTO
 import com.example.howareyou.Model.SigninResponseDTO
+import com.example.howareyou.Util.OnSingleClickListener
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_signin.*
@@ -32,17 +33,28 @@ class SigninActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signin)
 
+        // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
+        // sharedpref 연결
         prefs = PreferenceUtil(applicationContext)
 
-        signin_button_signin.setOnClickListener {
-            attemptLogin()
-        }
+        // 자동로그인 시도
+        moveMainpage()
 
-        signin_button_signup.setOnClickListener {
-            startActivity(Intent(this,SignupActivity::class.java))
-        }
+        // button 관리
+        signin_button_signin.setOnClickListener(object: OnSingleClickListener(){
+            override fun onSingleClick(view: View) {
+                attemptLogin()
+            }
+        })
+
+        signin_button_signup.setOnClickListener(object: OnSingleClickListener(){
+            override fun onSingleClick(view: View) {
+                moveSignupPage()
+            }
+        })
+
     }
 
     private fun attemptLogin() {
@@ -93,8 +105,9 @@ class SigninActivity : AppCompatActivity() {
                     App.prefs.myEmail = result.user.email
                     App.prefs.myJwt = result.jwt
                     App.prefs.myName = result.user.username
+                    App.prefs.myId = result.user._id
                     Log.e("로그인 토큰 확인",App.prefs.myEmail+","+App.prefs.myJwt)
-                    Log.e("유저 정보 확인", result.user.username+","+result.user.id)
+                    Log.e("유저 정보 확인", result.user.username+","+result.user._id)
                     moveMainpage()
                 }else {
                     // 실패시 resopnse.errorbody를 객체화
@@ -134,8 +147,15 @@ class SigninActivity : AppCompatActivity() {
     }
 
     private fun moveMainpage() {
-        startActivity(Intent(this,MainActivity::class.java))
-        finish()
+        System.out.println(App.prefs.myJwt+"jwt")
+        if(App.prefs.myJwt != ""){
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun moveSignupPage() {
+        startActivity(Intent(this,SignupActivity::class.java))
     }
 
 

@@ -8,16 +8,14 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.example.howareyou.Model.LoadPostDTO
-import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Model.PostingDTO
 import kotlinx.android.synthetic.main.item_posting.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PostingAdapter(val context: Context, val postingDTO : ArrayList<LoadPostItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),Filterable{
+class SearchAdapter(val context: Context, val postingDTO : ArrayList<PostingDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),Filterable{
 
-    var postingDTOfilter : ArrayList<LoadPostItem>
+    var postingDTOfilter = ArrayList<PostingDTO>()
     init {
         postingDTOfilter = postingDTO
     }
@@ -60,9 +58,9 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIt
 
         view.posting_textview_title.text = postingDTOfilter[position].title
         view.posting_textview_author.text = postingDTOfilter[position].author
-        view.posting_textview_date.text = postingDTOfilter[position].createdAt
-        view.posting_textview_comment.text = postingDTOfilter[position].comments?.size.toString()
-        view.posting_textview_favorite.text = postingDTOfilter[position].likeds?.size.toString()
+//        view.posting_textview_favorite.text = postingDTOfilter[position].liked.toString()
+//        view.posting_textview_comment.text = postingDTOfilter[position].comments_no.toString()
+//        view.posting_textview_date.text = postingDTOfilter[position].created_at
 
         view.setOnClickListener{
             val intent = Intent(context,DetailActivity::class.java)
@@ -87,14 +85,14 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIt
                 if (charSearch.isEmpty()) {
                     postingDTOfilter = postingDTO
                 } else {
-                    val resultList : LoadPostDTO? = null
+                    val resultList = ArrayList<PostingDTO>()
                     for (row in postingDTO)
                         if (row.title!!.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
-                            resultList?.add(row)
+                            resultList.add(row)
                     } else if (row.content!!.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
-                            resultList?.add(row)
+                            resultList.add(row)
                         }
-                    postingDTOfilter = resultList!!
+                    postingDTOfilter = resultList
                 }
                 val filterResults = FilterResults()
                 filterResults.values = postingDTOfilter
@@ -103,7 +101,7 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIt
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                postingDTOfilter = results?.values as LoadPostDTO
+                postingDTOfilter = results?.values as ArrayList<PostingDTO>
                 notifyDataSetChanged()
             }
 
