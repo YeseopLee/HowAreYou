@@ -5,39 +5,36 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Adapter
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.howareyou.Model.LoadPostDTO
-import com.example.howareyou.Model.PostingDTO
-import com.example.howareyou.Model.SigninDTO
-import com.example.howareyou.Model.SigninResponseDTO
+import com.example.howareyou.Model.*
+import com.example.howareyou.Util.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.synthetic.main.activity_posting.*
-import kotlinx.android.synthetic.main.activity_signin.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class PostingActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
-    lateinit var board_category: String
-    var postingDTOlist : ArrayList<PostingDTO> = arrayListOf()
+    var postingDTOlist : ArrayList<LoadPostItem> = arrayListOf()
+    //var postingDTOlist : ArrayList<LoadPostDTO> = arrayListOf()
     var mAdapter = PostingAdapter(this,postingDTOlist)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posting)
 
-        board_category = intent.getStringExtra("board_category")
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
+
+        System.out.println("now"+App.prefs.myCode)
 
         //어댑터 연결
         posting_recyclerview.adapter = mAdapter
@@ -52,25 +49,26 @@ class PostingActivity : AppCompatActivity() {
         loadBranch()
 
         posting_button_post.setOnClickListener {
-            startActivity(Intent(this,WritingActivity::class.java))
+            var It = Intent(applicationContext,WritingActivity::class.java)
+            startActivity(It)
             finish()
         }
 
     }
 
     private fun loadBranch(){
-        when(board_category){
-            "01" -> loadFreePosting()
-            "02" -> loadQAposting()
-            "03" -> loadTipsPosting()
-            "04" -> loadCoursePosting()
-            "05" -> loadStudyPosting()
-            "06" -> loadBestPosting()
+        when(App.prefs.myCode){
+            App.prefs.codeFree -> loadFreePosting()
+//            "02" -> loadQAposting()
+//            "03" -> loadTipsPosting()
+//            "04" -> loadCoursePosting()
+//            "05" -> loadStudyPosting()
+//            "06" -> loadBestPosting()
         }
     }
 
     private fun loadFreePosting() {
-        service?.getFreePost()?.enqueue(object : Callback<LoadPostDTO?> {
+        service?.getPost(App.prefs.codeFree)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
                 response: Response<LoadPostDTO?>
@@ -79,15 +77,29 @@ class PostingActivity : AppCompatActivity() {
                 if(response.isSuccessful)
                 {
                     val result: LoadPostDTO = response.body()!!
+                    val postSize: Int = result.size-1
 
-                    val postSize : Int = result.size
-                    for (i in 1..postSize){
-                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
-                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
+                    if(result.size != 0)
+                    {
+                        for (i in 0..postSize){
+
+                            var comment_size: Int = 0
+                            var liked_size: Int = 0
+                            comment_size = result[i].comments!!.size
+                            liked_size = result[i].likeds!!.size
+
+                            postingDTOlist?.add(LoadPostItem(result[i].title,result[i].content,result[i].author,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
+                                ,result[i].header,result[i].user_id,result[i].is_delected))
+
+
+                        }
+
+                        // 리사이클러뷰 데이터 갱신
+                        showProgress(false)
+                        mAdapter?.notifyDataSetChanged()
+                    }else{
+
                     }
-                    // 리사이클러뷰 데이터 갱신
-                    showProgress(false)
-                    mAdapter.notifyDataSetChanged()
 
                 }else {
                     // 실패시 resopnse.errorbody를 객체화
@@ -115,235 +127,235 @@ class PostingActivity : AppCompatActivity() {
 
     }
 
-    private fun loadQAposting() {
-        service?.getQAPost()?.enqueue(object : Callback<LoadPostDTO?> {
-            override fun onResponse(
-                call: Call<LoadPostDTO?>?,
-                response: Response<LoadPostDTO?>
-
-            ) {
-                if(response.isSuccessful)
-                {
-                    val result: LoadPostDTO = response.body()!!
-                    System.out.println(result.toString())
-                    val postSize : Int = result.size
-                    for (i in 1..postSize){
-                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
-                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
-                    }
-                    // 리사이클러뷰 데이터 갱신
-                    showProgress(false)
-                    mAdapter.notifyDataSetChanged()
-
-                }else {
-                    // 실패시 resopnse.errorbody를 객체화
-                    val gson = Gson()
-                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
-                        LoadPostDTO::class.java
-                    )
-                    try {
-                        if (response.errorBody() != null) {
-                            showProgress(false)
-                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
-
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-
-            }
-
-            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                Log.e("onFailure", t.message!!)
-            }
-        })
-
-    }
-
-    private fun loadTipsPosting() {
-        service?.getTipsPost()?.enqueue(object : Callback<LoadPostDTO?> {
-            override fun onResponse(
-                call: Call<LoadPostDTO?>?,
-                response: Response<LoadPostDTO?>
-
-            ) {
-                if(response.isSuccessful)
-                {
-                    val result: LoadPostDTO = response.body()!!
-                    System.out.println(result.toString())
-                    val postSize : Int = result.size
-                    for (i in 1..postSize){
-                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
-                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
-                    }
-                    // 리사이클러뷰 데이터 갱신
-                    showProgress(false)
-                    mAdapter.notifyDataSetChanged()
-
-                }else {
-                    // 실패시 resopnse.errorbody를 객체화
-                    val gson = Gson()
-                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
-                        LoadPostDTO::class.java
-                    )
-                    try {
-                        if (response.errorBody() != null) {
-                            showProgress(false)
-                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
-
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-
-            }
-
-            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                Log.e("onFailure", t.message!!)
-            }
-        })
-
-    }
-
-    private fun loadCoursePosting() {
-        service?.getCoursePost()?.enqueue(object : Callback<LoadPostDTO?> {
-            override fun onResponse(
-                call: Call<LoadPostDTO?>?,
-                response: Response<LoadPostDTO?>
-
-            ) {
-                if(response.isSuccessful)
-                {
-                    val result: LoadPostDTO = response.body()!!
-                    System.out.println(result.toString())
-                    val postSize : Int = result.size
-                    for (i in 1..postSize){
-                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
-                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
-                    }
-                    // 리사이클러뷰 데이터 갱신
-                    showProgress(false)
-                    mAdapter.notifyDataSetChanged()
-
-                }else {
-                    // 실패시 resopnse.errorbody를 객체화
-                    val gson = Gson()
-                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
-                        LoadPostDTO::class.java
-                    )
-                    try {
-                        if (response.errorBody() != null) {
-                            showProgress(false)
-                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
-
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-
-            }
-
-            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                Log.e("onFailure", t.message!!)
-            }
-        })
-
-    }
-
-    private fun loadStudyPosting() {
-        service?.getStudyPost()?.enqueue(object : Callback<LoadPostDTO?> {
-            override fun onResponse(
-                call: Call<LoadPostDTO?>?,
-                response: Response<LoadPostDTO?>
-
-            ) {
-                if(response.isSuccessful)
-                {
-                    val result: LoadPostDTO = response.body()!!
-                    System.out.println(result.toString())
-                    val postSize : Int = result.size
-                    for (i in 1..postSize){
-                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
-                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
-                    }
-                    // 리사이클러뷰 데이터 갱신
-                    showProgress(false)
-                    mAdapter.notifyDataSetChanged()
-
-                }else {
-                    // 실패시 resopnse.errorbody를 객체화
-                    val gson = Gson()
-                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
-                        LoadPostDTO::class.java
-                    )
-                    try {
-                        if (response.errorBody() != null) {
-                            showProgress(false)
-                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
-
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-
-            }
-
-            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                Log.e("onFailure", t.message!!)
-            }
-        })
-
-    }
-
-    private fun loadBestPosting() {
-        service?.getBestPost()?.enqueue(object : Callback<LoadPostDTO?> {
-            override fun onResponse(
-                call: Call<LoadPostDTO?>?,
-                response: Response<LoadPostDTO?>
-
-            ) {
-                if(response.isSuccessful)
-                {
-                    val result: LoadPostDTO = response.body()!!
-                    System.out.println(result.toString())
-                    val postSize : Int = result.size
-                    for (i in 1..postSize){
-                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
-                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
-                    }
-                    // 리사이클러뷰 데이터 갱신
-                    showProgress(false)
-                    mAdapter.notifyDataSetChanged()
-
-                }else {
-                    // 실패시 resopnse.errorbody를 객체화
-                    val gson = Gson()
-                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
-                        LoadPostDTO::class.java
-                    )
-                    try {
-                        if (response.errorBody() != null) {
-                            showProgress(false)
-                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
-
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-
-            }
-
-            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                Log.e("onFailure", t.message!!)
-            }
-        })
-
-    }
+//    private fun loadQAposting() {
+//        service?.getQAPost()?.enqueue(object : Callback<LoadPostDTO?> {
+//            override fun onResponse(
+//                call: Call<LoadPostDTO?>?,
+//                response: Response<LoadPostDTO?>
+//
+//            ) {
+//                if(response.isSuccessful)
+//                {
+//                    val result: LoadPostDTO = response.body()!!
+//                    System.out.println(result.toString())
+//                    val postSize : Int = result.size
+//                    for (i in 1..postSize){
+//                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
+//                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
+//                    }
+//                    // 리사이클러뷰 데이터 갱신
+//                    showProgress(false)
+//                    mAdapter.notifyDataSetChanged()
+//
+//                }else {
+//                    // 실패시 resopnse.errorbody를 객체화
+//                    val gson = Gson()
+//                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
+//                        LoadPostDTO::class.java
+//                    )
+//                    try {
+//                        if (response.errorBody() != null) {
+//                            showProgress(false)
+//                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
+//
+//                        }
+//                    } catch (e: IOException) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+//                Log.e("onFailure", t.message!!)
+//            }
+//        })
+//
+//    }
+//
+//    private fun loadTipsPosting() {
+//        service?.getTipsPost()?.enqueue(object : Callback<LoadPostDTO?> {
+//            override fun onResponse(
+//                call: Call<LoadPostDTO?>?,
+//                response: Response<LoadPostDTO?>
+//
+//            ) {
+//                if(response.isSuccessful)
+//                {
+//                    val result: LoadPostDTO = response.body()!!
+//                    System.out.println(result.toString())
+//                    val postSize : Int = result.size
+//                    for (i in 1..postSize){
+//                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
+//                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
+//                    }
+//                    // 리사이클러뷰 데이터 갱신
+//                    showProgress(false)
+//                    mAdapter.notifyDataSetChanged()
+//
+//                }else {
+//                    // 실패시 resopnse.errorbody를 객체화
+//                    val gson = Gson()
+//                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
+//                        LoadPostDTO::class.java
+//                    )
+//                    try {
+//                        if (response.errorBody() != null) {
+//                            showProgress(false)
+//                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
+//
+//                        }
+//                    } catch (e: IOException) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+//                Log.e("onFailure", t.message!!)
+//            }
+//        })
+//
+//    }
+//
+//    private fun loadCoursePosting() {
+//        service?.getCoursePost()?.enqueue(object : Callback<LoadPostDTO?> {
+//            override fun onResponse(
+//                call: Call<LoadPostDTO?>?,
+//                response: Response<LoadPostDTO?>
+//
+//            ) {
+//                if(response.isSuccessful)
+//                {
+//                    val result: LoadPostDTO = response.body()!!
+//                    System.out.println(result.toString())
+//                    val postSize : Int = result.size
+//                    for (i in 1..postSize){
+//                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
+//                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
+//                    }
+//                    // 리사이클러뷰 데이터 갱신
+//                    showProgress(false)
+//                    mAdapter.notifyDataSetChanged()
+//
+//                }else {
+//                    // 실패시 resopnse.errorbody를 객체화
+//                    val gson = Gson()
+//                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
+//                        LoadPostDTO::class.java
+//                    )
+//                    try {
+//                        if (response.errorBody() != null) {
+//                            showProgress(false)
+//                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
+//
+//                        }
+//                    } catch (e: IOException) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+//                Log.e("onFailure", t.message!!)
+//            }
+//        })
+//
+//    }
+//
+//    private fun loadStudyPosting() {
+//        service?.getStudyPost()?.enqueue(object : Callback<LoadPostDTO?> {
+//            override fun onResponse(
+//                call: Call<LoadPostDTO?>?,
+//                response: Response<LoadPostDTO?>
+//
+//            ) {
+//                if(response.isSuccessful)
+//                {
+//                    val result: LoadPostDTO = response.body()!!
+//                    System.out.println(result.toString())
+//                    val postSize : Int = result.size
+//                    for (i in 1..postSize){
+//                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
+//                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
+//                    }
+//                    // 리사이클러뷰 데이터 갱신
+//                    showProgress(false)
+//                    mAdapter.notifyDataSetChanged()
+//
+//                }else {
+//                    // 실패시 resopnse.errorbody를 객체화
+//                    val gson = Gson()
+//                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
+//                        LoadPostDTO::class.java
+//                    )
+//                    try {
+//                        if (response.errorBody() != null) {
+//                            showProgress(false)
+//                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
+//
+//                        }
+//                    } catch (e: IOException) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+//                Log.e("onFailure", t.message!!)
+//            }
+//        })
+//
+//    }
+//
+//    private fun loadBestPosting() {
+//        service?.getBestPost()?.enqueue(object : Callback<LoadPostDTO?> {
+//            override fun onResponse(
+//                call: Call<LoadPostDTO?>?,
+//                response: Response<LoadPostDTO?>
+//
+//            ) {
+//                if(response.isSuccessful)
+//                {
+//                    val result: LoadPostDTO = response.body()!!
+//                    System.out.println(result.toString())
+//                    val postSize : Int = result.size
+//                    for (i in 1..postSize){
+//                        postingDTOlist.add(PostingDTO(result[i-1].email,result[i-1].board_category,result[i-1].header,result[i-1].title,result[i-1].author,result[i-1].content,
+//                            result[i-1].liked,result[i-1].views,result[i-1].reported,result[i-1].is_deleted,result[i-1].comments_no,result[i-1].created_at))
+//                    }
+//                    // 리사이클러뷰 데이터 갱신
+//                    showProgress(false)
+//                    mAdapter.notifyDataSetChanged()
+//
+//                }else {
+//                    // 실패시 resopnse.errorbody를 객체화
+//                    val gson = Gson()
+//                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
+//                        LoadPostDTO::class.java
+//                    )
+//                    try {
+//                        if (response.errorBody() != null) {
+//                            showProgress(false)
+//                            val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
+//
+//                        }
+//                    } catch (e: IOException) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+//                Log.e("onFailure", t.message!!)
+//            }
+//        })
+//
+//    }
 
     private fun showProgress(show: Boolean) {
         posting_progressbar.visibility = (if (show) View.VISIBLE else View.GONE)

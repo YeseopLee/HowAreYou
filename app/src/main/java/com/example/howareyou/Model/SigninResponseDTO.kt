@@ -13,7 +13,7 @@ data class SigninResponseDTO(
 data class User(
     val blocked: Any,
     val email: String,
-    val id: Int,
+    val _id: String,
     val username: String
 )
 
