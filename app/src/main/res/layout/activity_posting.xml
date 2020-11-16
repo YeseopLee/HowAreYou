@@ -57,6 +57,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/posting_linearlayout_division"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorDivision"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/posting_textview_boardname">
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/posting_recyclerview"
         android:layout_width="0dp"
@@ -79,13 +90,4 @@
         app:layout_constraintTop_toTopOf="@+id/posting_recyclerview" />
 
 
-    <LinearLayout
-        android:id="@+id/posting_linearlayout_division"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/colorDivision"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/posting_textview_boardname"></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

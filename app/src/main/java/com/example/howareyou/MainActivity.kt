@@ -4,16 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import com.example.howareyou.Model.LoadCodeResponseDTO
-import com.example.howareyou.Model.SigninDTO
-import com.example.howareyou.Model.SigninResponseDTO
 import com.example.howareyou.Util.App
-import com.example.howareyou.Util.App.Companion.prefs
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_main.*

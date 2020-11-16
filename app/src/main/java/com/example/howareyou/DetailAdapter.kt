@@ -38,7 +38,7 @@ class DetailAdapter(val context: Context, val commentDTO : ArrayList<CommentDTO>
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         var view = holder.itemView
-        view.comment_textview.text = commentDTO[position].content
+        view.comment_textview_content.text = commentDTO[position].content
 
 
 //        view.profile_layout.setOnClickListener {

@@ -23,41 +23,41 @@
         app:layout_constraintBottom_toTopOf="@id/main_division_TopBarDivision"
         app:srcCompat="@drawable/howareyou" />
 
-    <ImageView
-        android:id="@+id/main_imageview_myaccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/main_button_myaccount"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/main_division_TopBarDivision"
-        android:src="@drawable/ic_account_white"/>
+        android:background="@drawable/ic_account_white"/>
 
-    <ImageView
-        android:id="@+id/main_imageview_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/main_button_notification"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        app:layout_constraintEnd_toStartOf="@id/main_imageview_myaccount"
+        app:layout_constraintEnd_toStartOf="@id/main_button_myaccount"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/main_division_TopBarDivision"
-        android:src="@drawable/ic_notification_white"/>
+        android:background="@drawable/ic_notification_white"/>
 
-    <ImageView
-        android:id="@+id/main_imageview_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/main_button_search"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        app:layout_constraintEnd_toStartOf="@id/main_imageview_notification"
+        app:layout_constraintEnd_toStartOf="@id/main_button_notification"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/main_division_TopBarDivision"
-        android:src="@drawable/ic_search_white"/>
+        android:background="@drawable/ic_search_white"/>
 
 
     <LinearLayout

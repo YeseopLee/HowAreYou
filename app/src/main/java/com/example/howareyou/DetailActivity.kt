@@ -15,7 +15,6 @@ import java.util.*
 class DetailActivity : AppCompatActivity() {
 
     lateinit var detailAdapter: DetailAdapter
-
     var commentDTOlist : ArrayList<CommentDTO> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,18 +22,16 @@ class DetailActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_detail)
 
-        detail_textview_content.text = intent.getStringExtra("content")
-
         commentDTOlist.add(CommentDTO(0,0,0,"hi"))
         commentDTOlist.add(CommentDTO(0,0,0,"hi2"))
         commentDTOlist.add(CommentDTO(0,0,0,"hi3"))
 
         detailAdapter = DetailAdapter(this,commentDTOlist)
-        detail_recyclerview.adapter = detailAdapter
+        detail_recyclerview_comment.adapter = detailAdapter
 
         val lm = LinearLayoutManager(this)
-        detail_recyclerview.layoutManager = lm
-        detail_recyclerview.setHasFixedSize(true)
+        detail_recyclerview_comment.layoutManager = lm
+        detail_recyclerview_comment.setHasFixedSize(true)
 
     }
 

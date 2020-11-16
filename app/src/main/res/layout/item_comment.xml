@@ -6,24 +6,90 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/comment_imageview_profile"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/comment_textview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center_vertical"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/comment_button_favorite"
-        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/comment_textview_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/author"
+        app:layout_constraintBottom_toBottomOf="@+id/comment_imageview_profile"
+        app:layout_constraintStart_toEndOf="@id/comment_imageview_profile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/commnet_imageview_liked"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_favorite_border"
+        app:layout_constraintBottom_toBottomOf="@id/comment_imageview_profile"
+        app:layout_constraintEnd_toStartOf="@+id/comment_textview_liked"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/comment_textview_liked"
+        android:layout_width="25dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:textColor="@color/colorBlack"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="comment_imageview_profile"
+        app:layout_constraintEnd_toStartOf="@+id/comment_button_comment"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/comment_button_favorite"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/ic_favorite_border"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/comment_button_comment"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_chat_black"
+        app:layout_constraintBottom_toBottomOf="comment_imageview_profile"
+        app:layout_constraintEnd_toStartOf="@+id/comment_button_morevert"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/comment_button_morevert"
+        android:layout_marginRight="5dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_more_vert_black"
+        app:layout_constraintBottom_toBottomOf="comment_imageview_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/comment_textview_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/writing_guide"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/comment_imageview_profile" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:text="날짜"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/comment_textview_content"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
