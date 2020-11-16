@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         // sharedpref 연결
         prefs = PreferenceUtil(applicationContext)
 
+        // 게시판별 코드 불러오기
         loadCode()
 
         /* 버튼 관리 */

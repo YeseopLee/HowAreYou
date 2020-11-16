@@ -22,7 +22,7 @@ class DetailActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_detail)
 
-        commentDTOlist.add(CommentDTO(0,0,0,"hi"))
+        commentDTOlist.add(CommentDTO(0,0,0,"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\n\ndddddddddd"))
         commentDTOlist.add(CommentDTO(0,0,0,"hi2"))
         commentDTOlist.add(CommentDTO(0,0,0,"hi3"))
 

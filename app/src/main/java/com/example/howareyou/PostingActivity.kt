@@ -34,7 +34,7 @@ class PostingActivity : AppCompatActivity() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        System.out.println("now"+App.prefs.myCode)
+        System.out.println("now Code"+App.prefs.myCode)
 
         //어댑터 연결
         posting_recyclerview.adapter = mAdapter
@@ -58,16 +58,11 @@ class PostingActivity : AppCompatActivity() {
 
     private fun loadBranch(){
         when(App.prefs.myCode){
-            App.prefs.codeFree -> loadFreePosting()
-//            "02" -> loadQAposting()
-//            "03" -> loadTipsPosting()
-//            "04" -> loadCoursePosting()
-//            "05" -> loadStudyPosting()
-//            "06" -> loadBestPosting()
+            App.prefs.codeFree -> loadPosting()
         }
     }
 
-    private fun loadFreePosting() {
+    private fun loadPosting() {
         service?.getPost(App.prefs.codeFree)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
@@ -83,22 +78,44 @@ class PostingActivity : AppCompatActivity() {
                     {
                         for (i in 0..postSize){
 
-                            var comment_size: Int = 0
-                            var liked_size: Int = 0
-                            comment_size = result[i].comments!!.size
-                            liked_size = result[i].likeds!!.size
-
-                            postingDTOlist?.add(LoadPostItem(result[i].title,result[i].content,result[i].author,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
+                            postingDTOlist?.add(LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
                                 ,result[i].header,result[i].user_id,result[i].is_delected))
 
+//                            "comments": [
+//                            {
+//                                "_id": "5fb0d76ba9e87d59a4da5f35",
+//                                "user_id": "5fae6d3d37087c3b10d4977c",
+//                                "author": "yeseoplee",
+//                                "content": "테스트 댓글",
+//                                "published_at": "2020-11-15T07:23:25.485Z",
+//                                "createdAt": "2020-11-15T07:23:23.401Z",
+//                                "updatedAt": "2020-11-16T10:11:46.977Z",
+//                                "__v": 0,
+//                                "board": "5fb0d452a9e87d59a4da5f33",
+//                                "comment": null,                                           = 댓글
+//                                "id": "5fb0d76ba9e87d59a4da5f35"
+//                            },
+//                            {
+//                                "_id": "5fb24ea22a3144761cced1c0",
+//                                "user_id": "5fae6d3d37087c3b10d4977c",
+//                                "author": "yeseoplee",
+//                                "content": "코멘트의 코멘트 테스트",
+//                                "published_at": "2020-11-16T10:04:20.246Z",
+//                                "createdAt": "2020-11-16T10:04:18.325Z",
+//                                "updatedAt": "2020-11-16T10:13:22.093Z",
+//                                "__v": 0,
+//                                "comment": "5fb0d76ba9e87d59a4da5f35",                    = 대댓글 (댓글의 comment id 참조)
+//                                "board": "5fb0d452a9e87d59a4da5f33",
+//                                "id": "5fb24ea22a3144761cced1c0"
+//                            }
+//                            ]
 
                         }
-
                         // 리사이클러뷰 데이터 갱신
                         showProgress(false)
                         mAdapter?.notifyDataSetChanged()
                     }else{
-
+                        //TODO
                     }
 
                 }else {

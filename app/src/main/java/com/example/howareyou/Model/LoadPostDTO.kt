@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 class LoadPostDTO : ArrayList<LoadPostItem>()
 
 data class LoadPostItem(
+    @SerializedName("id") val id: String,
     @SerializedName("title") val title: String,
     @SerializedName("content") val content: String,
     @SerializedName("author") val author: String,
