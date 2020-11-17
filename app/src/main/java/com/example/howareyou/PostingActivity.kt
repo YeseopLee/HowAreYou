@@ -25,7 +25,6 @@ class PostingActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
     var postingDTOlist : ArrayList<LoadPostItem> = arrayListOf()
-    //var postingDTOlist : ArrayList<LoadPostDTO> = arrayListOf()
     var mAdapter = PostingAdapter(this,postingDTOlist)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +32,6 @@ class PostingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_posting)
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
-
-        System.out.println("now"+App.prefs.myCode)
 
         //어댑터 연결
         posting_recyclerview.adapter = mAdapter
@@ -58,16 +55,11 @@ class PostingActivity : AppCompatActivity() {
 
     private fun loadBranch(){
         when(App.prefs.myCode){
-            App.prefs.codeFree -> loadFreePosting()
-//            "02" -> loadQAposting()
-//            "03" -> loadTipsPosting()
-//            "04" -> loadCoursePosting()
-//            "05" -> loadStudyPosting()
-//            "06" -> loadBestPosting()
+            App.prefs.codeFree -> loadPosting()
         }
     }
 
-    private fun loadFreePosting() {
+    private fun loadPosting() {
         service?.getPost(App.prefs.codeFree)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
@@ -83,22 +75,15 @@ class PostingActivity : AppCompatActivity() {
                     {
                         for (i in 0..postSize){
 
-                            var comment_size: Int = 0
-                            var liked_size: Int = 0
-                            comment_size = result[i].comments!!.size
-                            liked_size = result[i].likeds!!.size
-
-                            postingDTOlist?.add(LoadPostItem(result[i].title,result[i].content,result[i].author,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
+                            postingDTOlist?.add(LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
                                 ,result[i].header,result[i].user_id,result[i].is_delected))
 
-
                         }
-
                         // 리사이클러뷰 데이터 갱신
                         showProgress(false)
                         mAdapter?.notifyDataSetChanged()
                     }else{
-
+                        //TODO
                     }
 
                 }else {

@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 class LoadPostDTO : ArrayList<LoadPostItem>()
 
 data class LoadPostItem(
+    @SerializedName("id") val id: String,
     @SerializedName("title") val title: String,
     @SerializedName("content") val content: String,
     @SerializedName("author") val author: String,
@@ -33,17 +34,12 @@ data class Code(
 )
 
 data class Comment(
-    val __v: Int,
-    val _id: String,
-    val author: String,
-    val board: String,
-    val comment: String,
-    val content: String,
-    val createdAt: String,
     val id: String,
-    val published_at: String,
-    val updatedAt: String,
-    val user_id: String
+    val author: String,
+    val user_id: String,
+    val comment: String?,
+    val content: String,
+    val createdAt: String
 )
 
 data class LImage(

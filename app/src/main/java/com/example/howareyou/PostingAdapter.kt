@@ -66,7 +66,7 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIt
 
         view.setOnClickListener{
             val intent = Intent(context,DetailActivity::class.java)
-            intent.putExtra("content",text_content)
+            intent.putExtra("board_id",postingDTOfilter[position].id)
             context.startActivity(intent)
         }
 

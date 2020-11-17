@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.howareyou.Model.Comment
 import com.example.howareyou.Model.CommentDTO
+import com.example.howareyou.Model.LoadPostItem
 import kotlinx.android.synthetic.main.item_comment.view.*
 import kotlin.collections.ArrayList
 
-class DetailAdapter(val context: Context, val commentDTO : ArrayList<CommentDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -28,17 +30,19 @@ class DetailAdapter(val context: Context, val commentDTO : ArrayList<CommentDTO>
     inner class CustomViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
     override fun getItemCount(): Int {
-        return commentDTO.size
+        return detailDTO.size
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return commentDTO[position].type
-    }
+//    override fun getItemViewType(position: Int): Int {
+//        return commentDTO[position]
+//    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         var view = holder.itemView
-        view.comment_textview.text = commentDTO[position].content
+        view.comment_textview_content.text = detailDTO[position].content
+        view.comment_textview_author.text = detailDTO[position].author
+//        view.comment_textview_liked.text = detailDTO[position].comments!![0].
 
 
 //        view.profile_layout.setOnClickListener {

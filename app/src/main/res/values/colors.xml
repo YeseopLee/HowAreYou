@@ -13,6 +13,7 @@
     <color name="colorBackground">#E2E2E2</color>
     <color name="colorText">#FFFFFF</color>
     <color name="colorGray">#868E96</color>
+    <color name="colorBlack">#000000</color>
 
 
     <color name="colorGoogleSignIn">#d34836</color>
