@@ -25,7 +25,6 @@ class PostingActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
     var postingDTOlist : ArrayList<LoadPostItem> = arrayListOf()
-    //var postingDTOlist : ArrayList<LoadPostDTO> = arrayListOf()
     var mAdapter = PostingAdapter(this,postingDTOlist)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +32,6 @@ class PostingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_posting)
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
-
-        System.out.println("now Code"+App.prefs.myCode)
 
         //어댑터 연결
         posting_recyclerview.adapter = mAdapter
@@ -80,35 +77,6 @@ class PostingActivity : AppCompatActivity() {
 
                             postingDTOlist?.add(LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
                                 ,result[i].header,result[i].user_id,result[i].is_delected))
-
-//                            "comments": [
-//                            {
-//                                "_id": "5fb0d76ba9e87d59a4da5f35",
-//                                "user_id": "5fae6d3d37087c3b10d4977c",
-//                                "author": "yeseoplee",
-//                                "content": "테스트 댓글",
-//                                "published_at": "2020-11-15T07:23:25.485Z",
-//                                "createdAt": "2020-11-15T07:23:23.401Z",
-//                                "updatedAt": "2020-11-16T10:11:46.977Z",
-//                                "__v": 0,
-//                                "board": "5fb0d452a9e87d59a4da5f33",
-//                                "comment": null,                                           = 댓글
-//                                "id": "5fb0d76ba9e87d59a4da5f35"
-//                            },
-//                            {
-//                                "_id": "5fb24ea22a3144761cced1c0",
-//                                "user_id": "5fae6d3d37087c3b10d4977c",
-//                                "author": "yeseoplee",
-//                                "content": "코멘트의 코멘트 테스트",
-//                                "published_at": "2020-11-16T10:04:20.246Z",
-//                                "createdAt": "2020-11-16T10:04:18.325Z",
-//                                "updatedAt": "2020-11-16T10:13:22.093Z",
-//                                "__v": 0,
-//                                "comment": "5fb0d76ba9e87d59a4da5f35",                    = 대댓글 (댓글의 comment id 참조)
-//                                "board": "5fb0d452a9e87d59a4da5f33",
-//                                "id": "5fb24ea22a3144761cced1c0"
-//                            }
-//                            ]
 
                         }
                         // 리사이클러뷰 데이터 갱신

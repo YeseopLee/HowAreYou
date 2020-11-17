@@ -34,17 +34,13 @@ data class Code(
 )
 
 data class Comment(
-    val __v: Int,
-    val _id: String,
+    val id: String,
     val author: String,
+    val user_id: String,
     val board: String,
     val comment: String,
     val content: String,
-    val createdAt: String,
-    val id: String,
-    val published_at: String,
-    val updatedAt: String,
-    val user_id: String
+    val createdAt: String
 )
 
 data class LImage(

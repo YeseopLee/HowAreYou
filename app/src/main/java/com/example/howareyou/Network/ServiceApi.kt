@@ -4,6 +4,7 @@ import com.example.howareyou.Model.*
 import retrofit2.Call
 import retrofit2.http.*
 
+
 interface ServiceApi {
 
     @POST("/auth/local/register")
@@ -21,6 +22,8 @@ interface ServiceApi {
     @GET("/boards?_sort=id:DESC&_limit=10")
     fun getPost(@Query("code") code: String): Call<LoadPostDTO?>?
 
+    @GET("/boards/{board_id}")
+    fun getPostContent(@Path("board_id")board_id : String): Call<LoadPostItem>?
 
     /* dynamic query 예시 */
 //    @GET("/api/users")
