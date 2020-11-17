@@ -29,8 +29,8 @@ import java.util.*
 class DetailActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
-    var detailDTOlist : ArrayList<Comment> = arrayListOf()
-    var mAdapter = DetailAdapter(this,detailDTOlist)
+    var commentDTOList : ArrayList<Comment> = arrayListOf()
+    var mAdapter = DetailAdapter(this,commentDTOList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,10 +66,16 @@ class DetailActivity : AppCompatActivity() {
                     detail_textview_title.text = result.title
                     detail_textview_content.text = result.content
 
-                    // comment, like, image 등을 위해 불러오기
-//                    detailDTOlist.add(
-//                        Comment(result.comments[0])
-//                    )
+
+                    //LoadPostItem의 comments를 adapter에 담는다.
+                    if(result.comments?.size != 0)
+                    {
+                        for ( i in 1..result.comments?.size!!)
+                        {
+                            commentDTOList.add(Comment(result.comments[i-1].id,result.comments[i-1].author,result.comments[i-1].user_id,result.comments[i-1].comment,
+                            result.comments[i-1].content,result.comments[i-1].createdAt))
+                        }
+                    }
 
                     mAdapter?.notifyDataSetChanged()
 

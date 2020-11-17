@@ -37,8 +37,7 @@ data class Comment(
     val id: String,
     val author: String,
     val user_id: String,
-    val board: String,
-    val comment: String,
+    val comment: String?,
     val content: String,
     val createdAt: String
 )
