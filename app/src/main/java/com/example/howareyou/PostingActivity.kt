@@ -33,6 +33,8 @@ class PostingActivity : AppCompatActivity() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
+        System.out.println("테스트용 아이디 체크 ${App.prefs.myId}")
+
         //어댑터 연결
         posting_recyclerview.adapter = mAdapter
         val lm = LinearLayoutManager(this)

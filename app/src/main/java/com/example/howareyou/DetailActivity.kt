@@ -24,11 +24,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class DetailActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
+    var tempDTOList : ArrayList<Comment> = arrayListOf()
     var commentDTOList : ArrayList<Comment> = arrayListOf()
     var mAdapter = DetailAdapter(this,commentDTOList)
 
@@ -67,15 +69,44 @@ class DetailActivity : AppCompatActivity() {
                     detail_textview_content.text = result.content
 
 
-                    //LoadPostItem의 comments를 adapter에 담는다.
+                    //LoadPostItem의 comments를 adapter에 연결할 dtolist에 담는다.
                     if(result.comments?.size != 0)
                     {
                         for ( i in 1..result.comments?.size!!)
                         {
-                            commentDTOList.add(Comment(result.comments[i-1].id,result.comments[i-1].author,result.comments[i-1].user_id,result.comments[i-1].comment,
+                            tempDTOList.add(Comment(result.comments[i-1].id,result.comments[i-1].author,result.comments[i-1].user_id,result.comments[i-1].comment,
                             result.comments[i-1].content,result.comments[i-1].createdAt))
                         }
                     }
+
+                    var tempId: String = ""
+
+                    for ( i in 1..tempDTOList.size)
+                    {
+                        if(tempDTOList[i-1].comment == null)
+                        {
+                            commentDTOList.add(tempDTOList[i-1])
+                            tempId = tempDTOList[i-1].id
+                            for ( j in i..tempDTOList.size)
+                            {
+                                if (tempDTOList[j-1].comment == tempId)
+                                {
+                                    commentDTOList.add(tempDTOList[j-1])
+                                }
+                            }
+                        }
+                    }
+
+                    // scan하면서 commnet가 널인값의 id를 찾고,
+                    // 그 id를 comment로 갖고있는 값들을 찾아.
+
+                    // result.comments.comment 가 null이 아니면,
+                    // count를 세
+                    // null이 아닐때 id값을 가져와서, 이 id값을 가진 comment들의 count를 세고,
+                    // result.comments.id 뒤로 정렬.
+
+                    // 댓 댓 대댓 대댓 댓 인데 -> 댓 대댓 대댓 댓 댓 으로 정렬해야함
+                    // 댓글순으로 먼저 싹 정렬하고, 밀어?
 
                     mAdapter?.notifyDataSetChanged()
 
