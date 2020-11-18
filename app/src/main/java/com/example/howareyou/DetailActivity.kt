@@ -30,7 +30,6 @@ import kotlin.collections.ArrayList
 class DetailActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
-    var tempDTOList : ArrayList<Comment> = arrayListOf()
     var commentDTOList : ArrayList<Comment> = arrayListOf()
     var mAdapter = DetailAdapter(this,commentDTOList)
 
@@ -70,6 +69,10 @@ class DetailActivity : AppCompatActivity() {
 
 
                     //LoadPostItem의 comments를 adapter에 연결할 dtolist에 담는다.
+
+                    // 정렬 이전의 임시 list
+                    var tempDTOList : ArrayList<Comment> = arrayListOf()
+
                     if(result.comments?.size != 0)
                     {
                         for ( i in 1..result.comments?.size!!)
@@ -79,8 +82,8 @@ class DetailActivity : AppCompatActivity() {
                         }
                     }
 
+                    //댓글, 대댓글을 id로 정렬하여 새로운 list에 담는다.
                     var tempId: String = ""
-
                     for ( i in 1..tempDTOList.size)
                     {
                         if(tempDTOList[i-1].comment == null)
@@ -96,17 +99,6 @@ class DetailActivity : AppCompatActivity() {
                             }
                         }
                     }
-
-                    // scan하면서 commnet가 널인값의 id를 찾고,
-                    // 그 id를 comment로 갖고있는 값들을 찾아.
-
-                    // result.comments.comment 가 null이 아니면,
-                    // count를 세
-                    // null이 아닐때 id값을 가져와서, 이 id값을 가진 comment들의 count를 세고,
-                    // result.comments.id 뒤로 정렬.
-
-                    // 댓 댓 대댓 대댓 댓 인데 -> 댓 대댓 대댓 댓 댓 으로 정렬해야함
-                    // 댓글순으로 먼저 싹 정렬하고, 밀어?
 
                     mAdapter?.notifyDataSetChanged()
 
