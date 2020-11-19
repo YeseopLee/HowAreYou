@@ -33,8 +33,6 @@ class PostingActivity : AppCompatActivity() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        System.out.println("테스트용 아이디 체크 ${App.prefs.myId}")
-
         //어댑터 연결
         posting_recyclerview.adapter = mAdapter
         val lm = LinearLayoutManager(this)
@@ -45,24 +43,30 @@ class PostingActivity : AppCompatActivity() {
         lm.reverseLayout = true
         lm.stackFromEnd = true
 
-        loadBranch()
+        loadPosting()
 
+        // buttons
         posting_button_post.setOnClickListener {
             var It = Intent(applicationContext,WritingActivity::class.java)
             startActivity(It)
+        }
+
+        posting_button_back.setOnClickListener {
             finish()
         }
 
     }
 
-    private fun loadBranch(){
-        when(App.prefs.myCode){
-            App.prefs.codeFree -> loadPosting()
-        }
+    override fun onResume() {
+        super.onResume()
+
+        // refresh activity
+        mAdapter?.notifyDataSetChanged()
+
     }
 
     private fun loadPosting() {
-        service?.getPost(App.prefs.codeFree)?.enqueue(object : Callback<LoadPostDTO?> {
+        service?.getPost(App.prefs.myCode)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
                 response: Response<LoadPostDTO?>
