@@ -62,7 +62,7 @@ class WritingActivity : AppCompatActivity() {
         if (cancel) {
             focusView?.requestFocus()
         } else {
-            startPost(PostingDTO(App.prefs.myEmail,App.prefs.myId,App.prefs.myName,title,content,"header","5faf9473ec65907850b3f7b5"))
+            startPost(PostingDTO(App.prefs.myEmail,App.prefs.myId,App.prefs.myName,title,content,"header",App.prefs.myCode))
         }
     }
 
@@ -73,7 +73,6 @@ class WritingActivity : AppCompatActivity() {
                 response: Response<PostingResponseDTO?>
 
             ) {
-                System.out.println("111111")
                 if(response.isSuccessful)
                 {
                     val result: PostingResponseDTO = response.body()!!
@@ -81,7 +80,6 @@ class WritingActivity : AppCompatActivity() {
                     finish()
 
                 }else {
-                    System.out.println("222222")
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
                     val adapter: TypeAdapter<PostingResponseDTO> = gson.getAdapter<PostingResponseDTO>(

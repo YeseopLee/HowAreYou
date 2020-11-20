@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackground"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp"
+    android:layout_marginTop="3dp">
 
-    <data>
-
-        <variable
-            name="commentitem"
-            type="com.example.howareyou.DetailActivity"
-            />
-
-    </data>
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:background="@drawable/ic_recomment"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/recomment_layout_content"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recomment_layout_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="3dp">
+        android:layout_marginLeft="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/comment_imageview_profile"
+            android:id="@+id/recomment_imageview_profile"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/ic_profile"
-            app:layout_constraintBottom_toTopOf="@id/comment_textview_content"
+            app:layout_constraintBottom_toTopOf="@id/recomment_textview_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/comment_textview_author"
+            android:id="@+id/recomment_textview_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -42,55 +49,45 @@
             android:text="@string/author"
             android:textSize="16sp"
             android:textColor="@color/colorBlack"
-            app:layout_constraintBottom_toBottomOf="@+id/comment_imageview_profile"
-            app:layout_constraintStart_toEndOf="@id/comment_imageview_profile"
+            app:layout_constraintBottom_toBottomOf="@+id/recomment_imageview_profile"
+            app:layout_constraintStart_toEndOf="@id/recomment_imageview_profile"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/commnet_imageview_liked"
+            android:id="@+id/recommnet_imageview_liked"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/ic_favorite_border"
-            app:layout_constraintBottom_toTopOf="@id/comment_textview_content"
-            app:layout_constraintEnd_toStartOf="@+id/comment_textview_liked"
+            app:layout_constraintBottom_toTopOf="@id/recomment_textview_content"
+            app:layout_constraintEnd_toStartOf="@+id/recomment_textview_liked"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/comment_textview_liked"
+            android:id="@+id/recomment_textview_liked"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:textColor="@color/colorBlack"
             android:text="0"
-            app:layout_constraintBottom_toTopOf="@id/comment_textview_content"
-            app:layout_constraintEnd_toStartOf="@+id/comment_button_comment"
+            app:layout_constraintBottom_toTopOf="@id/recomment_textview_content"
+            app:layout_constraintEnd_toStartOf="@+id/recomment_button_morevert"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/comment_button_comment"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/ic_chat_black"
-            app:layout_constraintBottom_toTopOf="@id/comment_textview_content"
-            app:layout_constraintEnd_toStartOf="@+id/comment_button_morevert"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/comment_button_morevert"
+            android:id="@+id/recomment_button_morevert"
             android:layout_marginRight="5dp"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/ic_more_vert_black"
-            app:layout_constraintBottom_toTopOf="@id/comment_textview_content"
+            app:layout_constraintBottom_toTopOf="@id/recomment_textview_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/comment_textview_content"
+            android:id="@+id/recomment_textview_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -102,7 +99,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comment_imageview_profile" />
+            app:layout_constraintTop_toBottomOf="@+id/recomment_imageview_profile" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,8 +110,8 @@
             android:textSize="14sp"
             android:textColor="@color/colorGray"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/comment_textview_content"/>
+            app:layout_constraintTop_toBottomOf="@id/recomment_textview_content"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
