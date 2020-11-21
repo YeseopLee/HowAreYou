@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorWhite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".DetailActivity">
@@ -17,11 +17,11 @@
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:gravity="center_vertical"
-            android:text="@string/board"
+            android:text=""
             android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="@font/basic"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
             app:layout_constraintStart_toEndOf="@+id/detail_button_back"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +33,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_arrow_back"
+            android:background="@drawable/ic_arrow_back_white"
             app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -45,7 +45,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_more_vert_white"
+            android:background="@drawable/ic_more_hori"
             app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -78,9 +78,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginTop="1dp"
                     android:background="@color/colorWhite"
                     android:orientation="vertical">
 
@@ -135,7 +135,7 @@
                             android:layout_width="25dp"
                             android:layout_height="0dp"
                             android:layout_marginBottom="5dp"
-                            android:background="@drawable/ic_favorite_border"
+                            android:background="@drawable/ic_thumbsup_white"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/detail_textview_liked"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -146,7 +146,7 @@
                             android:layout_height="0dp"
                             android:layout_marginBottom="5dp"
                             android:gravity="center"
-                            android:textColor="@color/colorBlack"
+                            android:textColor="@color/colorIcon"
                             android:text="0"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/detail_button_comment"
@@ -157,7 +157,7 @@
                             android:layout_width="25dp"
                             android:layout_height="0dp"
                             android:layout_marginBottom="5dp"
-                            android:background="@drawable/ic_chat_black"
+                            android:background="@drawable/ic_comment"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/detail_textview_comment"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -170,7 +170,7 @@
                             android:layout_marginBottom="5dp"
                             android:gravity="center"
                             android:text="0"
-                            android:textColor="@color/colorBlack"
+                            android:textColor="@color/colorIcon"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -195,6 +195,7 @@
             android:id="@+id/detail_constraintlayout_inputcomment"
             android:layout_width="0dp"
             android:layout_height="50dp"
+            android:background="@color/colorPostComment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">

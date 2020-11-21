@@ -52,12 +52,14 @@ class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : 
             var view = holder.itemView
             view.comment_textview_content.text = detailDTO[position].content
             view.comment_textview_author.text = detailDTO[position].author
+            view.comment_textview_date.text = detailDTO[position].createdAt
 
         }
         else{
             var view = holder.itemView
             view.recomment_textview_content.text = detailDTO[position].content
             view.recomment_textview_author.text = detailDTO[position].author
+            view.recomment_textview_date.text = detailDTO[position].createdAt
         }
 
     }

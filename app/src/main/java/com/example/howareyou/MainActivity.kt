@@ -1,13 +1,23 @@
 package com.example.howareyou
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import com.example.howareyou.Model.LoadCodeResponseDTO
+import com.example.howareyou.Model.LoadPostDTO
+import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Util.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,7 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var service: ServiceApi? = null
     lateinit var prefs: PreferenceUtil
@@ -31,41 +41,53 @@ class MainActivity : AppCompatActivity() {
         // sharedpref 연결
         prefs = PreferenceUtil(applicationContext)
 
+        /*Bottom_Navigation*/
+        main_bottom_navigation.setOnNavigationItemSelectedListener(this)
+        //bottomnavigation 텍스트 제거
+        main_bottom_navigation.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_UNLABELED
+        //시작 탭 결정
+        main_bottom_navigation.selectedItemId = R.id.action_home
+
         // 게시판별 코드 불러오기
         loadCode()
 
-        /* 버튼 관리 */
-        main_textview_freeboard.setOnClickListener {
-            App.prefs.myCode = App.prefs.codeFree
-            moveBoards()
-        }
-        main_textview_qabaord.setOnClickListener {
-            App.prefs.myCode = App.prefs.codeQA
-            moveBoards()
-        }
-        main_textview_tipsboard.setOnClickListener {
-            App.prefs.myCode = App.prefs.codeTips
-            moveBoards()
-        }
-        main_textview_courseboard.setOnClickListener {
-            App.prefs.myCode = App.prefs.codeCourse
-            moveBoards()
-        }
-        main_textview_studyboard.setOnClickListener {
-            App.prefs.myCode = App.prefs.codeStudy
-            moveBoards()
-        }
-        main_textview_bestboard.setOnClickListener {
-            App.prefs.myCode = App.prefs.codeBest
-            moveBoards()
-        }
+
+//        /* 버튼 관리 */
+//        main_textview_freeboard.setOnClickListener {
+//            App.prefs.myCode = App.prefs.codeFree
+//            moveBoards()
+//        }
+//        main_textview_qabaord.setOnClickListener {
+//            App.prefs.myCode = App.prefs.codeQA
+//            moveBoards()
+//        }
+//        main_textview_tipsboard.setOnClickListener {
+//            App.prefs.myCode = App.prefs.codeTips
+//            moveBoards()
+//        }
+//        main_textview_courseboard.setOnClickListener {
+//            App.prefs.myCode = App.prefs.codeCourse
+//            moveBoards()
+//        }
+//        main_textview_studyboard.setOnClickListener {
+//            App.prefs.myCode = App.prefs.codeStudy
+//            moveBoards()
+//        }
+//        main_textview_bestboard.setOnClickListener {
+//            App.prefs.myCode = App.prefs.codeBest
+//            moveBoards()
+//        }
 
         // 내가쓴글, 댓글단글, 스크랩
 
 
     }
 
+
     private fun loadCode() {
+        // Board Code initializing
+        App.prefs.myCode = App.prefs.codeFree
+
         service?.getCode()?.enqueue(object : Callback<LoadCodeResponseDTO?> {
             override fun onResponse(
                 call: Call<LoadCodeResponseDTO?>?,
@@ -108,11 +130,66 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+//
+//    private fun moveBoards(){
+//        var IT = Intent(applicationContext,PostingActivity::class.java)
+//        startActivity(IT)
+//    }
 
-    private fun moveBoards(){
-        var IT = Intent(applicationContext,PostingActivity::class.java)
-        startActivity(IT)
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_home -> {
+                var FragmentA = HomeFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_framelayout, FragmentA).commit()
+
+                return true
+            }
+
+            R.id.action_board -> {
+                var FragmentB = BoardFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_framelayout, FragmentB).commit()
+
+                return true
+            }
+
+            R.id.action_search -> {
+                return true
+            }
+
+            R.id.action_notification -> {
+                return true
+            }
+
+            R.id.action_write -> {
+
+                startActivity(Intent(this,WritingActivity::class.java))
+                return true
+            }
+
+        }
+        return false
     }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val focusView = currentFocus
+
+        if (focusView != null) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            val x = ev!!.x.toInt()
+            val y = ev.y.toInt()
+            if (!rect.contains(x, y)) {
+                val imm: InputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                if (imm != null) imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+                focusView.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
 
 
 }

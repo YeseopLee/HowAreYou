@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
@@ -32,12 +34,62 @@ class WritingActivity : AppCompatActivity() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
+        // alert dialog value
+        val builder = AlertDialog.Builder(this).create()
+
         // button 관리
         writing_button_check.setOnClickListener (object : OnSingleClickListener(){
             override fun onSingleClick(view: View) {
                 attemptPost()
             }
         })
+
+        writing_button_menu.setOnClickListener (object : OnSingleClickListener(){
+            override fun onSingleClick(view: View) {
+
+                val dialogView = layoutInflater.inflate(R.layout.activity_board_menu, null)
+                val Btnfree = dialogView.findViewById<Button>(R.id.boardmenu_button_free)
+                val Btnqa = dialogView.findViewById<Button>(R.id.boardmenu_button_qa)
+                val Btntips = dialogView.findViewById<Button>(R.id.boardmenu_button_tips)
+                val Btnstudy = dialogView.findViewById<Button>(R.id.boardmenu_button_study)
+
+                builder.setView(dialogView)
+                builder.show()
+
+                Btnfree.setOnClickListener {
+                    App.prefs.myCode = App.prefs.codeFree
+                    writing_textview_writing.text = "자유게시판"
+                    builder.dismiss()
+                }
+                Btnqa.setOnClickListener {
+                    App.prefs.myCode = App.prefs.codeQA
+                    writing_textview_writing.text = "Q&A"
+                    builder.dismiss()
+                }
+                Btntips.setOnClickListener {
+                    App.prefs.myCode = App.prefs.codeTips
+                    writing_textview_writing.text = "Tips"
+                    builder.dismiss()
+                }
+                Btnstudy.setOnClickListener {
+                    App.prefs.myCode = App.prefs.codeStudy
+                    writing_textview_writing.text = "스터디/모임"
+                    builder.dismiss()
+                }
+            }
+        })
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        when(App.prefs.myCode){
+            App.prefs.codeFree -> writing_textview_writing.text = "자유게시판"
+            App.prefs.codeQA -> writing_textview_writing.text = "Q&A"
+            App.prefs.codeTips -> writing_textview_writing.text = "Tips"
+            App.prefs.codeStudy -> writing_textview_writing.text = "스터디/모임"
+        }
     }
 
     private fun attemptPost() {
@@ -76,7 +128,7 @@ class WritingActivity : AppCompatActivity() {
                 if(response.isSuccessful)
                 {
                     val result: PostingResponseDTO = response.body()!!
-                    movePostingPage()
+//                    movePostingPage()
                     finish()
 
                 }else {
@@ -105,13 +157,29 @@ class WritingActivity : AppCompatActivity() {
         })
     }
 
+    private fun showDiaglog(){
+        val builder = AlertDialog.Builder(this)
+
+        val dialogView = layoutInflater.inflate(R.layout.activity_board_menu, null)
+
+        val Btnfree = dialogView.findViewById<Button>(R.id.boardmenu_button_free)
+        val Btnqa = dialogView.findViewById<Button>(R.id.boardmenu_button_qa)
+        val Btntips = dialogView.findViewById<Button>(R.id.boardmenu_button_tips)
+        val Btnstudy = dialogView.findViewById<Button>(R.id.boardmenu_button_study)
+    }
+
     private fun showProgress(show: Boolean) {
         writing_progressbar.visibility = (if (show) View.VISIBLE else View.GONE)
     }
 
     private fun movePostingPage() {
-        var It = Intent(applicationContext,PostingActivity::class.java)
-        startActivity(It)
+
+        var Fragment = PostingFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_framelayout, Fragment).commit()
+
+//        var It = Intent(applicationContext,PostingActivity::class.java)
+//        startActivity(It)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

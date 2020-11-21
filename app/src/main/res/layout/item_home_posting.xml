@@ -4,16 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="200dp"
     android:background="@color/colorWhite"
     android:layout_marginTop="3dp"
     android:layout_marginLeft="3dp"
     android:layout_marginRight="3dp">
 
     <TextView
-        android:id="@+id/posting_textview_content"
+        android:id="@+id/homeposting_textview_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:gravity="left"
@@ -21,40 +22,50 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/posting_textview_title" />
+        app:layout_constraintTop_toBottomOf="@+id/homeposting_textview_title" />
 
     <TextView
-        android:id="@+id/posting_textview_title"
+        android:id="@+id/homeposting_textview_title"
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:textSize="16sp"
-        android:text="제목"
+        android:text="@string/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/homeposting_textview_boardname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:text="@string/board"
+        app:layout_constraintBottom_toBottomOf="@+id/homeposting_textview_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/homeposting_textview_title" />
+
     <Button
-        android:id="@+id/posting_button_favorite"
+        android:id="@+id/homeposting_button_favorite"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/ic_thumbsup_white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/posting_textview_favorite" />
+        app:layout_constraintEnd_toStartOf="@+id/homeposting_textview_favorite" />
 
     <Button
-        android:id="@+id/posting_button_comment"
+        android:id="@+id/homeposting_button_comment"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/ic_comment"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/posting_textview_comment" />
+        app:layout_constraintEnd_toStartOf="@+id/homeposting_textview_comment" />
 
     <TextView
-        android:id="@+id/posting_textview_favorite"
+        android:id="@+id/homeposting_textview_favorite"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginBottom="5dp"
@@ -63,42 +74,43 @@
         android:textSize="11sp"
         android:textColor="@color/colorIcon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/posting_button_comment" />
+        app:layout_constraintEnd_toStartOf="@+id/homeposting_button_comment" />
 
     <TextView
-        android:id="@+id/posting_textview_comment"
+        android:id="@+id/homeposting_textview_comment"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:gravity="center"
         android:text="0"
         android:textSize="11sp"
+
         android:textColor="@color/colorIcon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/posting_textview_date"
+        android:id="@+id/homeposting_textview_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="5dp"
-        android:text="날짜 |"
+        android:layout_marginBottom="10dp"
+        android:text="@string/date"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/posting_textview_author"
+        android:id="@+id/homeposting_textview_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
-        android:text="쓰니"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/author"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/posting_textview_date"/>
+        app:layout_constraintBottom_toTopOf="@id/homeposting_linearlayout_division"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -108,6 +120,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/homeposting_linearlayout_division"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical"
+        android:background="@color/colorDivision"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/homeposting_button_favorite"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

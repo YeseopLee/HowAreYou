@@ -23,7 +23,6 @@ import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.activity_writing.*
 import kotlinx.android.synthetic.main.item_comment.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -72,13 +71,6 @@ class DetailActivity : AppCompatActivity() {
             true // Attach with root layout or not
         )
 
-        // Find the text view from custom layout
-        val btn = view.findViewById<Button>(R.id.comment_button_comment)
-
-        btn.setOnClickListener {
-            System.out.println("클릭")
-            detail_edittext_comment.hint = " 대댓글을 입력해주세요."
-        }
 
     }
 

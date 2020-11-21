@@ -7,12 +7,15 @@
     <color name="colorNavIcon">#1d1d1d</color>
 
     <!-- PRIMARY COLOR -->
-    <color name="colorPrimary">#EF6841</color>
+    <color name="colorPrimary">#FF543A</color>
     <color name="colorPrimaryLight">#FF996E</color>
     <color name="colorPrimaryDark">#B63716</color>
     <color name="colorBackground">#E2E2E2</color>
+    <color name="colorPostComment">#F5A19E</color>
+    <color name="colorRecomment">#F3F3F3</color>
     <color name="colorText">#FFFFFF</color>
     <color name="colorGray">#868E96</color>
+    <color name="colorIcon">#707070</color>
     <color name="colorBlack">#000000</color>
 
 

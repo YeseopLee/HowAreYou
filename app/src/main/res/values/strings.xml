@@ -28,6 +28,16 @@
     <string name="posting">글쓰기</string>
     <string name="search">검색</string>
     <string name="post">등록</string>
+    <string name="more">더보기</string>
+
+    <!-- Bottom Navigation -->
+    <string name="b_home">Home</string>
+    <string name="b_board">Board</string>
+    <string name="b_search">Search</string>
+    <string name="b_noti">Noti</string>
+    <string name="b_account">Account</string>
+    <string name="b_write">Write</string>
+
 
     <!-- inform -->
     <string name="date">날짜</string>

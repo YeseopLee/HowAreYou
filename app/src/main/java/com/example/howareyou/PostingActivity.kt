@@ -1,6 +1,5 @@
 package com.example.howareyou
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,13 +11,11 @@ import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
-import com.google.gson.annotations.SerializedName
-import kotlinx.android.synthetic.main.activity_posting.*
+import kotlinx.android.synthetic.main.fragment_posting.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.util.*
 import kotlin.collections.ArrayList
 
 class PostingActivity : AppCompatActivity() {
@@ -29,7 +26,7 @@ class PostingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_posting)
+        setContentView(R.layout.fragment_posting)
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
@@ -45,15 +42,9 @@ class PostingActivity : AppCompatActivity() {
 
         loadPosting()
 
-        // buttons
-        posting_button_post.setOnClickListener {
-            var It = Intent(applicationContext,WritingActivity::class.java)
-            startActivity(It)
-        }
-
-        posting_button_back.setOnClickListener {
-            finish()
-        }
+//        posting_button_back.setOnClickListener {
+//            finish()
+//        }
 
     }
 
@@ -81,7 +72,7 @@ class PostingActivity : AppCompatActivity() {
                     {
                         for (i in 0..postSize){
 
-                            postingDTOlist?.add(LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
+                            postingDTOlist?.add(LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].code,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
                                 ,result[i].header,result[i].user_id,result[i].is_delected))
 
                         }
