@@ -23,6 +23,7 @@ import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.item_comment.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,16 +85,12 @@ class DetailActivity : AppCompatActivity() {
 
                 if(response.isSuccessful)
                 {
+                    showProgress(false);
                     val result: LoadPostItem = response.body()!!
-
-//                        showProgress(false)
-
                     detail_textview_title.text = result.title
                     detail_textview_content.text = result.content
 
-
                     //LoadPostItem의 comments를 adapter에 연결할 dtolist에 담는다.
-
                     // 정렬 이전의 임시 list
                     var tempDTOList : ArrayList<Comment> = arrayListOf()
 
@@ -123,7 +120,6 @@ class DetailActivity : AppCompatActivity() {
                             }
                         }
                     }
-
                     mAdapter?.notifyDataSetChanged()
 
                 }else {
@@ -134,7 +130,6 @@ class DetailActivity : AppCompatActivity() {
                     )
                     try {
                         if (response.errorBody() != null) {
-//                            showProgress(false)
                             val result : LoadPostItem = adapter.fromJson(response.errorBody()!!.string())
 
                         }
@@ -147,6 +142,7 @@ class DetailActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<LoadPostItem?>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
+                showProgress(false);
             }
         })
 
@@ -185,7 +181,6 @@ class DetailActivity : AppCompatActivity() {
                 if(response.isSuccessful)
                 {
                     val result: PostCommentDTO = response.body()!!
-
                     mAdapter?.notifyDataSetChanged()
 
                 }else {
@@ -196,7 +191,6 @@ class DetailActivity : AppCompatActivity() {
                     )
                     try {
                         if (response.errorBody() != null) {
-//                            showProgress(false)
                             val result : PostCommentDTO = adapter.fromJson(response.errorBody()!!.string())
 
                         }
@@ -230,5 +224,9 @@ class DetailActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    private fun showProgress(show: Boolean){
+        detail_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
     }
 }

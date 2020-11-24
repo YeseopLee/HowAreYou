@@ -56,6 +56,7 @@ class HomeFragment : Fragment() {
             ) {
                 if(response.isSuccessful)
                 {
+                    showProgress(false)
                     val result: LoadPostDTO = response.body()!!
                     val postSize: Int = result.size-1
 
@@ -70,8 +71,6 @@ class HomeFragment : Fragment() {
 
                         // 어댑터 연결
                         attachAdapter()
-
-                        showProgress(false)
                         //mAdapter?.notifyDataSetChanged()
                     }else{
                         //TODO
@@ -85,7 +84,6 @@ class HomeFragment : Fragment() {
                     )
                     try {
                         if (response.errorBody() != null) {
-                            showProgress(false)
                             val result : LoadPostDTO = adapter.fromJson(response.errorBody()!!.string())
 
                         }
@@ -93,11 +91,14 @@ class HomeFragment : Fragment() {
                         e.printStackTrace()
                     }
                 }
+                //home_layout_loading.visibility = View.GONE;
 
             }
 
             override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
+                showProgress(false)
+//                home_layout_loading.visibility = View.GONE;
             }
         })
 
@@ -115,8 +116,12 @@ class HomeFragment : Fragment() {
         lm.stackFromEnd = true
     }
 
-    private fun showProgress(show: Boolean) {
-        home_progressbar.visibility = (if (show) View.VISIBLE else View.GONE)
+//    private fun showProgress(show: Boolean) {
+//        home_progressbar.visibility = (if (show) View.VISIBLE else View.GONE)
+//    }
+
+    private fun showProgress(show: Boolean){
+        home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
     }
 
 

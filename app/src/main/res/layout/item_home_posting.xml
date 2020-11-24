@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:background="@color/colorWhite"
-    android:layout_marginTop="3dp"
-    android:layout_marginLeft="3dp"
-    android:layout_marginRight="3dp">
+    android:layout_marginTop="1dp">
 
     <TextView
         android:id="@+id/homeposting_textview_content"
@@ -48,8 +46,9 @@
 
     <Button
         android:id="@+id/homeposting_button_favorite"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/ic_thumbsup_white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -57,49 +56,55 @@
 
     <Button
         android:id="@+id/homeposting_button_comment"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/ic_comment"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/homeposting_textview_comment" />
+        app:layout_constraintEnd_toStartOf="@+id/homeposting_textview_comment"
+        app:layout_constraintTop_toTopOf="@+id/homeposting_button_favorite" />
 
     <TextView
         android:id="@+id/homeposting_textview_favorite"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
         android:gravity="center"
         android:text="0"
         android:textSize="11sp"
         android:textColor="@color/colorIcon"
+        app:layout_constraintTop_toTopOf="@id/homeposting_button_favorite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/homeposting_button_comment" />
 
     <TextView
         android:id="@+id/homeposting_textview_comment"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:gravity="center"
         android:text="0"
-        android:textSize="11sp"
-
         android:textColor="@color/colorIcon"
+
+        android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/homeposting_button_favorite" />
 
     <TextView
         android:id="@+id/homeposting_textview_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/date"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/homeposting_button_favorite" />
 
     <TextView
         android:id="@+id/homeposting_textview_author"

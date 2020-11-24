@@ -4,8 +4,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
         android:layout_marginTop="1dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,28 +24,30 @@
 
     <ImageView
         android:id="@+id/commnet_imageview_liked"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="5dp"
         android:background="@drawable/ic_thumbsup_white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/comment_textview_liked"
-        app:layout_constraintTop_toTopOf="@+id/comment_textview_liked" />
+        app:layout_constraintTop_toBottomOf="@id/comment_textview_content"/>
 
     <TextView
         android:id="@+id/comment_textview_liked"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
         android:gravity="center"
         android:text="0"
         android:textColor="@color/colorIcon"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/comment_button_morevert"
-        app:layout_constraintTop_toTopOf="@+id/comment_button_morevert" />
+        app:layout_constraintTop_toBottomOf="@id/comment_textview_content"/>
 
     <Button
         android:id="@+id/comment_button_morevert"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"

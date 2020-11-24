@@ -65,6 +65,7 @@ class PostingActivity : AppCompatActivity() {
             ) {
                 if(response.isSuccessful)
                 {
+                    showProgress(false);
                     val result: LoadPostDTO = response.body()!!
                     val postSize: Int = result.size-1
 
@@ -104,6 +105,7 @@ class PostingActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
+                showProgress(false);
             }
         })
 

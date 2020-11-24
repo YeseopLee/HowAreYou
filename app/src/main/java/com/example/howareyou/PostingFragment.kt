@@ -53,6 +53,13 @@ class PostingFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        PostingAdapter(activity!!, postingDTOlist).notifyDataSetChanged()
+        
+    }
+
     private fun loadPosting() {
         service?.getPost(App.prefs.myCode)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
