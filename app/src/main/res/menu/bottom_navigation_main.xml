@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_home"
+        android:enabled="true"
+        android:title="@string/b_home"/>
+    <item
+        android:id="@+id/action_board"
+        android:icon="@drawable/ic_board"
+        android:enabled="true"
+        android:title="@string/b_board"/>
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_white"
+        android:enabled="true"
+        android:title="@string/b_search"/>
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/ic_notification_white"
+        android:enabled="true"
+        android:title="@string/b_noti"/>
+    <item
+        android:id="@+id/action_write"
+        android:icon="@drawable/ic_write"
+        android:enabled="true"
+        android:title="@string/b_write"/>
 
 </menu>

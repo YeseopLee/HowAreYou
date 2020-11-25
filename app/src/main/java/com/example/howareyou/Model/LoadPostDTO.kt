@@ -9,6 +9,7 @@ data class LoadPostItem(
     @SerializedName("title") val title: String,
     @SerializedName("content") val content: String,
     @SerializedName("author") val author: String,
+    @SerializedName("code") val code: Code?,
     @SerializedName("comments") val comments: List<Comment>?,
     @SerializedName("likeds") val likeds: List<Liked>?,
     @SerializedName("viewed") val viewed: Int,
@@ -20,17 +21,7 @@ data class LoadPostItem(
 )
 
 data class Code(
-    val __v: Int,
-    val _id: String,
-    val board: String,
-    val code: String,
-    val code_name: String,
-    val code_type_name: String,
-    val createdAt: String,
-    val id: String,
-    val published_at: String,
-    val type_code: String,
-    val updatedAt: String
+    val id: String
 )
 
 data class Comment(

@@ -7,5 +7,6 @@ data class PostCommentDTO(
     @SerializedName("author") val author : String,
     @SerializedName("content") val content : String,
     @SerializedName("user_id") val user_id : String,
-    @SerializedName("board") val board : String
+    @SerializedName("board") val board : String,
+    @SerializedName("comment") val comment : String?
 )

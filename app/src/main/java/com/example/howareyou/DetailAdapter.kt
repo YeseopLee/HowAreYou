@@ -1,11 +1,17 @@
 package com.example.howareyou
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.Comment
+import com.example.howareyou.Util.App
+import com.example.howareyou.Util.OnSingleClickListener
+import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 import kotlinx.android.synthetic.main.item_recomment.view.*
 import kotlin.collections.ArrayList
@@ -48,16 +54,65 @@ class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
+        // alert dialog value
+        val builder = AlertDialog.Builder(context).create()
+
+        // Get the LayoutInflater from Context
+        val layoutInflater:LayoutInflater = LayoutInflater.from(context)
+
         if (holder.itemViewType == 0){
             var view = holder.itemView
             view.comment_textview_content.text = detailDTO[position].content
             view.comment_textview_author.text = detailDTO[position].author
+            view.comment_textview_date.text = detailDTO[position].createdAt
+
+            view.comment_button_morevert.setOnClickListener (object : OnSingleClickListener(){
+                override fun onSingleClick(view: View) {
+
+                    val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
+                    val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
+                    val BtnRecomment = dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
+
+                    builder.setView(dialogView)
+                    builder.show()
+
+                    BtnReport.setOnClickListener {
+                        builder.dismiss()
+                    }
+                    BtnRecomment.setOnClickListener {
+                        System.out.println(detailDTO[position].id);
+                        App.prefs.tempCommentId = detailDTO[position].id
+                        builder.dismiss()
+                    }
+
+                }
+            })
 
         }
         else{
             var view = holder.itemView
             view.recomment_textview_content.text = detailDTO[position].content
             view.recomment_textview_author.text = detailDTO[position].author
+            view.recomment_textview_date.text = detailDTO[position].createdAt
+
+
+            view.recomment_button_morevert.setOnClickListener (object : OnSingleClickListener(){
+                override fun onSingleClick(view: View) {
+
+                    val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
+                    val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
+                    val BtnRecomment = dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
+                    BtnRecomment.visibility = View.GONE
+
+                    builder.setView(dialogView)
+                    builder.show()
+
+                    BtnReport.setOnClickListener {
+                        builder.dismiss()
+                    }
+
+                }
+            })
         }
 
     }
