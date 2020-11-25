@@ -75,6 +75,14 @@ class HomeAdapter(val context: Context, val postingDTO : ArrayList<LoadPostItem>
         view.homeposting_textview_comment.text = postingDTOfilter[position].comments?.size.toString()
         view.homeposting_textview_favorite.text = postingDTOfilter[position].likeds?.size.toString()
 
+        // 좋아요 체크
+        if(postingDTOfilter[position].likeds!!.isNotEmpty()){
+            for ( i in  1..postingDTOfilter[position].likeds!!.size)
+            {
+                if( postingDTOfilter[position].likeds!![i-1].user_id == App.prefs.myId) view.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup)
+            }
+        }
+
         view.setOnClickListener{
             val intent = Intent(context,DetailActivity::class.java)
             intent.putExtra("board_id",postingDTOfilter[position].id)

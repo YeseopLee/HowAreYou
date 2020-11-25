@@ -79,6 +79,7 @@ class PostingFragment : Fragment() {
                             postingDTOlist?.add(
                                 LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].code,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
                                 ,result[i].header,result[i].user_id,result[i].is_delected)
+
                             )
 
                         }

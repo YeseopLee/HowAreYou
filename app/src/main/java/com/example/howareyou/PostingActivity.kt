@@ -76,7 +76,11 @@ class PostingActivity : AppCompatActivity() {
                             postingDTOlist?.add(LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].code,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
                                 ,result[i].header,result[i].user_id,result[i].is_delected))
 
+                            System.out.println("테스트${result[i].likeds}")
+
                         }
+
+
                         // 리사이클러뷰 데이터 갱신
                         showProgress(false)
                         mAdapter?.notifyDataSetChanged()

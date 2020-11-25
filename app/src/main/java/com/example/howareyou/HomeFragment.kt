@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
+import com.example.howareyou.Util.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
+import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.item_home_posting.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -66,7 +69,6 @@ class HomeFragment : Fragment() {
 
                             postingDTOlist?.add(LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].code,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
                                 ,result[i].header,result[i].user_id,result[i].is_delected))
-
                         }
 
                         // 어댑터 연결
@@ -115,10 +117,6 @@ class HomeFragment : Fragment() {
         lm.reverseLayout = true
         lm.stackFromEnd = true
     }
-
-//    private fun showProgress(show: Boolean) {
-//        home_progressbar.visibility = (if (show) View.VISIBLE else View.GONE)
-//    }
 
     private fun showProgress(show: Boolean){
         home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)

@@ -83,6 +83,11 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(main_bottom_navigation.selectedItemId != R.id.action_home) main_bottom_navigation.selectedItemId = R.id.action_home
+    }
+
 
     private fun loadCode() {
         // Board Code initializing
@@ -130,11 +135,6 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
             }
         })
     }
-//
-//    private fun moveBoards(){
-//        var IT = Intent(applicationContext,PostingActivity::class.java)
-//        startActivity(IT)
-//    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

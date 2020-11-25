@@ -3,28 +3,24 @@ package com.example.howareyou
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.howareyou.Model.Comment
-import com.example.howareyou.Model.LoadPostItem
-import com.example.howareyou.Model.PostCommentDTO
-import com.example.howareyou.Model.PostingDTO
+import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
+import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.item_comment.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,7 +37,6 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
         // posting activity에서 클릭한 게시물의 id를 받아온다
@@ -59,8 +54,36 @@ class DetailActivity : AppCompatActivity() {
         }
 
         detail_button_postcomment.setOnClickListener {
-            attemptComment(board_id)
+            attemptComment(board_id,App.prefs.tempCommentId)
         }
+
+        detail_button_liked.setOnClickListener(object : OnSingleClickListener(){
+            override fun onSingleClick(view: View) {
+                postLiked(PostLikedDTO(App.prefs.myEmail,App.prefs.myId,board_id,null));
+            }
+        })
+
+        // alert dialog value
+        val builder = AlertDialog.Builder(this).create()
+
+        detail_button_morevert.setOnClickListener (object : OnSingleClickListener(){
+            override fun onSingleClick(view: View) {
+
+                val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
+                val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
+                val BtnRecomment = dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
+                BtnRecomment.visibility = View.GONE
+
+                builder.setView(dialogView)
+                builder.show()
+
+                BtnReport.setOnClickListener {
+                    builder.dismiss()
+                }
+
+            }
+        })
+
 
         // Get the LayoutInflater from Context
         val layoutInflater:LayoutInflater = LayoutInflater.from(applicationContext)
@@ -75,7 +98,13 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        App.prefs.tempCommentId = null.toString()
+    }
+
     private fun loadPostingContent(board_id : String) {
+        showProgress(true);
         service?.getPostContent(board_id)?.enqueue(object : Callback<LoadPostItem?> {
             override fun onResponse(
                 call: Call<LoadPostItem?>?,
@@ -89,6 +118,15 @@ class DetailActivity : AppCompatActivity() {
                     val result: LoadPostItem = response.body()!!
                     detail_textview_title.text = result.title
                     detail_textview_content.text = result.content
+                    detail_textview_comment.text = result.comments?.size.toString()!!
+                    detail_textview_liked.text = result.likeds?.size.toString()!!
+
+                    // 사용자 좋아요 상태 체크
+                    for (i in 1..result.likeds?.size!!){
+                        if(result.likeds[i-1].user_id == App.prefs.myId){
+                            detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+                        }
+                    }
 
                     //LoadPostItem의 comments를 adapter에 연결할 dtolist에 담는다.
                     // 정렬 이전의 임시 list
@@ -148,7 +186,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
-    private fun attemptComment(board_id: String){
+    private fun attemptComment(board_id: String, comment_id: String?){
         detail_edittext_comment.error = null
         val content: String = detail_edittext_comment.text.toString()
         var cancel = false
@@ -165,7 +203,7 @@ class DetailActivity : AppCompatActivity() {
             focusView?.requestFocus()
         } else {
             detail_edittext_comment.text = null
-            postComment(PostCommentDTO(App.prefs.myEmail,App.prefs.myName,content,App.prefs.myId,board_id))
+            postComment(PostCommentDTO(App.prefs.myEmail,App.prefs.myName,content,App.prefs.myId,board_id,comment_id))
             focusView = null
         }
     }
@@ -202,6 +240,22 @@ class DetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostCommentDTO?>?, t: Throwable) {
+                Log.e("onFailure", t.message!!)
+            }
+        })
+
+    }
+
+    private fun postLiked(data: PostLikedDTO) {
+        service?.userLiked(data)?.enqueue(object : Callback<PostingResponseDTO?> {
+            override fun onResponse(
+                call: Call<PostingResponseDTO?>?,
+                response: Response<PostingResponseDTO?>
+
+            ) {}
+
+            override fun onFailure(call: Call<PostingResponseDTO?>?, t: Throwable) {
+                Toast.makeText(applicationContext,"이미 좋아요를 눌렀습니다.",Toast.LENGTH_SHORT).show()
                 Log.e("onFailure", t.message!!)
             }
         })

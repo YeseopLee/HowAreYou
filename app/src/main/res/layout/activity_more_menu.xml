@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/transparent"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    tools:context=".BoardMenuActivity">
+
+    <Button
+        android:id="@+id/moremenu_button_report"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/colorWhite"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/more_report"/>
+
+    <Button
+        android:id="@+id/moremenu_button_recomment"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="1dp"
+        app:layout_constraintTop_toBottomOf="@id/moremenu_button_report"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/colorWhite"
+        android:textColor="@color/colorBlack"
+        android:text="@string/more_recomment"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
