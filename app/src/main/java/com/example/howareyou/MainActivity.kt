@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        System.out.println("MyJwt${App.prefs.myJwt}")
+
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 

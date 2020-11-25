@@ -19,7 +19,7 @@ class SharedPref(context: Context){
     val key_study = "study"
     val key_best = "best"
 
-    val key_tempCommentid = null
+    val key_tempCommentid = "none"
 
     val prefs: SharedPreferences = context.getSharedPreferences(prefs_filename, 0)
 
@@ -68,7 +68,7 @@ class SharedPref(context: Context){
         set(value) = prefs.edit().putString(key_best, value).apply()
 
     var tempCommentId: String
-        get() = prefs.getString(key_tempCommentid, null)!!
+        get() = prefs.getString(key_tempCommentid, "none")!!
         set(value) = prefs.edit().putString(key_tempCommentid, value).apply()
 
     /* get/set 함수 임의 설정. get 실행 시 저장된 값을 반환하며 default 값은 ""

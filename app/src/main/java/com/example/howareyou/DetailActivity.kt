@@ -25,14 +25,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import kotlin.collections.ArrayList
 
 
 class DetailActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
     var commentDTOList : ArrayList<Comment> = arrayListOf()
-    var mAdapter = DetailAdapter(this,commentDTOList)
+    var mAdapter = DetailAdapter(this, commentDTOList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,35 +48,49 @@ class DetailActivity : AppCompatActivity() {
         detail_recyclerview_comment.setHasFixedSize(true)
 
         // buttons
-        detail_button_back.setOnClickListener {
+        detail_button_back.setOnClickListener { //뒤로가기 버튼
+            //finish()
+        }
+
+        detail_button_postcomment.setOnClickListener { // 댓글등록 버튼
+            if(App.prefs.tempCommentId == "none") attemptComment(board_id, null)
+            else attemptComment(board_id, App.prefs.tempCommentId)
+
+            val intent = intent
             finish()
+            startActivity(intent)
+            mAdapter.notifyDataSetChanged()
+
         }
 
-        detail_button_postcomment.setOnClickListener {
-            attemptComment(board_id,App.prefs.tempCommentId)
-        }
-
-        detail_button_liked.setOnClickListener(object : OnSingleClickListener(){
+        detail_button_liked.setOnClickListener(object : OnSingleClickListener() { // 좋아요버튼
             override fun onSingleClick(view: View) {
-                postLiked(PostLikedDTO(App.prefs.myEmail,App.prefs.myId,board_id,null));
+                detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+                postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, board_id, null));
             }
         })
 
         // alert dialog value
         val builder = AlertDialog.Builder(this).create()
 
-        detail_button_morevert.setOnClickListener (object : OnSingleClickListener(){
+        detail_button_morevert.setOnClickListener(object : OnSingleClickListener() {
             override fun onSingleClick(view: View) {
 
                 val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
                 val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
                 val BtnRecomment = dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
+                val BtnDelete = dialogView.findViewById<Button>(R.id.moremenu_button_delete)
                 BtnRecomment.visibility = View.GONE
 
                 builder.setView(dialogView)
                 builder.show()
 
                 BtnReport.setOnClickListener {
+                    builder.dismiss()
+                }
+
+                BtnDelete.setOnClickListener {
+                    deletePosting(board_id)
                     builder.dismiss()
                 }
 
@@ -100,10 +113,11 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        App.prefs.tempCommentId = null.toString()
+        App.prefs.tempCommentId = "none"
+        mAdapter.notifyDataSetChanged()
     }
 
-    private fun loadPostingContent(board_id : String) {
+    private fun loadPostingContent(board_id: String) {
         showProgress(true);
         service?.getPostContent(board_id)?.enqueue(object : Callback<LoadPostItem?> {
             override fun onResponse(
@@ -112,8 +126,7 @@ class DetailActivity : AppCompatActivity() {
 
             ) {
 
-                if(response.isSuccessful)
-                {
+                if (response.isSuccessful) {
                     showProgress(false);
                     val result: LoadPostItem = response.body()!!
                     detail_textview_title.text = result.title
@@ -122,65 +135,75 @@ class DetailActivity : AppCompatActivity() {
                     detail_textview_liked.text = result.likeds?.size.toString()!!
 
                     // 사용자 좋아요 상태 체크
-                    for (i in 1..result.likeds?.size!!){
-                        if(result.likeds[i-1].user_id == App.prefs.myId){
+                    for (i in 1..result.likeds?.size!!) {
+                        if (result.likeds[i - 1].user_id == App.prefs.myId) {
                             detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
                         }
                     }
 
                     //LoadPostItem의 comments를 adapter에 연결할 dtolist에 담는다.
                     // 정렬 이전의 임시 list
-                    var tempDTOList : ArrayList<Comment> = arrayListOf()
+                    var tempDTOList: ArrayList<Comment> = arrayListOf()
 
-                    if(result.comments?.size != 0)
-                    {
-                        for ( i in 1..result.comments?.size!!)
-                        {
-                            tempDTOList.add(Comment(result.comments[i-1].id,result.comments[i-1].author,result.comments[i-1].user_id,result.comments[i-1].comment,
-                            result.comments[i-1].content,result.comments[i-1].createdAt))
+                    if (result.comments?.size != 0) {
+                        for (i in 1..result.comments?.size!!) {
+                            tempDTOList.add(
+                                Comment(
+                                    result.comments[i - 1].id,
+                                    result.comments[i - 1].author,
+                                    result.comments[i - 1].user_id,
+                                    result.comments[i - 1].comment,
+                                    result.comments[i - 1].content,
+                                    result.comments[i - 1].createdAt
+                                )
+                            )
                         }
                     }
 
                     //댓글, 대댓글을 id로 정렬하여 새로운 list에 담는다.
                     var tempId: String = ""
-                    for ( i in 1..tempDTOList.size)
-                    {
-                        if(tempDTOList[i-1].comment == null)
-                        {
-                            commentDTOList.add(tempDTOList[i-1])
-                            tempId = tempDTOList[i-1].id
-                            for ( j in i..tempDTOList.size)
-                            {
-                                if (tempDTOList[j-1].comment == tempId)
-                                {
-                                    commentDTOList.add(tempDTOList[j-1])
+                    for (i in 1..tempDTOList.size) {
+                        if (tempDTOList[i - 1].comment == null) {
+                            commentDTOList.add(tempDTOList[i - 1])
+                            tempId = tempDTOList[i - 1].id
+                            for (j in i..tempDTOList.size) {
+                                if (tempDTOList[j - 1].comment == tempId) {
+                                    commentDTOList.add(tempDTOList[j - 1])
                                 }
                             }
                         }
                     }
+
                     mAdapter?.notifyDataSetChanged()
 
-                }else {
+                } else {
                     // 실패시 resopnse.errorbody를 객체화
+
                     val gson = Gson()
                     val adapter: TypeAdapter<LoadPostItem> = gson.getAdapter<LoadPostItem>(
                         LoadPostItem::class.java
                     )
                     try {
                         if (response.errorBody() != null) {
-                            val result : LoadPostItem = adapter.fromJson(response.errorBody()!!.string())
+                            val result: LoadPostItem = adapter.fromJson(
+                                response.errorBody()!!.string()
+                            )
 
                         }
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }
+
+                    finish()
+                    Toast.makeText(applicationContext,"불러올 수 없는 글입니다.",Toast.LENGTH_SHORT);
                 }
 
             }
 
             override fun onFailure(call: Call<LoadPostItem?>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
-                showProgress(false);
+                finish()
+                Toast.makeText(applicationContext,"불러올 수 없는 글입니다.",Toast.LENGTH_SHORT);
             }
         })
 
@@ -203,25 +226,34 @@ class DetailActivity : AppCompatActivity() {
             focusView?.requestFocus()
         } else {
             detail_edittext_comment.text = null
-            postComment(PostCommentDTO(App.prefs.myEmail,App.prefs.myName,content,App.prefs.myId,board_id,comment_id))
+            postComment(
+                PostCommentDTO(
+                    App.prefs.myEmail,
+                    App.prefs.myName,
+                    content,
+                    App.prefs.myId,
+                    board_id,
+                    comment_id
+                )
+            )
             focusView = null
         }
     }
 
     private fun postComment(data: PostCommentDTO) {
-        service?.userComment("Bearer "+App.prefs.myJwt,data)?.enqueue(object : Callback<PostCommentDTO?> {
+        service?.userComment("Bearer " + App.prefs.myJwt, data)?.enqueue(object :
+            Callback<PostCommentDTO?> {
             override fun onResponse(
                 call: Call<PostCommentDTO?>?,
                 response: Response<PostCommentDTO?>
 
             ) {
 
-                if(response.isSuccessful)
-                {
+                if (response.isSuccessful) {
                     val result: PostCommentDTO = response.body()!!
                     mAdapter?.notifyDataSetChanged()
 
-                }else {
+                } else {
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
                     val adapter: TypeAdapter<PostCommentDTO> = gson.getAdapter<PostCommentDTO>(
@@ -229,7 +261,9 @@ class DetailActivity : AppCompatActivity() {
                     )
                     try {
                         if (response.errorBody() != null) {
-                            val result : PostCommentDTO = adapter.fromJson(response.errorBody()!!.string())
+                            val result: PostCommentDTO = adapter.fromJson(
+                                response.errorBody()!!.string()
+                            )
 
                         }
                     } catch (e: IOException) {
@@ -252,10 +286,49 @@ class DetailActivity : AppCompatActivity() {
                 call: Call<PostingResponseDTO?>?,
                 response: Response<PostingResponseDTO?>
 
-            ) {}
+            ) {
+            }
 
             override fun onFailure(call: Call<PostingResponseDTO?>?, t: Throwable) {
-                Toast.makeText(applicationContext,"이미 좋아요를 눌렀습니다.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "이미 좋아요를 눌렀습니다.", Toast.LENGTH_SHORT).show()
+                Log.e("onFailure", t.message!!)
+            }
+        })
+
+    }
+
+    private fun deletePosting(board_id: String) {
+        service?.deletePost("Bearer " + App.prefs.myJwt, board_id)?.enqueue(object : Callback<Void> {
+            override fun onResponse(
+                call: Call<Void>?,
+                response: Response<Void>
+
+            ) {
+
+                if (response.isSuccessful) {
+                    finish()
+                } else {
+                    // 실패시 resopnse.errorbody를 객체화
+                    Toast.makeText(applicationContext,"글쓴이가 아닙니다.",Toast.LENGTH_SHORT).show()
+                    val gson = Gson()
+                    val adapter: TypeAdapter<LoadPostItem> = gson.getAdapter<LoadPostItem>(
+                        LoadPostItem::class.java
+                    )
+                    try {
+                        if (response.errorBody() != null) {
+                            val result: LoadPostItem = adapter.fromJson(
+                                response.errorBody()!!.string()
+                            )
+
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call<Void>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
             }
         })

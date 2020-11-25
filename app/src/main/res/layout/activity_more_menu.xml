@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/transparent"
     android:layout_width="200dp"
-    android:layout_height="wrap_content"
-    tools:context=".BoardMenuActivity">
+    android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/moremenu_button_report"
@@ -30,6 +29,18 @@
         android:background="@color/colorWhite"
         android:textColor="@color/colorBlack"
         android:text="@string/more_recomment"/>
+
+    <Button
+        android:id="@+id/moremenu_button_delete"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/colorWhite"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintTop_toBottomOf="@+id/moremenu_button_recomment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/more_delete"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

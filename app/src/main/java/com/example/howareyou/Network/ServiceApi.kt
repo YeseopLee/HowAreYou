@@ -25,14 +25,20 @@ interface ServiceApi {
     @GET("/Codes")
     fun getCode(): Call<LoadCodeResponseDTO>?
 
-    @GET("/boards?_sort=id:DESC&_limit=10")
+    @GET("/boards")
     fun getAllPost(): Call<LoadPostDTO?>?
+
+//    @GET("/boards?_sort=id:DESC&_limit=10")
+//    fun getAllPost(): Call<LoadPostDTO?>?
 
     @GET("/boards?_sort=id:DESC&_limit=10")
     fun getPost(@Query("code") code: String): Call<LoadPostDTO?>?
 
     @GET("/boards/{board_id}")
     fun getPostContent(@Path("board_id")board_id : String): Call<LoadPostItem>?
+
+    @DELETE("boards/{board_id}")
+    fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String): Call<Void>?
 
     /* dynamic query 예시 */
 //    @GET("/api/users")

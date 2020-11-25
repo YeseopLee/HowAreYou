@@ -2,6 +2,7 @@ package com.example.howareyou
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,12 +77,11 @@ class HomeAdapter(val context: Context, val postingDTO : ArrayList<LoadPostItem>
         view.homeposting_textview_favorite.text = postingDTOfilter[position].likeds?.size.toString()
 
         // 좋아요 체크
-        if(postingDTOfilter[position].likeds!!.isNotEmpty()){
-            for ( i in  1..postingDTOfilter[position].likeds!!.size)
-            {
-                if( postingDTOfilter[position].likeds!![i-1].user_id == App.prefs.myId) view.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup)
-            }
+        for ( i in  1..postingDTOfilter[position].likeds!!.size)
+        {
+            if( postingDTOfilter[position].likeds!![i-1].user_id == App.prefs.myId) view.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup)
         }
+
 
         view.setOnClickListener{
             val intent = Intent(context,DetailActivity::class.java)

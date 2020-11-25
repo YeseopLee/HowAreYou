@@ -113,9 +113,10 @@ class HomeFragment : Fragment() {
         home_recyclerview.layoutManager = lm
         home_recyclerview.setHasFixedSize(true)
 
-        // 리사이클러뷰 역순 출력
+        // 역순출력
         lm.reverseLayout = true
         lm.stackFromEnd = true
+
     }
 
     private fun showProgress(show: Boolean){
