@@ -11,7 +11,7 @@
     <color name="colorPrimaryLight">#FF996E</color>
     <color name="colorPrimaryDark">#B63716</color>
     <color name="colorBackground">#E2E2E2</color>
-    <color name="colorPostComment">#F5A19E</color>
+    <color name="colorEditText">#F5A19E</color>
     <color name="colorRecomment">#F3F3F3</color>
     <color name="colorText">#FFFFFF</color>
     <color name="colorGray">#868E96</color>

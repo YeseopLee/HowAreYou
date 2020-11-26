@@ -134,6 +134,7 @@ class HomeFragment : Fragment() {
         lm.reverseLayout = true
         lm.stackFromEnd = true
 
+
     }
 
     private fun showProgress(show: Boolean){

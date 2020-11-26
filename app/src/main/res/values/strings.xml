@@ -49,6 +49,7 @@
     <string name="title">제목</string>
     <string name="writing_guide">글 내용을 입력해주세요.\n\n주의사항: 질문 글의 경우 댓글이 달릴 때는삭제 할 수 없습니다. 또한, 신고 받는 경우 일정기간 이용이 정지될 수 있습니다.</string>
     <string name="comment_guide">댓글을 입력하세요.</string>
+    <string name="search_guide">검색할 내용을 입력해주세요.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
