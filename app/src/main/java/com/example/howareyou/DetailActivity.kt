@@ -65,14 +65,13 @@ class DetailActivity : AppCompatActivity() {
 
         detail_button_liked.setOnClickListener(object : OnSingleClickListener() { // 좋아요버튼
             override fun onSingleClick(view: View) {
-                detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+                //게시물 or 코멘트 좋아요
                 postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, board_id, null));
             }
         })
 
         // alert dialog value
         val builder = AlertDialog.Builder(this).create()
-
         detail_button_morevert.setOnClickListener(object : OnSingleClickListener() {
             override fun onSingleClick(view: View) {
 
@@ -96,18 +95,6 @@ class DetailActivity : AppCompatActivity() {
 
             }
         })
-
-
-        // Get the LayoutInflater from Context
-        val layoutInflater:LayoutInflater = LayoutInflater.from(applicationContext)
-
-        // Inflate the layout using LayoutInflater
-        val view: View = layoutInflater.inflate(
-            R.layout.item_comment, // Custom view/ layout
-            null, // Root layout to attach the view
-            true // Attach with root layout or not
-        )
-
 
     }
 
@@ -287,6 +274,10 @@ class DetailActivity : AppCompatActivity() {
                 response: Response<PostingResponseDTO?>
 
             ) {
+
+                detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+                detail_textview_liked.text = (detail_textview_liked.text.toString().toInt() + 1).toString()
+
             }
 
             override fun onFailure(call: Call<PostingResponseDTO?>?, t: Throwable) {

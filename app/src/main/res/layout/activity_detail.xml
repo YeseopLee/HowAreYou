@@ -201,7 +201,7 @@
             android:id="@+id/detail_constraintlayout_inputcomment"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:background="@color/colorPostComment"
+            android:background="@color/colorEditText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
