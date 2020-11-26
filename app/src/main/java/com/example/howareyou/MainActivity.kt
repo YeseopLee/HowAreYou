@@ -9,11 +9,9 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
 import com.example.howareyou.Model.LoadCodeResponseDTO
-import com.example.howareyou.Model.LoadPostDTO
-import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Util.App
+import com.example.howareyou.Util.PreferenceUtil
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,8 +33,6 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        System.out.println("MyJwt${App.prefs.myJwt}")
-
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
@@ -52,36 +48,6 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
 
         // 게시판별 코드 불러오기
         loadCode()
-
-
-//        /* 버튼 관리 */
-//        main_textview_freeboard.setOnClickListener {
-//            App.prefs.myCode = App.prefs.codeFree
-//            moveBoards()
-//        }
-//        main_textview_qabaord.setOnClickListener {
-//            App.prefs.myCode = App.prefs.codeQA
-//            moveBoards()
-//        }
-//        main_textview_tipsboard.setOnClickListener {
-//            App.prefs.myCode = App.prefs.codeTips
-//            moveBoards()
-//        }
-//        main_textview_courseboard.setOnClickListener {
-//            App.prefs.myCode = App.prefs.codeCourse
-//            moveBoards()
-//        }
-//        main_textview_studyboard.setOnClickListener {
-//            App.prefs.myCode = App.prefs.codeStudy
-//            moveBoards()
-//        }
-//        main_textview_bestboard.setOnClickListener {
-//            App.prefs.myCode = App.prefs.codeBest
-//            moveBoards()
-//        }
-
-        // 내가쓴글, 댓글단글, 스크랩
-
 
     }
 
@@ -157,6 +123,9 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
             }
 
             R.id.action_search -> {
+                var FragmentC = SearchFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_framelayout, FragmentC).commit()
                 return true
             }
 
@@ -191,7 +160,5 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         }
         return super.dispatchTouchEvent(ev)
     }
-
-
 
 }

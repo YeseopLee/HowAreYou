@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".BoardMenuActivity"></activity>
         <activity android:name=".SigninActivity" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".SearchFragment" />
         <activity android:name=".PostingActivity" />
         <activity android:name=".WritingActivity" />
         <activity android:name=".SignupActivity" />

@@ -15,6 +15,7 @@ import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.Model.SigninDTO
 import com.example.howareyou.Model.SigninResponseDTO
 import com.example.howareyou.Util.OnSingleClickListener
+import com.example.howareyou.Util.PreferenceUtil
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_signin.*

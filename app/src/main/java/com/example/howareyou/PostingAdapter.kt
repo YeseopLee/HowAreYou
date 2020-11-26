@@ -69,13 +69,6 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIt
             context.startActivity(intent)
         }
 
-//        view.profile_layout.setOnClickListener {
-//            val iT = Intent(context,ProfileActivity::class.java)
-//            iT.putExtra("name",friendDTOfilter[position].name)
-//            iT.putExtra("username",username)
-//            context.startActivity(iT)
-//        }
-
     }
 
     /* 검색기능 */

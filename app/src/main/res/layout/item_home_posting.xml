@@ -18,6 +18,7 @@
         android:gravity="left"
         android:text="@string/writing_guide"
         android:textSize="14sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homeposting_textview_title" />
@@ -40,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:text="@string/board"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/homeposting_textview_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/homeposting_textview_title" />
@@ -51,8 +53,10 @@
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/ic_thumbsup_white"
+        android:contentDescription="@string/more"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/homeposting_textview_favorite" />
+
 
     <Button
         android:id="@+id/homeposting_button_comment"

@@ -75,6 +75,7 @@ class HomeAdapter(val context: Context, val postingDTO : ArrayList<LoadPostItem>
         view.homeposting_textview_date.text = postingDTOfilter[position].createdAt
         view.homeposting_textview_comment.text = postingDTOfilter[position].comments?.size.toString()
         view.homeposting_textview_favorite.text = postingDTOfilter[position].likeds?.size.toString()
+        view.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup_white)
 
         // 좋아요 체크
         for ( i in  1..postingDTOfilter[position].likeds!!.size)

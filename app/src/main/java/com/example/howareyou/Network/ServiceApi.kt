@@ -25,13 +25,13 @@ interface ServiceApi {
     @GET("/Codes")
     fun getCode(): Call<LoadCodeResponseDTO>?
 
-    @GET("/boards")
-    fun getAllPost(): Call<LoadPostDTO?>?
-
-//    @GET("/boards?_sort=id:DESC&_limit=10")
+//    @GET("/boards")
 //    fun getAllPost(): Call<LoadPostDTO?>?
 
-    @GET("/boards?_sort=id:DESC&_limit=10")
+    @GET("/boards?_sort=_id:DESC&_limit=10")
+    fun getAllPost(): Call<LoadPostDTO?>?
+
+    @GET("/boards?_sort=_id:DESC&_limit=10")
     fun getPost(@Query("code") code: String): Call<LoadPostDTO?>?
 
     @GET("/boards/{board_id}")
