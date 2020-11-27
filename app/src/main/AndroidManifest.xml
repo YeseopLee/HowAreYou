@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".BoardMenuActivity"></activity>
+        <activity android:name=".AccountActivity"></activity>
+        <activity android:name=".BoardMenuActivity" />
         <activity android:name=".SigninActivity" />
         <activity android:name=".SearchFragment" />
         <activity android:name=".PostingActivity" />

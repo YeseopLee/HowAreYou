@@ -41,6 +41,7 @@ class HomeFragment : Fragment() {
             //fragment refresh
             val ft = fragmentManager!!.beginTransaction()
             ft.detach(this).attach(this).commit()
+            loadPosting()
         }
 
         return view
