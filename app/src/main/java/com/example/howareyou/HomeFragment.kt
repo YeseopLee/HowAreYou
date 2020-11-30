@@ -1,5 +1,7 @@
 package com.example.howareyou
 
+import android.accounts.Account
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,6 +44,10 @@ class HomeFragment : Fragment() {
             val ft = fragmentManager!!.beginTransaction()
             ft.detach(this).attach(this).commit()
             loadPosting()
+        }
+
+        view.home_button_myaccount.setOnClickListener {
+            startActivity(Intent(activity,AccountActivity::class.java))
         }
 
         return view
