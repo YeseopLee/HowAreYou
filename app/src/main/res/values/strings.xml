@@ -43,6 +43,22 @@
     <string name="more_recomment">대댓글 작성</string>
     <string name="more_delete">삭제하기</string>
 
+    <!-- Account -->
+    <string name="like_inform">내 이야기가 공감받고 있어요.</string>
+    <string name="account_setting">계정설정</string>
+    <string name="account_setAuthor">닉네임설정</string>
+    <string name="account_setPassword">패스워드변경</string>
+    <string name="account_exit">회원탈퇴</string>
+    <string name="account_signout">로그아웃</string>
+    <string name="account_setApp">앱 설정</string>
+    <string name="account_setNoti">알람 설정</string>
+    <string name="account_inform">이용 안내</string>
+    <string name="account_faq">문의하기</string>
+    <string name="account_notice">공지사항</string>
+    <string name="account_terms">이용약관</string>
+    <string name="account_rule">개인정보 처리 방침</string>
+    <string name="account_license">오픈소스 라이센스</string>
+
 
     <!-- inform -->
     <string name="date">날짜</string>
@@ -50,6 +66,7 @@
     <string name="writing_guide">글 내용을 입력해주세요.\n\n주의사항: 질문 글의 경우 댓글이 달릴 때는삭제 할 수 없습니다. 또한, 신고 받는 경우 일정기간 이용이 정지될 수 있습니다.</string>
     <string name="comment_guide">댓글을 입력하세요.</string>
     <string name="search_guide">검색할 내용을 입력해주세요.</string>
+    <string name="image_guide">이미지 설명을 입력할 수 있습니다.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
