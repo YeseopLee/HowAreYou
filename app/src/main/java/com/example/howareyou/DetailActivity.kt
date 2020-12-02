@@ -32,6 +32,8 @@ class DetailActivity : AppCompatActivity() {
     private var service: ServiceApi? = null
     var commentDTOList : ArrayList<Comment> = arrayListOf()
     var mAdapter = DetailAdapter(this, commentDTOList)
+    var imageList : ArrayList<String> = arrayListOf()
+    var mImageAdapter = Detail_imageAdapter(this, imageList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,11 @@ class DetailActivity : AppCompatActivity() {
         val lm = LinearLayoutManager(this)
         detail_recyclerview_comment.layoutManager = lm
         detail_recyclerview_comment.setHasFixedSize(true)
+
+        detail_recyclerview_imageview.adapter = mImageAdapter
+        val lm2 = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        detail_recyclerview_imageview.layoutManager = lm2
+        detail_recyclerview_imageview.setHasFixedSize(true)
 
         // buttons
         detail_button_back.setOnClickListener { //뒤로가기 버튼
@@ -158,6 +165,18 @@ class DetailActivity : AppCompatActivity() {
                                     commentDTOList.add(tempDTOList[j - 1])
                                 }
                             }
+                        }
+                    }
+
+                    // 이미지 담기
+                    if(result.image?.isNotEmpty()!!)
+                    {
+                        for (i in 0 until result.image.size)
+                        {
+
+                            ////////////// 서버주소 해결해야함
+
+                            imageList.add("http://211.208.220.233:1337"+result.image[i].url)
                         }
                     }
 
@@ -323,6 +342,28 @@ class DetailActivity : AppCompatActivity() {
                 Log.e("onFailure", t.message!!)
             }
         })
+
+    }
+
+//    private fun getImage(data: String) {
+//        service?.getImage(data)?.enqueue(object : Callback<imageItem?> {
+//            override fun onResponse(
+//                call: Call<imageItem?>?,
+//                response: Response<imageItem?>
+//
+//            ) {
+//
+//
+//            }
+//
+//            override fun onFailure(call: Call<UploadImageResponseDTO?>?, t: Throwable) {
+//                Log.e("onFailure", t.message!!)
+//            }
+//        })
+//
+//    }
+
+    private fun showImages(){
 
     }
 

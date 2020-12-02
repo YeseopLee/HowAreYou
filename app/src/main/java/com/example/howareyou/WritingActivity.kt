@@ -1,32 +1,49 @@
 package com.example.howareyou
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
+import com.example.howareyou.Util.PermissionCheck
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
+import gun0912.tedimagepicker.builder.TedImagePicker
+import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_writing.*
+import kotlinx.android.synthetic.main.item_imageupload.view.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 class WritingActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
+    var uriList22: ArrayList<Uri> = arrayListOf()
+    var uriList: ArrayList<Uri> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +60,15 @@ class WritingActivity : AppCompatActivity() {
                 attemptPost()
             }
         })
+
+        writing_button_imageupload.setOnClickListener {
+            // 권한 체크
+//            var requestPermissions = arrayOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
+//            PermissionCheck(this,requestPermissions)
+            TedImagePicker.with(this)
+                .max(5-uriList22.size,R.string.ted_image_picker_max_count)
+                .startMultiImage { uriList -> showMultiImage(uriList) }
+        }
 
         writing_button_menu.setOnClickListener (object : OnSingleClickListener(){
             override fun onSingleClick(view: View) {
@@ -79,6 +105,23 @@ class WritingActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun showMultiImage(uriList: List<Uri>) {
+        //TODO
+        for (element in uriList)
+        {
+            uriList22.add(element)
+        }
+
+        var mAdapter = WritingAdapter(this, uriList22)
+        writing_recyclerview_image.adapter = mAdapter
+        val lm = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        writing_recyclerview_image.layoutManager = lm
+        writing_recyclerview_image.setHasFixedSize(true)
+
+        mAdapter.notifyDataSetChanged()
+        //uploadImage()
     }
 
     override fun onResume() {
@@ -129,6 +172,7 @@ class WritingActivity : AppCompatActivity() {
                 {
                     val result: PostingResponseDTO = response.body()!!
 //                    movePostingPage()
+                    if(uriList22.isNotEmpty())  uploadImage(result.id)
                     finish()
 
                 }else {
@@ -172,14 +216,41 @@ class WritingActivity : AppCompatActivity() {
         writing_progressbar.visibility = (if (show) View.VISIBLE else View.GONE)
     }
 
-    private fun movePostingPage() {
+    private fun uploadImage(board_id: String){
+//        var file = File(uriList22[0].path)
+//        var requestBody : RequestBody = RequestBody.create(MediaType.parse("image/*"),file)
+//        var body : MultipartBody.Part = MultipartBody.Part.createFormData("files",file.name,requestBody)
+//
 
-        var Fragment = PostingFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_framelayout, Fragment).commit()
+        var images = ArrayList<MultipartBody.Part>()
+        for (index in 0 until uriList22.size) {
+            val file = File(uriList22[index].path)
+            val surveyBody = RequestBody.create(MediaType.parse("image/*"), file)
+            images.add(MultipartBody.Part.createFormData("files",file.name,surveyBody))
+        }
 
-//        var It = Intent(applicationContext,PostingActivity::class.java)
-//        startActivity(It)
+        val ref = RequestBody.create(MediaType.parse("text/plain"),"board")
+        val refId = RequestBody.create(MediaType.parse("text/plain"),board_id)
+        val field = RequestBody.create(MediaType.parse("text/plain"),"image")
+
+
+        service?.uploadFile(images,ref,refId,field)?.enqueue(object : Callback<UploadImageResponseDTO?> {
+            override fun onResponse(
+                call: Call<UploadImageResponseDTO?>,
+                response: Response<UploadImageResponseDTO?>
+            ) {
+                var result : UploadImageResponseDTO = response.body()!!
+                for (index in 0 until result.size){
+                    System.out.println("test"+result[index]._id)
+                }
+            }
+
+            override fun onFailure(call: Call<UploadImageResponseDTO?>, t: Throwable) {
+                System.out.println("fail")
+                Log.d("??",t.message)
+            }
+
+        })
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

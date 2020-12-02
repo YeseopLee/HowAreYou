@@ -88,7 +88,8 @@ class HomeFragment : Fragment() {
                                     result[i].createdAt,
                                     result[i].header,
                                     result[i].user_id,
-                                    result[i].is_delected
+                                    result[i].is_delected,
+                                    result[i].image
                                 )
                             )
                         }

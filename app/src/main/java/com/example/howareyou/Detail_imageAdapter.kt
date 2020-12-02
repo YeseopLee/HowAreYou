@@ -17,17 +17,18 @@ import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.item_comment.view.*
+import kotlinx.android.synthetic.main.item_imageshow.view.*
 import kotlinx.android.synthetic.main.item_imageupload.view.*
 import kotlinx.android.synthetic.main.item_recomment.view.*
 import kotlin.collections.ArrayList
 
-class WritingAdapter(val context: Context, val uriList : ArrayList<Uri>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class Detail_imageAdapter(val context: Context, val uriList : ArrayList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-    val TAG : String = "WritingAdapter"
+    val TAG : String = "Detail_imageAdapter"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        var view = LayoutInflater.from(context).inflate(R.layout.item_imageupload,parent,false)
+        var view = LayoutInflater.from(context).inflate(R.layout.item_imageshow,parent,false)
         return ImageViewHolder(view)
 
     }
@@ -41,15 +42,9 @@ class WritingAdapter(val context: Context, val uriList : ArrayList<Uri>) : Recyc
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         var view = holder.itemView
-        Glide.with(view).load(uriList[position]).into(view.imageupload_imageview)
+        System.out.println("good"+uriList)
+        Glide.with(view).load(uriList[position]).into(view.imageshow_imageview)
 
-        view.imageupload_button_close.setOnClickListener {
-            //리스트에서 해당 요소 제거
-            uriList.remove(uriList[position])
-            notifyDataSetChanged()
-        }
-
-        Log.d(TAG,uriList.toString())
     }
 
 }

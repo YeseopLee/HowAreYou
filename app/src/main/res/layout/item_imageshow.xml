@@ -8,7 +8,7 @@
     android:layout_height="100dp">
 
     <ImageView
-        android:id="@+id/imageupload_imageview"
+        android:id="@+id/imageshow_imageview"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,11 +16,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/imageupload_button_close"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/ic_close"
-        app:layout_constraintEnd_toEndOf="@id/imageupload_imageview"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

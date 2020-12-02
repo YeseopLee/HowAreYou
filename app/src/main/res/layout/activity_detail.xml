@@ -98,14 +98,6 @@
                         android:background="@drawable/image_sample"
                         android:scaleType="fitXY"/>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/detail_recyclerview_imageview"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/detail_textview_title"
@@ -127,6 +119,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/writing_guide"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/detail_recyclerview_imageview"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_marginTop="10dp"
