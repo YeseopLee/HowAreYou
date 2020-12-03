@@ -2,6 +2,7 @@ package com.example.howareyou
 
 import android.content.Context
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
@@ -20,20 +22,34 @@ import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
+import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.activity_writing.*
+import kotlinx.android.synthetic.main.item_imageshow.view.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 
 class DetailActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
+
+    //comment recyclerview data / adapter
     var commentDTOList : ArrayList<Comment> = arrayListOf()
     var mAdapter = DetailAdapter(this, commentDTOList)
+
+    //image recyclerview data / adapter
     var imageList : ArrayList<String> = arrayListOf()
     var mImageAdapter = Detail_imageAdapter(this, imageList)
+
+    //commnet image uri
+    var commentImageUri : Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +75,7 @@ class DetailActivity : AppCompatActivity() {
             //finish()
         }
 
+
         detail_button_postcomment.setOnClickListener { // 댓글등록 버튼
             if(App.prefs.tempCommentId == "none") attemptComment(board_id, null)
             else attemptComment(board_id, App.prefs.tempCommentId)
@@ -68,6 +85,11 @@ class DetailActivity : AppCompatActivity() {
             startActivity(intent)
             mAdapter.notifyDataSetChanged()
 
+        }
+
+        detail_button_addphoto.setOnClickListener { // 댓글 이미지등록
+            TedImagePicker.with(this)
+                .start { uri -> showSingleImage(uri) }
         }
 
         detail_button_liked.setOnClickListener(object : OnSingleClickListener() { // 좋아요버튼
@@ -109,6 +131,13 @@ class DetailActivity : AppCompatActivity() {
         super.onResume()
         App.prefs.tempCommentId = "none"
         mAdapter.notifyDataSetChanged()
+    }
+
+    private fun showSingleImage(uri : Uri){
+        commentImageUri = uri
+        Glide.with(this).load(commentImageUri).into(detail_imageview_commentimage)
+        detail_imageview_commentimage.visibility = View.VISIBLE
+        detail_button_deleteCommentimage.visibility = View.VISIBLE
     }
 
     private fun loadPostingContent(board_id: String) {
@@ -175,7 +204,6 @@ class DetailActivity : AppCompatActivity() {
                         {
 
                             ////////////// 서버주소 해결해야함
-
                             imageList.add("http://211.208.220.233:1337"+result.image[i].url)
                         }
                     }
@@ -257,6 +285,8 @@ class DetailActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val result: PostCommentDTO = response.body()!!
+                    //var comment_id = result.comment.id
+                    if(commentImageUri != null) //TODO 이미지 업로드 포스트
                     mAdapter?.notifyDataSetChanged()
 
                 } else {
@@ -284,6 +314,43 @@ class DetailActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun uploadImage(comment_id: String){
+//        var file = File(uriList22[0].path)
+//        var requestBody : RequestBody = RequestBody.create(MediaType.parse("image/*"),file)
+//        var body : MultipartBody.Part = MultipartBody.Part.createFormData("files",file.name,requestBody)
+//
+
+        var images = ArrayList<MultipartBody.Part>()
+        for (index in 0 until _uriList.size) {
+            val file = File(_uriList[index].path)
+            val surveyBody = RequestBody.create(MediaType.parse("image/*"), file)
+            images.add(MultipartBody.Part.createFormData("files",file.name,surveyBody))
+        }
+
+        val ref = RequestBody.create(MediaType.parse("text/plain"),"board")
+        val refId = RequestBody.create(MediaType.parse("text/plain"),board_id)
+        val field = RequestBody.create(MediaType.parse("text/plain"),"image")
+
+
+        service?.uploadFile(images,ref,refId,field)?.enqueue(object : Callback<UploadImageResponseDTO?> {
+            override fun onResponse(
+                call: Call<UploadImageResponseDTO?>,
+                response: Response<UploadImageResponseDTO?>
+            ) {
+                var result : UploadImageResponseDTO = response.body()!!
+                for (index in 0 until result.size){
+                    System.out.println("test"+result[index]._id)
+                }
+            }
+
+            override fun onFailure(call: Call<UploadImageResponseDTO?>, t: Throwable) {
+                System.out.println("fail")
+                Log.d("??",t.message)
+            }
+
+        })
     }
 
     private fun postLiked(data: PostLikedDTO) {

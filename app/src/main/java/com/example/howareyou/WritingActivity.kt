@@ -42,7 +42,7 @@ import java.io.IOException
 class WritingActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
-    var uriList22: ArrayList<Uri> = arrayListOf()
+    var _uriList: ArrayList<Uri> = arrayListOf()
     var uriList: ArrayList<Uri> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +66,7 @@ class WritingActivity : AppCompatActivity() {
 //            var requestPermissions = arrayOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
 //            PermissionCheck(this,requestPermissions)
             TedImagePicker.with(this)
-                .max(5-uriList22.size,R.string.ted_image_picker_max_count)
+                .max(5-_uriList.size,R.string.ted_image_picker_max_count)
                 .startMultiImage { uriList -> showMultiImage(uriList) }
         }
 
@@ -111,10 +111,10 @@ class WritingActivity : AppCompatActivity() {
         //TODO
         for (element in uriList)
         {
-            uriList22.add(element)
+            _uriList.add(element)
         }
 
-        var mAdapter = WritingAdapter(this, uriList22)
+        var mAdapter = WritingAdapter(this, _uriList)
         writing_recyclerview_image.adapter = mAdapter
         val lm = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         writing_recyclerview_image.layoutManager = lm
@@ -172,7 +172,7 @@ class WritingActivity : AppCompatActivity() {
                 {
                     val result: PostingResponseDTO = response.body()!!
 //                    movePostingPage()
-                    if(uriList22.isNotEmpty())  uploadImage(result.id)
+                    if(_uriList.isNotEmpty())  uploadImage(result.id) // 이미지를 올렸다면 이미지 post를 호출한다.
                     finish()
 
                 }else {
@@ -223,8 +223,8 @@ class WritingActivity : AppCompatActivity() {
 //
 
         var images = ArrayList<MultipartBody.Part>()
-        for (index in 0 until uriList22.size) {
-            val file = File(uriList22[index].path)
+        for (index in 0 until _uriList.size) {
+            val file = File(_uriList[index].path)
             val surveyBody = RequestBody.create(MediaType.parse("image/*"), file)
             images.add(MultipartBody.Part.createFormData("files",file.name,surveyBody))
         }
