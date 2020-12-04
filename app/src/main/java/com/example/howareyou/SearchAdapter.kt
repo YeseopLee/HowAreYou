@@ -109,10 +109,10 @@ class SearchAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIte
                     val resultList : ArrayList<LoadPostItem> = arrayListOf()
                     for (row in postingDTO)
                         if (row.title!!.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
-                            resultList.add(LoadPostItem(row.id,row.title,row.content,row.author,row.code,row.comments,row.likeds,row.viewed,row.createdAt,row.header,row.user_id,row.is_delected))
+                            resultList.add(LoadPostItem(row.id,row.title,row.content,row.author,row.code,row.comments,row.likeds,row.viewed,row.createdAt,row.header,row.user_id,row.is_delected,row.image))
 //                            resultList?.add(row)
                         } else if (row.content!!.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
-                            resultList.add(LoadPostItem(row.id,row.title,row.content,row.author,row.code,row.comments,row.likeds,row.viewed,row.createdAt,row.header,row.user_id,row.is_delected))
+                            resultList.add(LoadPostItem(row.id,row.title,row.content,row.author,row.code,row.comments,row.likeds,row.viewed,row.createdAt,row.header,row.user_id,row.is_delected,row.image))
 //                            resultList?.add(row)
                         }
                     postingDTOfilter = resultList

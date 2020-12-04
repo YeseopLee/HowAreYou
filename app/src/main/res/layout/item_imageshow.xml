@@ -3,24 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="5dp"
+    android:padding="3dp"
     android:layout_width="wrap_content"
-    android:layout_height="100dp">
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageupload_imageview"
+        android:id="@+id/imageshow_imageview"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/round_border"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/imageupload_button_close"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/ic_close"
-        app:layout_constraintEnd_toEndOf="@id/imageupload_imageview"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

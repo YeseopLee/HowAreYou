@@ -2,6 +2,7 @@ package com.example.howareyou
 
 import android.content.Context
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
@@ -20,18 +22,34 @@ import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
+import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.activity_writing.*
+import kotlinx.android.synthetic.main.item_imageshow.view.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 
 class DetailActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
+
+    //comment recyclerview data / adapter
     var commentDTOList : ArrayList<Comment> = arrayListOf()
     var mAdapter = DetailAdapter(this, commentDTOList)
+
+    //image recyclerview data / adapter
+    var imageList : ArrayList<String> = arrayListOf()
+    var mImageAdapter = Detail_imageAdapter(this, imageList)
+
+    //commnet image uri
+    var commentImageUriList : ArrayList<Uri> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,19 +65,27 @@ class DetailActivity : AppCompatActivity() {
         detail_recyclerview_comment.layoutManager = lm
         detail_recyclerview_comment.setHasFixedSize(true)
 
+        detail_recyclerview_imageview.adapter = mImageAdapter
+        val lm2 = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        detail_recyclerview_imageview.layoutManager = lm2
+        detail_recyclerview_imageview.setHasFixedSize(true)
+
         // buttons
         detail_button_back.setOnClickListener { //뒤로가기 버튼
             //finish()
         }
 
+
         detail_button_postcomment.setOnClickListener { // 댓글등록 버튼
             if(App.prefs.tempCommentId == "none") attemptComment(board_id, null)
             else attemptComment(board_id, App.prefs.tempCommentId)
-
-            val intent = intent
-            finish()
-            startActivity(intent)
             mAdapter.notifyDataSetChanged()
+
+        }
+
+        detail_button_addphoto.setOnClickListener { // 댓글 이미지등록
+            TedImagePicker.with(this)
+                .start { uri -> showSingleImage(uri) }
 
         }
 
@@ -98,12 +124,21 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onDestroy() {
+        super.onDestroy()
+        // 대댓글 비활성화
         App.prefs.tempCommentId = "none"
         mAdapter.notifyDataSetChanged()
     }
 
+    private fun showSingleImage(uri : Uri){
+        commentImageUriList.add(uri)
+        Glide.with(this).load(commentImageUriList[0]).into(detail_imageview_commentimage)
+        detail_imageview_commentimage.visibility = View.VISIBLE
+        detail_button_deleteCommentimage.visibility = View.VISIBLE
+    }
+
+    // 게시물, 댓글, 대댓글 정보 전부 불러옴
     private fun loadPostingContent(board_id: String) {
         showProgress(true);
         service?.getPostContent(board_id)?.enqueue(object : Callback<LoadPostItem?> {
@@ -129,7 +164,7 @@ class DetailActivity : AppCompatActivity() {
                     }
 
                     //LoadPostItem의 comments를 adapter에 연결할 dtolist에 담는다.
-                    // 정렬 이전의 임시 list
+                    // 정렬 이전의 임시 list.
                     var tempDTOList: ArrayList<Comment> = arrayListOf()
 
                     if (result.comments?.size != 0) {
@@ -141,16 +176,17 @@ class DetailActivity : AppCompatActivity() {
                                     result.comments[i - 1].user_id,
                                     result.comments[i - 1].comment,
                                     result.comments[i - 1].content,
-                                    result.comments[i - 1].createdAt
+                                    result.comments[i - 1].createdAt,
+                                    result.comments[i - 1].image
                                 )
                             )
                         }
                     }
 
-                    //댓글, 대댓글을 id로 정렬하여 새로운 list에 담는다.
+                    //댓글, 대댓글을 상위 id를 가졌는지를 판단하여 정렬, 새로운 list에 담는다.
                     var tempId: String = ""
                     for (i in 1..tempDTOList.size) {
-                        if (tempDTOList[i - 1].comment == null) {
+                        if (tempDTOList[i - 1].comment == null) { // comment값이 존재하면 해당 id를 가진 댓글에 달려있는 대댓글.
                             commentDTOList.add(tempDTOList[i - 1])
                             tempId = tempDTOList[i - 1].id
                             for (j in i..tempDTOList.size) {
@@ -158,6 +194,18 @@ class DetailActivity : AppCompatActivity() {
                                     commentDTOList.add(tempDTOList[j - 1])
                                 }
                             }
+                        }
+                    }
+
+                    // 이미지 담기
+                    if(result.image?.isNotEmpty()!!)
+                    {
+                        for (i in 0 until result.image.size)
+                        {
+
+                            ////////////// 서버주소 해결해야함
+                            /// 축소된 이미지를 불러온다.
+                            imageList.add(RetrofitClient.BASE_URL+result.image[i].formats.thumbnail.url)
                         }
                     }
 
@@ -197,6 +245,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun attemptComment(board_id: String, comment_id: String?){
+        //comment_id에 null이 아닌 값이 들어오면 대댓글
         detail_edittext_comment.error = null
         val content: String = detail_edittext_comment.text.toString()
         var cancel = false
@@ -229,26 +278,28 @@ class DetailActivity : AppCompatActivity() {
 
     private fun postComment(data: PostCommentDTO) {
         service?.userComment("Bearer " + App.prefs.myJwt, data)?.enqueue(object :
-            Callback<PostCommentDTO?> {
+            Callback<PostCommentResponseDTO?> {
             override fun onResponse(
-                call: Call<PostCommentDTO?>?,
-                response: Response<PostCommentDTO?>
+                call: Call<PostCommentResponseDTO?>?,
+                response: Response<PostCommentResponseDTO?>
 
             ) {
 
                 if (response.isSuccessful) {
-                    val result: PostCommentDTO = response.body()!!
+                    val result: PostCommentResponseDTO = response.body()!!
+                    var comment_id = result._id
+                    if(commentImageUriList.isNotEmpty()) uploadImage(comment_id)
                     mAdapter?.notifyDataSetChanged()
 
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
-                    val adapter: TypeAdapter<PostCommentDTO> = gson.getAdapter<PostCommentDTO>(
-                        PostCommentDTO::class.java
+                    val adapter: TypeAdapter<PostCommentResponseDTO> = gson.getAdapter<PostCommentResponseDTO>(
+                        PostCommentResponseDTO::class.java
                     )
                     try {
                         if (response.errorBody() != null) {
-                            val result: PostCommentDTO = adapter.fromJson(
+                            val result: PostCommentResponseDTO = adapter.fromJson(
                                 response.errorBody()!!.string()
                             )
 
@@ -258,13 +309,50 @@ class DetailActivity : AppCompatActivity() {
                     }
                 }
 
+                // 댓글 등록 후 새로고침
+                val intent = intent
+                finish()
+                startActivity(intent)
+
             }
 
-            override fun onFailure(call: Call<PostCommentDTO?>?, t: Throwable) {
+            override fun onFailure(call: Call<PostCommentResponseDTO?>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
             }
         })
 
+    }
+
+    private fun uploadImage(comment_id: String){
+        var images = ArrayList<MultipartBody.Part>()
+        for (index in 0 until commentImageUriList.size) {
+            val file = File(commentImageUriList[index].path)
+            val surveyBody = RequestBody.create(MediaType.parse("image/*"), file)
+            images.add(MultipartBody.Part.createFormData("files",file.name,surveyBody))
+        }
+
+        val ref = RequestBody.create(MediaType.parse("text/plain"),"comment")
+        val refId = RequestBody.create(MediaType.parse("text/plain"),comment_id)
+        val field = RequestBody.create(MediaType.parse("text/plain"),"image")
+
+
+        service?.uploadFile(images,ref,refId,field)?.enqueue(object : Callback<UploadImageResponseDTO?> {
+            override fun onResponse(
+                call: Call<UploadImageResponseDTO?>,
+                response: Response<UploadImageResponseDTO?>
+            ) {
+                var result : UploadImageResponseDTO = response.body()!!
+                for (index in 0 until result.size){
+                    System.out.println("test"+result[index]._id)
+                }
+            }
+
+            override fun onFailure(call: Call<UploadImageResponseDTO?>, t: Throwable) {
+                System.out.println("fail")
+                Log.d("??",t.message)
+            }
+
+        })
     }
 
     private fun postLiked(data: PostLikedDTO) {
@@ -325,6 +413,7 @@ class DetailActivity : AppCompatActivity() {
         })
 
     }
+
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val focusView = currentFocus

@@ -61,6 +61,7 @@ class HomeFragment : Fragment() {
 
 
     private fun loadPosting() {
+        System.out.println("loading!")
         service?.getAllPost()?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
@@ -68,6 +69,7 @@ class HomeFragment : Fragment() {
 
             ) {
                 if (response.isSuccessful) {
+                    System.out.println("loading!2")
                     showProgress(false)
                     val result: LoadPostDTO = response.body()!!
                     val postSize: Int = result.size - 1
@@ -88,7 +90,8 @@ class HomeFragment : Fragment() {
                                     result[i].createdAt,
                                     result[i].header,
                                     result[i].user_id,
-                                    result[i].is_delected
+                                    result[i].is_delected,
+                                    result[i].image
                                 )
                             )
                         }
@@ -101,6 +104,7 @@ class HomeFragment : Fragment() {
                     }
 
                 } else {
+                    System.out.println("loading!3")
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
                     val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
@@ -122,6 +126,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+                System.out.println("loading!4")
                 Log.e("onFailure", t.message!!)
                 showProgress(false)
 //                home_layout_loading.visibility = View.GONE;

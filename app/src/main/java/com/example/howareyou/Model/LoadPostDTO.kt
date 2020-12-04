@@ -16,8 +16,8 @@ data class LoadPostItem(
     @SerializedName("createdAt") val createdAt: String,
     @SerializedName("header") val header: String,
     @SerializedName("user_id") val user_id: String, // 글쓴이 id = 사용자 id 수정 삭제 위해 불러옴
-    @SerializedName("is_delected") val is_delected: Boolean
-//    @SerializedName("image") val image: List<LImage>
+    @SerializedName("is_delected") val is_delected: Boolean,
+    @SerializedName("image") val image: List<Image>?
 )
 
 data class Code(
@@ -30,17 +30,18 @@ data class Comment(
     val user_id: String,
     val comment: String?,
     val content: String,
-    val createdAt: String
+    val createdAt: String,
+    val image: Image?
 )
 
-data class LImage(
+data class Image(
     val __v: Int,
     val _id: String,
     val alternativeText: String,
     val caption: String,
     val createdAt: String,
     val ext: String,
-    val formats: LFormats,
+    val formats: Formats,
     val hash: String,
     val height: Int,
     val id: String,
@@ -54,12 +55,12 @@ data class LImage(
     val width: Int
 )
 
-data class LFormats(
-    val small: LSmall,
-    val thumbnail: LThumbnail
+data class Formats(
+    val small: Small,
+    val thumbnail: Thumbnail
 )
 
-data class LThumbnail(
+data class Thumbnail(
     val ext: String,
     val hash: String,
     val height: Int,
@@ -71,7 +72,7 @@ data class LThumbnail(
     val width: Int
 )
 
-data class LSmall(
+data class Small(
     val ext: String,
     val hash: String,
     val height: Int,
