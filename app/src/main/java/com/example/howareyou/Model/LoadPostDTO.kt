@@ -30,7 +30,8 @@ data class Comment(
     val user_id: String,
     val comment: String?,
     val content: String,
-    val createdAt: String
+    val createdAt: String,
+    val image: Image?
 )
 
 data class Image(

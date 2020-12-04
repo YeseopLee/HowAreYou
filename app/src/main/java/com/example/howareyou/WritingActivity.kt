@@ -62,9 +62,6 @@ class WritingActivity : AppCompatActivity() {
         })
 
         writing_button_imageupload.setOnClickListener {
-            // 권한 체크
-//            var requestPermissions = arrayOf(Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
-//            PermissionCheck(this,requestPermissions)
             TedImagePicker.with(this)
                 .max(5-_uriList.size,R.string.ted_image_picker_max_count)
                 .startMultiImage { uriList -> showMultiImage(uriList) }

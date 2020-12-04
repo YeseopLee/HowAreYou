@@ -8,14 +8,6 @@
     android:background="@color/colorRecomment"
     android:layout_marginTop="1dp">
 
-<!--    <ImageView-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="25dp"-->
-<!--        android:background="@drawable/ic_recomment"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/recomment_layout_content"-->
-<!--        app:layout_constraintStart_toStartOf="parent"/>-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recomment_layout_content"
         android:layout_width="match_parent"
@@ -86,7 +78,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recomment_textview_author" />
+            app:layout_constraintTop_toBottomOf="@+id/recomment_imageview_image" />
 
         <TextView
             android:id="@+id/recomment_textview_date"
@@ -99,6 +91,16 @@
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/recomment_textview_author"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/recomment_imageview_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/recomment_textview_author"
+            app:layout_constraintTop_toBottomOf="@+id/recomment_textview_author"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

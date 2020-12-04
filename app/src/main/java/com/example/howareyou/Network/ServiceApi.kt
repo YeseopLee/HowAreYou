@@ -19,7 +19,7 @@ interface ServiceApi {
     fun userPost(@Header("authorization") authHeader :String, @Body data: PostingDTO?): Call<PostingResponseDTO?>?
 
     @POST("/comments")
-    fun userComment(@Header("authorization") authHeader: String, @Body data: PostCommentDTO): Call<PostCommentDTO>?
+    fun userComment(@Header("authorization") authHeader: String, @Body data: PostCommentDTO): Call<PostCommentResponseDTO>?
 
     @POST("/likeds")
     fun userLiked(@Body data: PostLikedDTO): Call<PostingResponseDTO>?

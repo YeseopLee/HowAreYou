@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.howareyou.Model.Comment
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
+import com.example.howareyou.network.RetrofitClient
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.item_comment.view.*
+import kotlinx.android.synthetic.main.item_imageupload.view.*
 import kotlinx.android.synthetic.main.item_recomment.view.*
 import kotlin.collections.ArrayList
 
@@ -60,11 +63,25 @@ class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : 
         // Get the LayoutInflater from Context
         val layoutInflater:LayoutInflater = LayoutInflater.from(context)
 
+        // 댓글
         if (holder.itemViewType == 0){
             var view = holder.itemView
             view.comment_textview_content.text = detailDTO[position].content
             view.comment_textview_author.text = detailDTO[position].author
             view.comment_textview_date.text = detailDTO[position].createdAt
+
+
+            var tempUrl = detailDTO[position].image?.formats?.thumbnail?.url
+            if(!tempUrl.isNullOrEmpty())
+            {
+                Glide.with(view).load(RetrofitClient.BASE_URL+tempUrl).into(view.comment_imageview_image)
+                view.comment_imageview_image.visibility = View.VISIBLE
+            }
+
+//            if (!detailDTO[position].image()) {
+//                var temp : String = detailDTO[position].image!![0].formats.thumbnail.url
+//                Glide.with(view).load(RetrofitClient.BASE_URL+temp).into(view.imageupload_imageview)
+//            }
 
             view.comment_button_morevert.setOnClickListener (object : OnSingleClickListener(){
                 override fun onSingleClick(view: View) {
@@ -89,12 +106,18 @@ class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : 
             })
 
         }
-        else{
+        else{ // 대댓글
             var view = holder.itemView
             view.recomment_textview_content.text = detailDTO[position].content
             view.recomment_textview_author.text = detailDTO[position].author
             view.recomment_textview_date.text = detailDTO[position].createdAt
 
+            var tempUrl = detailDTO[position].image?.formats?.thumbnail?.url
+            if(!tempUrl.isNullOrEmpty())
+            {
+                Glide.with(view).load(RetrofitClient.BASE_URL+tempUrl).into(view.recomment_imageview_image)
+                view.recomment_imageview_image.visibility = View.VISIBLE
+            }
 
             view.recomment_button_morevert.setOnClickListener (object : OnSingleClickListener(){
                 override fun onSingleClick(view: View) {
