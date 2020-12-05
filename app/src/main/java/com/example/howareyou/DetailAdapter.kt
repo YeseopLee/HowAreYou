@@ -1,11 +1,13 @@
 package com.example.howareyou
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -13,25 +15,32 @@ import com.example.howareyou.Model.Comment
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
-import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.activity_imageview_detail.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
-import kotlinx.android.synthetic.main.item_imageupload.view.*
 import kotlinx.android.synthetic.main.item_recomment.view.*
-import kotlin.collections.ArrayList
 
-class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return when(viewType) {
             0 -> {
-                var view = LayoutInflater.from(context).inflate(R.layout.item_comment,parent,false)
+                var view = LayoutInflater.from(context).inflate(
+                    R.layout.item_comment,
+                    parent,
+                    false
+                )
                 CommentViewHolder(view)
             }
 
             1 -> {
-                var view = LayoutInflater.from(context).inflate(R.layout.item_recomment,parent,false)
+                var view = LayoutInflater.from(context).inflate(
+                    R.layout.item_recomment,
+                    parent,
+                    false
+                )
                 ReCommentViewHolder(view)
             }
 
@@ -39,8 +48,8 @@ class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : 
         }
     }
 
-    inner class CommentViewHolder(view : View) : RecyclerView.ViewHolder(view)
-    inner class ReCommentViewHolder(view : View) : RecyclerView.ViewHolder(view)
+    inner class CommentViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class ReCommentViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     override fun getItemCount(): Int {
         return detailDTO.size
@@ -72,23 +81,31 @@ class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : 
 
 
             var tempUrl = detailDTO[position].image?.formats?.thumbnail?.url
+            var detailUrl = detailDTO[position].image?.url
             if(!tempUrl.isNullOrEmpty())
             {
-                Glide.with(view).load(RetrofitClient.BASE_URL+tempUrl).into(view.comment_imageview_image)
+                Glide.with(view).load(RetrofitClient.BASE_URL + tempUrl).into(view.comment_imageview_image)
                 view.comment_imageview_image.visibility = View.VISIBLE
             }
 
-//            if (!detailDTO[position].image()) {
-//                var temp : String = detailDTO[position].image!![0].formats.thumbnail.url
-//                Glide.with(view).load(RetrofitClient.BASE_URL+temp).into(view.imageupload_imageview)
-//            }
+            view.comment_imageview_image.setOnClickListener {
 
-            view.comment_button_morevert.setOnClickListener (object : OnSingleClickListener(){
+                val dialogView = layoutInflater.inflate(R.layout.activity_imageview_detail, null)
+                Glide.with(dialogView).load(RetrofitClient.BASE_URL + detailUrl).into(dialogView.imageview_detail)
+                builder.setView(dialogView)
+                builder.show()
+
+
+            }
+
+
+            view.comment_button_morevert.setOnClickListener(object : OnSingleClickListener() {
                 override fun onSingleClick(view: View) {
 
                     val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
                     val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
-                    val BtnRecomment = dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
+                    val BtnRecomment =
+                        dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
 
                     builder.setView(dialogView)
                     builder.show()
@@ -115,16 +132,17 @@ class DetailAdapter(val context: Context, val detailDTO : ArrayList<Comment>) : 
             var tempUrl = detailDTO[position].image?.formats?.thumbnail?.url
             if(!tempUrl.isNullOrEmpty())
             {
-                Glide.with(view).load(RetrofitClient.BASE_URL+tempUrl).into(view.recomment_imageview_image)
+                Glide.with(view).load(RetrofitClient.BASE_URL + tempUrl).into(view.recomment_imageview_image)
                 view.recomment_imageview_image.visibility = View.VISIBLE
             }
 
-            view.recomment_button_morevert.setOnClickListener (object : OnSingleClickListener(){
+            view.recomment_button_morevert.setOnClickListener(object : OnSingleClickListener() {
                 override fun onSingleClick(view: View) {
 
                     val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
                     val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
-                    val BtnRecomment = dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
+                    val BtnRecomment =
+                        dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
                     BtnRecomment.visibility = View.GONE
 
                     builder.setView(dialogView)

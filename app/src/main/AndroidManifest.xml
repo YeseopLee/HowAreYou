@@ -2,12 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.howareyou">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!--갤러리 권한-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 갤러리 권한 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".Util.App"
@@ -18,11 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AccountActivity"></activity>
-        <activity android:name=".BoardMenuActivity" />
+        <activity android:name=".AccountActivity" ></activity>
         <activity android:name=".SigninActivity" />
-        <activity android:name=".SearchFragment" />
-        <activity android:name=".PostingActivity" />
         <activity android:name=".WritingActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".MainActivity" />
