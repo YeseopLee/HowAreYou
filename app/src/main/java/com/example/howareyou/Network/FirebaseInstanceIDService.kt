@@ -4,13 +4,11 @@ import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.howareyou.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -28,17 +26,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
+        Log.d(TAG, "onMessageReceived")
         Log.d(TAG, "From: ${remoteMessage.from}")
+
+//        sendNotification(remoteMessage.notification?.body!!)
+
+        sendNotification(remoteMessage.data)
 
         // Check if message contains a data payload.
         // notification만 있으면 background에서만 작동한다. (별도의 notification 채널을 이용하여 작동함)
-        // data를 담아야 sendNotification 실행, intent를 통해 바로 게시판 이동등의 동작 구현가능
-        if (remoteMessage.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-            //Log.d(TAG, "Message data payload: ${remoteMessage.notification}")
-            sendNotification(remoteMessage.notification?.body!!)
-            //sendNotification(remoteMessage.data)
-        }
+        // data를 담으면, foreground상태에서는 sendNotification 실행, intent를 통해 바로 게시판 이동등의 동작 구현가능
+//        if (remoteMessage.data.isNotEmpty()) {
+//            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
+//            //Log.d(TAG, "Message data payload: ${remoteMessage.notification}")
+//            sendNotification(remoteMessage.notification?.body!!)
+//            //sendNotification(remoteMessage.data)
+//        }
 
     }
 
@@ -70,18 +73,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(messageBody: Map<String, String>) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-            PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0 /* Request code */, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
 
         val channelId = "fcm_default_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_btn_speak_now)
-            .setContentTitle("채널 타이틀")
-            .setContentText(messageBody)
+            .setContentTitle(messageBody["url"])
+            .setContentText(messageBody["url2"])
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
@@ -90,9 +95,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
+            val channel = NotificationChannel(
+                channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
