@@ -9,7 +9,9 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.example.howareyou.DetailActivity
 import com.example.howareyou.MainActivity
+import com.example.howareyou.Util.App
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -32,6 +34,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //        sendNotification(remoteMessage.notification?.body!!)
 
         sendNotification(remoteMessage.data)
+        App.prefs.pushedId = remoteMessage.data["board"]!!
 
         // Check if message contains a data payload.
         // notification만 있으면 background에서만 작동한다. (별도의 notification 채널을 이용하여 작동함)
@@ -73,9 +76,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
+
+    /*
+           data: {
+              title : board.title,
+              body : "새 대댓글이 등록되었습니다",
+              board : alarm.board.id
+              }
+    */
     private fun sendNotification(messageBody: Map<String, String>) {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, DetailActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtra("board_id",messageBody["board"])
         val pendingIntent = PendingIntent.getActivity(
             this, 0 /* Request code */, intent,
             PendingIntent.FLAG_ONE_SHOT
@@ -85,8 +97,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_btn_speak_now)
-            .setContentTitle(messageBody["url"])
-            .setContentText(messageBody["url2"])
+            .setContentTitle(messageBody["title"])
+            .setContentText(messageBody["body"])
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
