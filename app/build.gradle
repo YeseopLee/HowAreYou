@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -15,6 +17,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -49,4 +52,12 @@ dependencies {
 
     implementation 'gun0912.ted:tedimagepicker:1.1.4'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+
+    // firebase
+    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // inSdkVersion 20 이하 "AndroidX를 사용하지 않는" 경우
+    implementation 'com.android.support:multidex:1.0.3'
 }

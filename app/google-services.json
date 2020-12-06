@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "426541951658",
+    "firebase_url": "https://lifo-e3e2f.firebaseio.com",
+    "project_id": "lifo-e3e2f",
+    "storage_bucket": "lifo-e3e2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426541951658:android:1a9929fc9728a6465d3ed3",
+        "android_client_info": {
+          "package_name": "com.example.howareyou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426541951658-vjcaach9jna71puc0nmavr1ltsioba29.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.howareyou",
+            "certificate_hash": "3872fbfe57a707a78627e6cf5e3c1c6a091edd00"
+          }
+        },
+        {
+          "client_id": "426541951658-50qel5s38d2b4ms11qjbjijkh302dk92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmu1iqUwuaVRkwG2v1mBMfoB57SPQclto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426541951658-50qel5s38d2b4ms11qjbjijkh302dk92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
