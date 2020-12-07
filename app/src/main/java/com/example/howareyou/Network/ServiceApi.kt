@@ -24,6 +24,9 @@ interface ServiceApi {
     @POST("/likeds")
     fun userLiked(@Body data: PostLikedDTO): Call<PostingResponseDTO>?
 
+    @POST("/usersettings")
+    fun userSetting(@Body data: PostdeviceTokenDTO): Call<Void>?
+
 //    @Multipart
 //    @POST("/upload")
 //    fun uploadFile(@Part imageFile: MultipartBody.Part): Call<UploadImageResponseDTO>?
@@ -39,7 +42,7 @@ interface ServiceApi {
 //    fun getAllPost(): Call<LoadPostDTO?>?
 
     @GET("/boards?_sort=_id:ASC&_limit=30")
-    fun getAllPost(): Call<LoadPostDTO?>?
+    fun getAllPost(@Header("authorization") authHeader: String): Call<LoadPostDTO?>?
 
     @GET("/boards?_sort=_id:ASC&_limit=100")
     fun getSearchPost(): Call<LoadPostDTO?>?
@@ -52,6 +55,9 @@ interface ServiceApi {
 
     @GET("/{url}")
     fun getImage(@Path("url")url : String): Call<imageItem>?
+
+    @GET("/notifications")
+    fun getNoti(): Call<NotiResponseDTO>?
 
     @DELETE("boards/{board_id}")
     fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String): Call<Void>?

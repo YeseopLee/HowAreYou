@@ -36,9 +36,6 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        // sharedpref 연결
-        prefs = PreferenceUtil(applicationContext)
-
         /*Bottom_Navigation*/
         main_bottom_navigation.setOnNavigationItemSelectedListener(this)
         //bottomnavigation 텍스트 제거
@@ -54,6 +51,10 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
     override fun onResume() {
         super.onResume()
         if(main_bottom_navigation.selectedItemId != R.id.action_home) main_bottom_navigation.selectedItemId = R.id.action_home
+    }
+
+    private fun notimanage(){
+
     }
 
 
@@ -105,6 +106,12 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
+        // 알람 badge
+        var badge = main_bottom_navigation.getOrCreateBadge(R.id.action_notification)
+        badge.number = App.prefs.notificationCount
+        badge.isVisible = badge.number != 0
+
         when (item.itemId) {
             R.id.action_home -> {
                 var FragmentA = HomeFragment()
@@ -130,6 +137,17 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
             }
 
             R.id.action_notification -> {
+                val badgeDrawable = main_bottom_navigation.getBadge(R.id.action_notification)
+                if (badgeDrawable != null) {
+                    App.prefs.notificationCount = 0
+                    badgeDrawable.isVisible = false
+                    badgeDrawable.clearNumber()
+                }
+
+                var FragmentD = NotiFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_framelayout, FragmentD).commit()
+
                 return true
             }
 

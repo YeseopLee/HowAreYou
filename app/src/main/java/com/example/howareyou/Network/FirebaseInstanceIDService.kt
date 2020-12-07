@@ -1,4 +1,4 @@
-package com.example.howareyou.Network
+package com.example.howareyou.network
 
 import android.R
 import android.app.NotificationChannel
@@ -10,7 +10,6 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.howareyou.DetailActivity
-import com.example.howareyou.MainActivity
 import com.example.howareyou.Util.App
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -34,7 +33,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //        sendNotification(remoteMessage.notification?.body!!)
 
         sendNotification(remoteMessage.data)
-        App.prefs.pushedId = remoteMessage.data["board"]!!
+        App.prefs.notificationCount++
 
         // Check if message contains a data payload.
         // notification만 있으면 background에서만 작동한다. (별도의 notification 채널을 이용하여 작동함)

@@ -9,10 +9,13 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.howareyou.Model.PostdeviceTokenDTO
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.Model.SignupDTO
 import com.example.howareyou.Model.SignupResponseDTO
+import com.example.howareyou.Model.StatuscodeResponse
+import com.example.howareyou.Util.App
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.activity_signup.*
@@ -25,6 +28,8 @@ import java.io.IOException
 class SignupActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
+
+    var tempuUserid: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,20 +97,21 @@ class SignupActivity : AppCompatActivity() {
                     val result: SignupResponseDTO = response.body()!!
                     showProgress(false)
                     val T1 = Toast.makeText(applicationContext, "환영합니다.",Toast.LENGTH_SHORT)
+                    tempuUserid = result.user._id // id값 임시 저장
                     T1.show()
+                    postDeviceToken()
                     finish()
                 }
-                else if (response.code() == 400) {
+                else {
                     val gson = Gson()
-                    val adapter: TypeAdapter<SignupResponseDTO> = gson.getAdapter<SignupResponseDTO>(
-                        SignupResponseDTO::class.java
+                    val adapter: TypeAdapter<StatuscodeResponse> = gson.getAdapter<StatuscodeResponse>(
+                        StatuscodeResponse::class.java
                     )
                     try {
                         if (response.errorBody() != null) {
                             showProgress(false)
-                            val result : SignupResponseDTO = adapter.fromJson(response.errorBody()!!.string())
-                            val errMessage : String = result.message[0].messages[0].message
-
+                            val result : StatuscodeResponse = adapter.fromJson(response.errorBody()!!.string())
+                            val errMessage : String = "이미 존재하는 아이디입니다."
                             Toast.makeText(applicationContext, errMessage, Toast.LENGTH_SHORT).show()
 
                         }
@@ -116,6 +122,39 @@ class SignupActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<SignupResponseDTO?>, t: Throwable) {
+                Log.e("회원가입 에러 발생", t.message);
+                showProgress(false);
+            }
+
+        })
+    }
+
+    private fun postDeviceToken() {
+        service?.userSetting(PostdeviceTokenDTO(tempuUserid!!, App.prefs.myDevice, true))?.enqueue(object : Callback<Void?> {
+            override fun onResponse(
+                call: Call<Void?>?,
+                response: Response<Void?>
+            ) {
+                if(response.isSuccessful) {
+
+                }
+                else if (response.code() == 400) {
+                    val gson = Gson()
+                    val adapter: TypeAdapter<StatuscodeResponse> = gson.getAdapter<StatuscodeResponse>(
+                        StatuscodeResponse::class.java
+                    )
+                    try {
+                        if (response.errorBody() != null) {
+                            showProgress(false)
+                            val result : StatuscodeResponse = adapter.fromJson(response.errorBody()!!.string())
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
                 Log.e("회원가입 에러 발생", t.message);
                 showProgress(false);
             }

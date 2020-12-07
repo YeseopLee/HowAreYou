@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
+import com.example.howareyou.Model.StatuscodeResponse
+import com.example.howareyou.Util.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
@@ -61,15 +63,13 @@ class HomeFragment : Fragment() {
 
 
     private fun loadPosting() {
-        System.out.println("loading!")
-        service?.getAllPost()?.enqueue(object : Callback<LoadPostDTO?> {
+        service?.getAllPost("Bearer "+App.prefs.myJwt)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
                 response: Response<LoadPostDTO?>
 
             ) {
                 if (response.isSuccessful) {
-                    System.out.println("loading!2")
                     showProgress(false)
                     val result: LoadPostDTO = response.body()!!
                     val postSize: Int = result.size - 1
@@ -104,17 +104,20 @@ class HomeFragment : Fragment() {
                     }
 
                 } else {
-                    System.out.println("loading!3")
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
-                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
-                        LoadPostDTO::class.java
+                    val adapter: TypeAdapter<StatuscodeResponse> = gson.getAdapter<StatuscodeResponse>(
+                        StatuscodeResponse::class.java
                     )
                     try {
                         if (response.errorBody() != null) {
-                            val result: LoadPostDTO = adapter.fromJson(
+                            val result: StatuscodeResponse = adapter.fromJson(
                                 response.errorBody()!!.string()
                             )
+                            if(result.statusCode == 401) // jwt 토큰 만료
+                            {
+
+                            }
 
                         }
                     } catch (e: IOException) {

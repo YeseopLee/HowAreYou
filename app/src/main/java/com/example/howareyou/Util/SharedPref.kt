@@ -11,6 +11,8 @@ class SharedPref(context: Context){
     val key_myName = "name"
     val key_myid = "id"
 
+    val key_myDeviceToken = "device"
+
     val key_code = "code"
     val key_free = "free"
     val key_qa = "qa"
@@ -20,8 +22,8 @@ class SharedPref(context: Context){
     val key_best = "best"
 
     val key_tempCommentid = "none"
-
     val key_pushed = "none"
+    val key_notification_count = "notification"
 
     val prefs: SharedPreferences = context.getSharedPreferences(prefs_filename, 0)
 
@@ -40,6 +42,10 @@ class SharedPref(context: Context){
     var myId: String
         get() = prefs.getString(key_myid, "")!!
         set(value) = prefs.edit().putString(key_myid, value).apply()
+
+    var myDevice: String
+        get() = prefs.getString(key_myDeviceToken, "")!!
+        set(value) = prefs.edit().putString(key_myDeviceToken, value).apply()
 
     var myCode : String
         get() = prefs.getString(key_code, "")!!
@@ -76,6 +82,11 @@ class SharedPref(context: Context){
     var pushedId: String
         get() = prefs.getString(key_pushed, "none")!!
         set(value) = prefs.edit().putString(key_pushed, value).apply()
+
+    var notificationCount: Int
+        get() = prefs.getInt(key_notification_count, 0)!!
+        set(value) = prefs.edit().putInt(key_notification_count, value).apply()
+
     /* get/set 함수 임의 설정. get 실행 시 저장된 값을 반환하며 default 값은 ""
      * set(value) 실행 시 value로 값을 대체한 후 저장 */
 }
