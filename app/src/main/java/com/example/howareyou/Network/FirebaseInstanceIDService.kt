@@ -10,12 +10,23 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.howareyou.DetailActivity
+import com.example.howareyou.Model.PostdeviceTokenDTO
+import com.example.howareyou.Model.StatuscodeResponse
+import com.example.howareyou.Model.UpdateSetResponseDTO
 import com.example.howareyou.Util.App
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
+import com.google.gson.TypeAdapter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.IOException
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    private var service: ServiceApi? = null
 
     /**
      * Called when message is received.
@@ -56,6 +67,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         sendRegistrationToServer(token)
     }
     // [END on_new_token]
+
 
     /**
      * Persist token to third-party servers.
