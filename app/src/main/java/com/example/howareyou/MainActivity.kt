@@ -53,6 +53,10 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         // 기기가 변경되었을 수 있으므로 usersetting db의 device 토큰을 update 한다.
         findSettingid(App.prefs.myId)
 
+        /////////////// test ////////////////
+        Log.e("testcode",App.prefs.myJwt)
+        Log.e("testDevicetoken",App.prefs.myDevice)
+
     }
 
     override fun onResume() {
@@ -113,6 +117,7 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         })
     }
 
+    // id를 기반으로 usersetting id값 검색
     private fun findSettingid(user_id : String) {
         var tempSettingid : String = ""
 
@@ -154,6 +159,7 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         })
     }
 
+    //usersetting id값을 기반으로 device token update
     private fun updateDeviceToken(setting_id : String) {
 
         service?.userUpdatesetting(setting_id,

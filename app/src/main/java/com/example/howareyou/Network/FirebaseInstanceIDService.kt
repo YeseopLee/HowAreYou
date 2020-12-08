@@ -98,6 +98,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(messageBody: Map<String, String>) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        // messageBody["notification_id"]
         intent.putExtra("board_id",messageBody["board"])
         val pendingIntent = PendingIntent.getActivity(
             this, 0 /* Request code */, intent,

@@ -27,6 +27,9 @@ interface ServiceApi {
     @POST("/usersettings")
     fun userSetting(@Body data: PostdeviceTokenDTO): Call<Void>?
 
+    @POST("/alarms")
+    fun postAlarm(@Header("authorization") authHeader: String, @Body data: AlarmDTO): Call<Void>?
+
 //    @Multipart
 //    @POST("/upload")
 //    fun uploadFile(@Part imageFile: MultipartBody.Part): Call<UploadImageResponseDTO>?
@@ -47,8 +50,11 @@ interface ServiceApi {
 //    @GET("/boards")
 //    fun getAllPost(): Call<LoadPostDTO?>?
 
-    @GET("/boards?_sort=_id:ASC&_limit=30")
+    @GET("/boards?_sort=_id:DESC&_limit=20")
     fun getAllPost(@Header("authorization") authHeader: String): Call<LoadPostDTO?>?
+
+    @GET("/boards?_sort=_id:DESC")
+    fun getAllPostMore(@Header("authorization") authHeader: String, @Query ("id_lt")id_lt: String, @Query("_limit")_limit : String): Call<LoadPostDTO?>?
 
     @GET("/boards?_sort=_id:ASC&_limit=100")
     fun getSearchPost(): Call<LoadPostDTO?>?
@@ -78,7 +84,7 @@ interface ServiceApi {
     fun deleteNoti(@Path("noti_id")noti_id: String): Call<Void>?
 
     @DELETE("/alarms/{alarm_id}")
-    fun deleteAlarm(@Path("alarm_id")alarm_id: String): Call<Void>?
+    fun deleteAlarm(@Header("authorization") authHeader: String, @Path("alarm_id")alarm_id : String, @Query("board")board: String): Call<Void>?
 
     /* dynamic query 예시 */
 //    @GET("/api/users")

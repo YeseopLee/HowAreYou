@@ -36,6 +36,8 @@ class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : R
 
     private var service: ServiceApi? = null
 
+    var likeCheck = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return when(viewType) {
@@ -91,17 +93,17 @@ class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : R
             view.comment_textview_content.text = detailDTO[position].content
             view.comment_textview_author.text = detailDTO[position].author
             view.comment_textview_date.text = detailDTO[position].createdAt
+            view.comment_textview_liked.text = detailDTO[position].likeds?.size.toString()
 
             // 좋아요
             view.comment_imageview_liked.setOnClickListener {
-                postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, null, detailDTO[position].id))
+                postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, null, detailDTO[position].id),view,holder)
             }
 
             // 사용자 좋아요 상태 체크
-            if(detailDTO[position].)
-            for (i in 0 until) {
-                if (result.likeds[i - 1].user_id == App.prefs.myId) {
-                    detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+            for (i in 0 until (detailDTO[position].likeds?.size!!)) {
+                if (detailDTO[position].likeds!![i].user_id == App.prefs.myId) {
+                    view.comment_imageview_liked.setBackgroundResource(R.drawable.ic_thumbsup)
                 }
             }
 
@@ -153,10 +155,19 @@ class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : R
             view.recomment_textview_content.text = detailDTO[position].content
             view.recomment_textview_author.text = detailDTO[position].author
             view.recomment_textview_date.text = detailDTO[position].createdAt
+            view.recomment_textview_liked.text = detailDTO[position].likeds?.size.toString()
 
             // 좋아요
             view.recomment_imageview_liked.setOnClickListener {
-                postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, null, detailDTO[position].id))
+                postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, null, detailDTO[position].id),view,holder)
+            }
+
+            // 사용자 좋아요 상태 체크
+
+            for (i in 0 until (detailDTO[position].likeds?.size!!)) {
+                if (detailDTO[position].likeds!![i].user_id == App.prefs.myId) {
+                    view.recomment_imageview_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+                }
             }
 
             // 이미지
@@ -201,7 +212,7 @@ class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : R
 
     }
 
-    private fun postLiked(data: PostLikedDTO) {
+    private fun postLiked(data: PostLikedDTO, view: View, holder: RecyclerView.ViewHolder) {
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
         service?.userLiked(data)?.enqueue(object : Callback<PostingResponseDTO?> {
@@ -210,9 +221,14 @@ class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : R
                 response: Response<PostingResponseDTO?>
 
             ) {
-//                detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
-//                detail_textview_liked.text = (detail_textview_liked.text.toString().toInt() + 1).toString()
-
+                if(holder.itemViewType == 0)
+                {
+                    view.comment_imageview_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+                    view.comment_textview_liked.text = (view.comment_textview_liked.text.toString().toInt() + 1).toString()
+                } else {
+                    view.recomment_imageview_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+                    view.recomment_textview_liked.text = (view.recomment_textview_liked.text.toString().toInt() + 1).toString()
+                }
             }
 
             override fun onFailure(call: Call<PostingResponseDTO?>?, t: Throwable) {
