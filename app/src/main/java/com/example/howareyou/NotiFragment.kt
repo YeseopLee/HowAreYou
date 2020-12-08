@@ -61,6 +61,10 @@ class NotiFragment : Fragment() {
 //        loadPosting()
 //    }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
 
     private fun loadNotification() {
         service?.getNoti()?.enqueue(object : Callback<NotiResponseDTO?> {
@@ -71,11 +75,9 @@ class NotiFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     //showProgress(false)
-                    System.out.println("userid"+App.prefs.myId)
                     val result: NotiResponseDTO = response.body()!!
                     for ( i in 0 until result.size){
-                        System.out.println(result[i].user_id)
-                        if(App.prefs.myId == result[i].user_id) notiDTOList.add(NotiItem(result[i].user_id,result[i].content,result[i].createdAt,result[i].board))
+                        if(App.prefs.myId == result[i].user_id) notiDTOList.add(NotiItem(result[i].user_id,result[i].content,result[i].createdAt,result[i].board,result[i]._id,result[i].viewed))
                     }
                     attachAdapter()
                 } else {
@@ -107,7 +109,7 @@ class NotiFragment : Fragment() {
 
     private fun attachAdapter(){
         //어댑터 연결
-        notification_recyclerview.adapter = NotiAdapter(activity!!, notiDTOList)
+        notification_recyclerview.adapter = NotiAdapter(activity!!,notiDTOList)
         val lm = LinearLayoutManager(activity)
         notification_recyclerview.layoutManager = lm
         notification_recyclerview.setHasFixedSize(true)

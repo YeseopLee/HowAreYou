@@ -5,15 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
-    android:layout_marginTop="1dp">
+    android:background="@color/colorWhite">
 
     <TextView
         android:id="@+id/posting_textview_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:gravity="left"
         android:text="@string/writing_guide"
@@ -27,7 +26,7 @@
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:textSize="16sp"
         android:text="제목"
@@ -79,9 +78,8 @@
         android:id="@+id/posting_textview_comment"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
-
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="0"
@@ -95,7 +93,7 @@
         android:id="@+id/posting_textview_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="10dp"
         android:text="날짜 |"
@@ -120,7 +118,9 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0.3dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@color/colorDivision"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

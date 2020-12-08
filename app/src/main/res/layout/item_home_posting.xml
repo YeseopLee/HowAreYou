@@ -5,16 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@color/colorWhite"
-    android:layout_marginTop="1dp">
+    android:layout_marginTop="0.5dp"
+    android:background="@color/colorWhite">
 
     <TextView
         android:id="@+id/homeposting_textview_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:gravity="left"
         android:text="@string/writing_guide"
         android:textSize="14sp"
@@ -28,8 +28,8 @@
         android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
         android:textSize="16sp"
         android:text="@string/title"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
         android:id="@+id/homeposting_textview_boardname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="15dp"
         android:text="@string/board"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/homeposting_textview_title"
@@ -87,7 +87,7 @@
         android:id="@+id/homeposting_textview_comment"
         android:layout_width="20dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="15dp"
         android:layout_marginBottom="5dp"
         android:gravity="center"
         android:text="0"
@@ -102,7 +102,7 @@
         android:id="@+id/homeposting_textview_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginBottom="5dp"
         android:text="@string/date"
         android:textSize="14sp"
@@ -114,32 +114,25 @@
         android:id="@+id/homeposting_textview_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginBottom="10dp"
         android:text="@string/author"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@id/homeposting_linearlayout_division"
+        app:layout_constraintBottom_toTopOf="@id/homeposting_textview_date"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@color/colorDivision"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"></LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/homeposting_linearlayout_division"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginBottom="5dp"
-        android:orientation="vertical"
-        android:background="@color/colorDivision"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/homeposting_button_favorite"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

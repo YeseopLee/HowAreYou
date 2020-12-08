@@ -38,6 +38,9 @@ interface ServiceApi {
     @PUT("/usersettings/{id}")
     fun userUpdatesetting(@Path("id")setting_id : String, @Body data: PostdeviceTokenDTO): Call<Void>?
 
+    @PUT("/notifications/{noti_id}")
+    fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Call<Void>?
+
     @GET("/Codes")
     fun getCode(): Call<LoadCodeResponseDTO>?
 
@@ -65,8 +68,17 @@ interface ServiceApi {
     @GET("/usersettings")
     fun getUsersettings(): Call<UpdateSetResponseDTO>?
 
+    @GET("/alarms")
+    fun getAlarms(): Call<AlarmResponseDTO>?
+
     @DELETE("boards/{board_id}")
     fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String): Call<Void>?
+
+    @DELETE("/notifications/{noti_id}")
+    fun deleteNoti(@Path("noti_id")noti_id: String): Call<Void>?
+
+    @DELETE("/alarms/{alarm_id}")
+    fun deleteAlarm(@Path("alarm_id")alarm_id: String): Call<Void>?
 
     /* dynamic query 예시 */
 //    @GET("/api/users")

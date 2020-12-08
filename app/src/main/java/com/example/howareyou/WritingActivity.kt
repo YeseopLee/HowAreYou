@@ -14,6 +14,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -151,6 +152,11 @@ class WritingActivity : AppCompatActivity() {
             focusView = writing_edittext_content
             cancel = true
         }
+        // 게시판 유효성 검사
+        if (App.prefs.myCode == ""){
+            Toast.makeText(this,"게시판을 선택하세요.",Toast.LENGTH_SHORT).show()
+            cancel = true
+        }
         if (cancel) {
             focusView?.requestFocus()
         } else {
@@ -169,7 +175,11 @@ class WritingActivity : AppCompatActivity() {
                 {
                     val result: PostingResponseDTO = response.body()!!
 //                    movePostingPage()
-                    if(_uriList.isNotEmpty())  uploadImage(result.id) // 이미지를 올렸다면 이미지 post를 호출한다.
+                    if(_uriList.isNotEmpty())  uploadImage(result._id) // 이미지를 올렸다면 이미지 post를 호출한다.
+
+                    val intent = Intent(applicationContext,DetailActivity::class.java)
+                    intent.putExtra("board_id",result._id)
+                    startActivity(intent)
                     finish()
 
                 }else {

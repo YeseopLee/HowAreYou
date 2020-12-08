@@ -10,6 +10,9 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import com.example.howareyou.Model.LoadCodeResponseDTO
+import com.example.howareyou.Model.PostdeviceTokenDTO
+import com.example.howareyou.Model.StatuscodeResponse
+import com.example.howareyou.Model.UpdateSetResponseDTO
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.PreferenceUtil
 import com.example.howareyou.network.RetrofitClient
@@ -46,11 +49,16 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         // 게시판별 코드 불러오기
         loadCode()
 
+        // update device token
+        // 기기가 변경되었을 수 있으므로 usersetting db의 device 토큰을 update 한다.
+        findSettingid(App.prefs.myId)
+
     }
 
     override fun onResume() {
         super.onResume()
-        if(main_bottom_navigation.selectedItemId != R.id.action_home) main_bottom_navigation.selectedItemId = R.id.action_home
+        // 글쓰기에서 메인 진입시 홈으로 이동
+        if(main_bottom_navigation.selectedItemId == R.id.action_write) main_bottom_navigation.selectedItemId = R.id.action_home
     }
 
     private fun notimanage(){
@@ -102,6 +110,82 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
             override fun onFailure(call: Call<LoadCodeResponseDTO?>?, t: Throwable) {
                 Log.e("에러 발생", t.message!!)
             }
+        })
+    }
+
+    private fun findSettingid(user_id : String) {
+        var tempSettingid : String = ""
+
+        service?.getUsersettings()?.enqueue(object :
+            Callback<UpdateSetResponseDTO?> {
+            override fun onResponse(
+                call: Call<UpdateSetResponseDTO?>?,
+                response: Response<UpdateSetResponseDTO?>
+            ) {
+                if(response.isSuccessful) {
+                    val result = response.body()!!
+                    for ( i in 0 until result.size){
+                        if(result[i].user_id == user_id)
+                        {
+                            tempSettingid = result[i]._id
+                            updateDeviceToken(tempSettingid) // setting id를 기반으로 devicetoken을 update 한다.
+                        }
+                    }
+                }
+                else if (response.code() == 400) {
+                    val gson = Gson()
+                    val adapter: TypeAdapter<StatuscodeResponse> = gson.getAdapter<StatuscodeResponse>(
+                        StatuscodeResponse::class.java
+                    )
+                    try {
+                        if (response.errorBody() != null) {
+                            val result : StatuscodeResponse = adapter.fromJson(response.errorBody()!!.string())
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateSetResponseDTO?>, t: Throwable) {
+                //
+            }
+
+        })
+    }
+
+    private fun updateDeviceToken(setting_id : String) {
+
+        service?.userUpdatesetting(setting_id,
+            PostdeviceTokenDTO(App.prefs.myId,App.prefs.myDevice,true)
+        )?.enqueue(object :
+            Callback<Void?> {
+            override fun onResponse(
+                call: Call<Void?>?,
+                response: Response<Void?>
+            ) {
+                if(response.isSuccessful) {
+
+                }
+                else if (response.code() == 400) {
+                    val gson = Gson()
+                    val adapter: TypeAdapter<StatuscodeResponse> = gson.getAdapter<StatuscodeResponse>(
+                        StatuscodeResponse::class.java
+                    )
+                    try {
+                        if (response.errorBody() != null) {
+                            val result : StatuscodeResponse = adapter.fromJson(response.errorBody()!!.string())
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                //
+            }
+
         })
     }
 
