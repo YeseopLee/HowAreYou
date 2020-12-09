@@ -54,10 +54,13 @@ interface ServiceApi {
     fun getAllPost(@Header("authorization") authHeader: String): Call<LoadPostDTO?>?
 
     @GET("/boards?_sort=_id:DESC")
-    fun getAllPostMore(@Header("authorization") authHeader: String, @Query ("id_lt")id_lt: String, @Query("_limit")_limit : String): Call<LoadPostDTO?>?
+    fun getAllPostMore(@Header("authorization") authHeader: String, @Query ("id_lt")id_lt: String, @Query("_limit")_limit : Int): Call<LoadPostDTO?>?
 
-    @GET("/boards?_sort=_id:ASC&_limit=100")
+    @GET("/boards?_sort=_id:DESC&_limit=100")
     fun getSearchPost(): Call<LoadPostDTO?>?
+
+    @GET("/boards?_sort=_id:DESC")
+    fun getSearchPostMore(@Header("authorization") authHeader: String, @Query ("id_lt")id_lt: String, @Query("_limit")_limit : Int): Call<LoadPostDTO?>?
 
     @GET("/boards?_sort=_id:DESC&_limit=30")
     fun getPost(@Query("code") code: String): Call<LoadPostDTO?>?

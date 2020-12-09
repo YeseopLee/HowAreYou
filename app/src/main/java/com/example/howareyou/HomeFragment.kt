@@ -31,9 +31,11 @@ class HomeFragment : Fragment() {
     private var service: ServiceApi? = null
     val postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
 
+    val loadLimit : Int = 100 // 한번에 불러올 게시물 양
+
     private lateinit var scrollListener: EndlessRecyclerViewScrollListener
     private lateinit var homeAdapter: HomeAdapter
-    private lateinit var lastboard_id: String
+    private lateinit var lastboard_id: String // loadMore를 위한 마지막 게시물 id
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,12 +70,14 @@ class HomeFragment : Fragment() {
         homeAdapter = HomeAdapter(activity!!, postingDTOlist)
         val linearLayoutManager = LinearLayoutManager(activity)
         home_recyclerview.layoutManager = linearLayoutManager
+
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                loadPostingMore(lastboard_id)
+                loadPostingMore()
             }
         }
         home_recyclerview.addOnScrollListener(scrollListener)
+
         home_recyclerview.adapter = homeAdapter
     }
 
@@ -148,8 +152,8 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun loadPostingMore(board_id : String) {
-        service?.getAllPostMore("Bearer "+App.prefs.myJwt,board_id,"20")?.enqueue(object : Callback<LoadPostDTO?> {
+    private fun loadPostingMore() {
+        service?.getAllPostMore("Bearer "+App.prefs.myJwt,lastboard_id,loadLimit)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
                 response: Response<LoadPostDTO?>
