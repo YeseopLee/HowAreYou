@@ -17,4 +17,13 @@ data class User(
     val username: String
 )
 
+data class Message(
+    val messages: List<MessageX>
+)
+
+data class MessageX(
+    val id: String,
+    val message: String
+)
+
 

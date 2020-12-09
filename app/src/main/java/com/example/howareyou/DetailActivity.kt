@@ -45,11 +45,15 @@ class DetailActivity : AppCompatActivity() {
     var mAdapter = DetailAdapter(this, commentDTOList)
 
     //image recyclerview data / adapter
-    var imageList : ArrayList<String> = arrayListOf()
+    var imageList : ArrayList<ImageDTO> = arrayListOf()
     var mImageAdapter = Detail_imageAdapter(this, imageList)
 
     //commnet image uri
     var commentImageUriList : ArrayList<Uri> = arrayListOf()
+
+    //alarm check
+    var alarmisRunning : Boolean = false
+    var alarm_id : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,11 +74,14 @@ class DetailActivity : AppCompatActivity() {
         detail_recyclerview_imageview.layoutManager = lm2
         detail_recyclerview_imageview.setHasFixedSize(true)
 
+        getAlarm(App.prefs.myId,board_id)
+        System.out.println("현재id"+App.prefs.myId)
+        System.out.println("현재board"+board_id)
+
         // buttons
         detail_button_back.setOnClickListener { //뒤로가기 버튼
             //finish()
         }
-
 
         detail_button_postcomment.setOnClickListener { // 댓글등록 버튼
             if(App.prefs.tempCommentId == "none") attemptComment(board_id, null)
@@ -93,6 +100,22 @@ class DetailActivity : AppCompatActivity() {
             override fun onSingleClick(view: View) {
                 //게시물 or 코멘트 좋아요
                 postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, board_id, null));
+            }
+        })
+
+        //알람버튼
+        detail_button_notification.setOnClickListener(object : OnSingleClickListener(){ //알람버튼
+            override fun onSingleClick(view: View) {
+                if(alarmisRunning) {
+                    deleteAlarm(board_id)
+                    detail_button_notification.setBackgroundResource(R.drawable.ic_notification_gray)
+                    Toast.makeText(applicationContext,"댓글 알림을 받지 않습니다.",Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    postAlarm(board_id)
+                    detail_button_notification.setBackgroundResource(R.drawable.ic_notification)
+                    Toast.makeText(applicationContext,"댓글 알림을 받습니다.",Toast.LENGTH_SHORT).show()
+                }
             }
         })
 
@@ -121,7 +144,10 @@ class DetailActivity : AppCompatActivity() {
 
             }
         })
+    }
 
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onDestroy() {
@@ -177,7 +203,8 @@ class DetailActivity : AppCompatActivity() {
                                     result.comments[i - 1].comment,
                                     result.comments[i - 1].content,
                                     result.comments[i - 1].createdAt,
-                                    result.comments[i - 1].image
+                                    result.comments[i - 1].image,
+                                    result.comments[i - 1].likeds
                                 )
                             )
                         }
@@ -202,10 +229,8 @@ class DetailActivity : AppCompatActivity() {
                     {
                         for (i in 0 until result.image.size)
                         {
-
-                            ////////////// 서버주소 해결해야함
                             /// 축소된 이미지를 불러온다.
-                            imageList.add(RetrofitClient.BASE_URL+result.image[i].formats.thumbnail.url)
+                            imageList.add(ImageDTO(RetrofitClient.BASE_URL+result.image[i].formats.thumbnail.url,RetrofitClient.BASE_URL+result.image[i].url))
                         }
                     }
 
@@ -287,12 +312,14 @@ class DetailActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val result: PostCommentResponseDTO = response.body()!!
+                    System.out.println("왜안돼")
                     var comment_id = result._id
                     if(commentImageUriList.isNotEmpty()) uploadImage(comment_id)
                     mAdapter?.notifyDataSetChanged()
 
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
+                    System.out.println("왜안돼2")
                     val gson = Gson()
                     val adapter: TypeAdapter<PostCommentResponseDTO> = gson.getAdapter<PostCommentResponseDTO>(
                         PostCommentResponseDTO::class.java
@@ -302,6 +329,8 @@ class DetailActivity : AppCompatActivity() {
                             val result: PostCommentResponseDTO = adapter.fromJson(
                                 response.errorBody()!!.string()
                             )
+                            System.out.println(response.errorBody().toString())
+                            System.out.println(response.errorBody()!!.string())
 
                         }
                     } catch (e: IOException) {
@@ -317,6 +346,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostCommentResponseDTO?>?, t: Throwable) {
+                System.out.println("왜안돼3")
                 Log.e("onFailure", t.message!!)
             }
         })
@@ -362,7 +392,6 @@ class DetailActivity : AppCompatActivity() {
                 response: Response<PostingResponseDTO?>
 
             ) {
-
                 detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
                 detail_textview_liked.text = (detail_textview_liked.text.toString().toInt() + 1).toString()
 
@@ -412,6 +441,69 @@ class DetailActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun getAlarm(user_id : String, board_id: String) {
+        service?.getAlarms()?.enqueue(object : Callback<AlarmResponseDTO?> {
+            override fun onResponse(
+                call: Call<AlarmResponseDTO?>?,
+                response: Response<AlarmResponseDTO?>
+            ) {
+                if (response.isSuccessful) {
+                    var result : AlarmResponseDTO = response.body()!!
+                    for (i in 0 until result.size){
+                        if(user_id == result[i].user_id && board_id == result[i].board._id ){
+                            // 해당 글에 대한 알람을 받는상태.
+                            alarm_id = result[i]._id
+                            detail_button_notification.setBackgroundResource(R.drawable.ic_notification)
+                            alarmisRunning = true
+                        } else {
+                        }
+                    }
+                    if(!alarmisRunning) detail_button_notification.setBackgroundResource(R.drawable.ic_notification_gray)
+                }
+            }
+
+            override fun onFailure(call: Call<AlarmResponseDTO?>?, t: Throwable) {
+                Log.e("onFailure", t.message!!)
+            }
+        })
+    }
+
+    private fun deleteAlarm(board_id: String) {
+        service?.deleteAlarm("Bearer "+App.prefs.myJwt,alarm_id,board_id)?.enqueue(object : Callback<Void?> {
+            override fun onResponse(
+                call: Call<Void?>?,
+                response: Response<Void?>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("onSuccess",alarm_id)
+                    alarmisRunning = false
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>?, t: Throwable) {
+                Log.e("onFailure", t.message!!)
+            }
+        })
+    }
+
+    private fun postAlarm(board_id: String) {
+        service?.postAlarm("Bearer "+App.prefs.myJwt, AlarmDTO(App.prefs.myId,board_id))?.enqueue(object : Callback<Void?> {
+            override fun onResponse(
+                call: Call<Void?>?,
+                response: Response<Void?>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("onSuccess",alarm_id)
+                    alarmisRunning = true
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>?, t: Throwable) {
+                Log.e("onFailure", t.message!!)
+            }
+        })
     }
 
 

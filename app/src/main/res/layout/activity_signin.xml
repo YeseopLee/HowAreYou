@@ -46,12 +46,15 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         app:boxStrokeColor="@color/colorGray"
+
+        app:hintTextAppearance="@color/colorGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signin_textinputlayout_id">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signin_edittext_password"
+            android:textColorHint="@color/colorGray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password" />

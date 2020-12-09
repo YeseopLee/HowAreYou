@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/commnet_imageview_liked"
+        android:id="@+id/comment_imageview_liked"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginRight="5dp"

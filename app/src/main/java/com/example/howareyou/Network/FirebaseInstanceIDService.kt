@@ -1,4 +1,4 @@
-package com.example.howareyou.Network
+package com.example.howareyou.network
 
 import android.R
 import android.app.NotificationChannel
@@ -10,13 +10,23 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.howareyou.DetailActivity
-import com.example.howareyou.MainActivity
+import com.example.howareyou.Model.PostdeviceTokenDTO
+import com.example.howareyou.Model.StatuscodeResponse
+import com.example.howareyou.Model.UpdateSetResponseDTO
 import com.example.howareyou.Util.App
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
+import com.google.gson.TypeAdapter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.IOException
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    private var service: ServiceApi? = null
 
     /**
      * Called when message is received.
@@ -34,7 +44,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //        sendNotification(remoteMessage.notification?.body!!)
 
         sendNotification(remoteMessage.data)
-        App.prefs.pushedId = remoteMessage.data["board"]!!
+        App.prefs.notificationCount++
 
         // Check if message contains a data payload.
         // notification만 있으면 background에서만 작동한다. (별도의 notification 채널을 이용하여 작동함)
@@ -57,6 +67,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         sendRegistrationToServer(token)
     }
     // [END on_new_token]
+
 
     /**
      * Persist token to third-party servers.
@@ -87,6 +98,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun sendNotification(messageBody: Map<String, String>) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        // messageBody["notification_id"]
         intent.putExtra("board_id",messageBody["board"])
         val pendingIntent = PendingIntent.getActivity(
             this, 0 /* Request code */, intent,

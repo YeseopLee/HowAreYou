@@ -31,7 +31,8 @@ data class Comment(
     val comment: String?,
     val content: String,
     val createdAt: String,
-    val image: Image?
+    val image: Image?,
+    val likeds: List<Liked>?
 )
 
 data class Image(

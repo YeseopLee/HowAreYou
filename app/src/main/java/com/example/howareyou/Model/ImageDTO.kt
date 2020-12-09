@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ImageDTO(
 
-    @SerializedName("imageurl") val imageurl: String,
-    @SerializedName("content") val content: String
+    @SerializedName("thumbnail") val thumbnail: String,
+    @SerializedName("image") val image: String
 
 )

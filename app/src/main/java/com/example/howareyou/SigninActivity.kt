@@ -9,11 +9,10 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
-import com.example.howareyou.Model.SigninDTO
-import com.example.howareyou.Model.SigninResponseDTO
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.Util.PreferenceUtil
 import com.google.gson.Gson
@@ -109,6 +108,7 @@ class SigninActivity : AppCompatActivity() {
                     App.prefs.myId = result.user._id
                     Log.e("로그인 토큰 확인",App.prefs.myEmail+","+App.prefs.myJwt)
                     Log.e("유저 정보 확인", result.user.username+","+result.user._id)
+
                     moveMainpage()
                 }else {
                     // 실패시 resopnse.errorbody를 객체화
@@ -134,6 +134,8 @@ class SigninActivity : AppCompatActivity() {
             }
         })
     }
+
+
 
     private fun isEmailValid(email: String): Boolean {
         return email.contains("@")

@@ -10,6 +10,9 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import com.example.howareyou.Model.LoadCodeResponseDTO
+import com.example.howareyou.Model.PostdeviceTokenDTO
+import com.example.howareyou.Model.StatuscodeResponse
+import com.example.howareyou.Model.UpdateSetResponseDTO
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.PreferenceUtil
 import com.example.howareyou.network.RetrofitClient
@@ -36,9 +39,6 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        // sharedpref 연결
-        prefs = PreferenceUtil(applicationContext)
-
         /*Bottom_Navigation*/
         main_bottom_navigation.setOnNavigationItemSelectedListener(this)
         //bottomnavigation 텍스트 제거
@@ -49,11 +49,24 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         // 게시판별 코드 불러오기
         loadCode()
 
+        // update device token
+        // 기기가 변경되었을 수 있으므로 usersetting db의 device 토큰을 update 한다.
+        findSettingid(App.prefs.myId)
+
+        /////////////// test ////////////////
+        Log.e("testcode",App.prefs.myJwt)
+        Log.e("testDevicetoken",App.prefs.myDevice)
+
     }
 
     override fun onResume() {
         super.onResume()
-        if(main_bottom_navigation.selectedItemId != R.id.action_home) main_bottom_navigation.selectedItemId = R.id.action_home
+        // 글쓰기에서 메인 진입시 홈으로 이동
+        if(main_bottom_navigation.selectedItemId == R.id.action_write) main_bottom_navigation.selectedItemId = R.id.action_home
+    }
+
+    private fun notimanage(){
+
     }
 
 
@@ -104,7 +117,91 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
         })
     }
 
+    // id를 기반으로 usersetting id값 검색
+    private fun findSettingid(user_id : String) {
+        var tempSettingid : String = ""
+
+        service?.getUsersettings()?.enqueue(object :
+            Callback<UpdateSetResponseDTO?> {
+            override fun onResponse(
+                call: Call<UpdateSetResponseDTO?>?,
+                response: Response<UpdateSetResponseDTO?>
+            ) {
+                if(response.isSuccessful) {
+                    val result = response.body()!!
+                    for ( i in 0 until result.size){
+                        if(result[i].user_id == user_id)
+                        {
+                            tempSettingid = result[i]._id
+                            updateDeviceToken(tempSettingid) // setting id를 기반으로 devicetoken을 update 한다.
+                        }
+                    }
+                }
+                else if (response.code() == 400) {
+                    val gson = Gson()
+                    val adapter: TypeAdapter<StatuscodeResponse> = gson.getAdapter<StatuscodeResponse>(
+                        StatuscodeResponse::class.java
+                    )
+                    try {
+                        if (response.errorBody() != null) {
+                            val result : StatuscodeResponse = adapter.fromJson(response.errorBody()!!.string())
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateSetResponseDTO?>, t: Throwable) {
+                //
+            }
+
+        })
+    }
+
+    //usersetting id값을 기반으로 device token update
+    private fun updateDeviceToken(setting_id : String) {
+
+        service?.userUpdatesetting(setting_id,
+            PostdeviceTokenDTO(App.prefs.myId,App.prefs.myDevice,true)
+        )?.enqueue(object :
+            Callback<Void?> {
+            override fun onResponse(
+                call: Call<Void?>?,
+                response: Response<Void?>
+            ) {
+                if(response.isSuccessful) {
+
+                }
+                else if (response.code() == 400) {
+                    val gson = Gson()
+                    val adapter: TypeAdapter<StatuscodeResponse> = gson.getAdapter<StatuscodeResponse>(
+                        StatuscodeResponse::class.java
+                    )
+                    try {
+                        if (response.errorBody() != null) {
+                            val result : StatuscodeResponse = adapter.fromJson(response.errorBody()!!.string())
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                //
+            }
+
+        })
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
+        // 알람 badge
+        var badge = main_bottom_navigation.getOrCreateBadge(R.id.action_notification)
+        badge.number = App.prefs.notificationCount
+        badge.isVisible = badge.number != 0
+
         when (item.itemId) {
             R.id.action_home -> {
                 var FragmentA = HomeFragment()
@@ -130,6 +227,17 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
             }
 
             R.id.action_notification -> {
+                val badgeDrawable = main_bottom_navigation.getBadge(R.id.action_notification)
+                if (badgeDrawable != null) {
+                    App.prefs.notificationCount = 0
+                    badgeDrawable.isVisible = false
+                    badgeDrawable.clearNumber()
+                }
+
+                var FragmentD = NotiFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_framelayout, FragmentD).commit()
+
                 return true
             }
 

@@ -24,6 +24,12 @@ interface ServiceApi {
     @POST("/likeds")
     fun userLiked(@Body data: PostLikedDTO): Call<PostingResponseDTO>?
 
+    @POST("/usersettings")
+    fun userSetting(@Body data: PostdeviceTokenDTO): Call<Void>?
+
+    @POST("/alarms")
+    fun postAlarm(@Header("authorization") authHeader: String, @Body data: AlarmDTO): Call<Void>?
+
 //    @Multipart
 //    @POST("/upload")
 //    fun uploadFile(@Part imageFile: MultipartBody.Part): Call<UploadImageResponseDTO>?
@@ -32,14 +38,23 @@ interface ServiceApi {
     @POST("/upload")
     fun uploadFile(@Part imageFile: ArrayList<MultipartBody.Part>, @Part ("ref") ref: RequestBody, @Part ("refId") refId: RequestBody, @Part ("field") field: RequestBody): Call<UploadImageResponseDTO>?
 
+    @PUT("/usersettings/{id}")
+    fun userUpdatesetting(@Path("id")setting_id : String, @Body data: PostdeviceTokenDTO): Call<Void>?
+
+    @PUT("/notifications/{noti_id}")
+    fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Call<Void>?
+
     @GET("/Codes")
     fun getCode(): Call<LoadCodeResponseDTO>?
 
 //    @GET("/boards")
 //    fun getAllPost(): Call<LoadPostDTO?>?
 
-    @GET("/boards?_sort=_id:ASC&_limit=30")
-    fun getAllPost(): Call<LoadPostDTO?>?
+    @GET("/boards?_sort=_id:DESC&_limit=20")
+    fun getAllPost(@Header("authorization") authHeader: String): Call<LoadPostDTO?>?
+
+    @GET("/boards?_sort=_id:DESC")
+    fun getAllPostMore(@Header("authorization") authHeader: String, @Query ("id_lt")id_lt: String, @Query("_limit")_limit : String): Call<LoadPostDTO?>?
 
     @GET("/boards?_sort=_id:ASC&_limit=100")
     fun getSearchPost(): Call<LoadPostDTO?>?
@@ -53,8 +68,23 @@ interface ServiceApi {
     @GET("/{url}")
     fun getImage(@Path("url")url : String): Call<imageItem>?
 
+    @GET("/notifications")
+    fun getNoti(): Call<NotiResponseDTO>?
+
+    @GET("/usersettings")
+    fun getUsersettings(): Call<UpdateSetResponseDTO>?
+
+    @GET("/alarms")
+    fun getAlarms(): Call<AlarmResponseDTO>?
+
     @DELETE("boards/{board_id}")
     fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String): Call<Void>?
+
+    @DELETE("/notifications/{noti_id}")
+    fun deleteNoti(@Path("noti_id")noti_id: String): Call<Void>?
+
+    @DELETE("/alarms/{alarm_id}")
+    fun deleteAlarm(@Header("authorization") authHeader: String, @Path("alarm_id")alarm_id : String, @Query("board")board: String): Call<Void>?
 
     /* dynamic query 예시 */
 //    @GET("/api/users")
