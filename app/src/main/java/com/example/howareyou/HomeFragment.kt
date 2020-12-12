@@ -133,11 +133,6 @@ class HomeFragment : Fragment() {
                             lastboard_id = result[i].id
 
                         }
-
-                        val convtime = ConvertTime()
-                        System.out.println("timetest0"+result[0].createdAt)
-                        System.out.println("timetest" +convtime.convertTimeZone(result[0].createdAt))
-
                         initAdapter()
                     } else {
                         //TODO

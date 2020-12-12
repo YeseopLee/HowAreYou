@@ -19,6 +19,7 @@ import com.example.howareyou.Model.Comment
 import com.example.howareyou.Model.PostLikedDTO
 import com.example.howareyou.Model.PostingResponseDTO
 import com.example.howareyou.Util.App
+import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
@@ -26,6 +27,7 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_detail.view.*
 import kotlinx.android.synthetic.main.activity_imageview_detail.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
+import kotlinx.android.synthetic.main.item_home_posting.view.*
 import kotlinx.android.synthetic.main.item_recomment.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -92,8 +94,11 @@ class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : R
             var view = holder.itemView
             view.comment_textview_content.text = detailDTO[position].content
             view.comment_textview_author.text = detailDTO[position].author
-            view.comment_textview_date.text = detailDTO[position].createdAt
             view.comment_textview_liked.text = detailDTO[position].likeds?.size.toString()
+
+            // 시간 convert
+            val convtime = ConvertTime()
+            view.comment_textview_date.text = convtime.showTime(detailDTO[position].createdAt)
 
             // 좋아요
             view.comment_imageview_liked.setOnClickListener {
@@ -154,8 +159,11 @@ class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : R
             var view = holder.itemView
             view.recomment_textview_content.text = detailDTO[position].content
             view.recomment_textview_author.text = detailDTO[position].author
-            view.recomment_textview_date.text = detailDTO[position].createdAt
             view.recomment_textview_liked.text = detailDTO[position].likeds?.size.toString()
+
+            // 시간 convert
+            val convtime = ConvertTime()
+            view.recomment_textview_date.text = convtime.showTime(detailDTO[position].createdAt)
 
             // 좋아요
             view.recomment_imageview_liked.setOnClickListener {
