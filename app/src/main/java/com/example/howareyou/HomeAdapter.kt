@@ -13,6 +13,7 @@ import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Model.PostingDTO
 import com.example.howareyou.Util.App
+import com.example.howareyou.Util.ConvertTime
 import kotlinx.android.synthetic.main.item_home_posting.view.*
 import kotlinx.android.synthetic.main.item_posting.view.*
 import kotlinx.android.synthetic.main.item_posting.view.posting_textview_title
@@ -68,10 +69,13 @@ class HomeAdapter(val context: Context, val postingDTO : ArrayList<LoadPostItem>
 
         view.homeposting_textview_title.text = postingDTO[position].title
         view.homeposting_textview_author.text = postingDTO[position].author
-        view.homeposting_textview_date.text = postingDTO[position].createdAt
         view.homeposting_textview_comment.text = postingDTO[position].comments?.size.toString()
         view.homeposting_textview_favorite.text = postingDTO[position].likeds?.size.toString()
         view.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup_white)
+
+        // 시간 convert
+        val convtime = ConvertTime()
+        view.homeposting_textview_date.text = convtime.showTime(postingDTO[position].createdAt)
 
         // 좋아요 체크
         for ( i in  1..postingDTO[position].likeds!!.size)

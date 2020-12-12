@@ -11,8 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
+import com.example.howareyou.Util.App
+import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
@@ -31,6 +34,13 @@ class SearchFragment : Fragment() {
     val postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
     //var searchAdapter = SearchAdapter(activity!!,postingDTOlist)
 
+    val loadLimit : Int = 100
+
+    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
+    private lateinit var searchAdapter: SearchAdapter
+    private lateinit var lastboard_id: String
+    private lateinit var target: String
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,12 +52,11 @@ class SearchFragment : Fragment() {
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
-        loadPosting()
-
         // key listener
         view.search_edittext_search.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                showProgress(false)
+                target = view.search_edittext_search.text.toString()
+                searchPosting()
                 return@OnKeyListener true
             }
             false
@@ -56,7 +65,20 @@ class SearchFragment : Fragment() {
         return view
     }
 
-    private fun loadPosting() {
+    private fun initAdapter() {
+        searchAdapter = SearchAdapter(activity!!, postingDTOlist)
+        val linearLayoutManager = LinearLayoutManager(activity)
+        search_recyclerview.layoutManager = linearLayoutManager
+        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                searchPostingMore(target,lastboard_id)
+            }
+        }
+        search_recyclerview.addOnScrollListener(scrollListener)
+        search_recyclerview.adapter = searchAdapter
+    }
+
+    private fun searchPosting() {
         service?.getSearchPost()?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
@@ -65,32 +87,37 @@ class SearchFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val result: LoadPostDTO = response.body()!!
-                    val postSize: Int = result.size - 1
                     if (result.size != 0) {
-                        for (i in 0..postSize) {
-
-                            postingDTOlist?.add(
-                                LoadPostItem(
-                                    result[i].id,
-                                    result[i].title,
-                                    result[i].content,
-                                    result[i].author,
-                                    result[i].code,
-                                    result[i].comments,
-                                    result[i].likeds,
-                                    result[i].viewed,
-                                    result[i].createdAt,
-                                    result[i].header,
-                                    result[i].user_id,
-                                    result[i].is_delected,
-                                    result[i].image
+                        for (i in 0 until result.size) {
+                            if(result[i].title == target || result[i].content == target)
+                            {
+                                System.out.println(target)
+                                postingDTOlist?.add(
+                                    LoadPostItem(
+                                        result[i].id,
+                                        result[i].title,
+                                        result[i].content,
+                                        result[i].author,
+                                        result[i].code,
+                                        result[i].comments,
+                                        result[i].likeds,
+                                        result[i].viewed,
+                                        result[i].createdAt,
+                                        result[i].header,
+                                        result[i].user_id,
+                                        result[i].is_delected,
+                                        result[i].image
+                                    )
                                 )
-                            )
+                                System.out.println(postingDTOlist)
+                            }
+
+                            lastboard_id = result[i].id
                         }
 
                         // 어댑터 연결
-                        attachAdapter()
-                        //mAdapter?.notifyDataSetChanged()
+                        initAdapter()
+
                     } else {
                         //TODO
                     }
@@ -112,8 +139,6 @@ class SearchFragment : Fragment() {
                         e.printStackTrace()
                     }
                 }
-                //home_layout_loading.visibility = View.GONE;
-
             }
 
             override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
@@ -123,33 +148,75 @@ class SearchFragment : Fragment() {
 
     }
 
-    private fun attachAdapter(){
-        //어댑터 연결
-        search_recyclerview.adapter = SearchAdapter(activity!!,postingDTOlist)
-        val lm = LinearLayoutManager(activity)
-        search_recyclerview.layoutManager = lm
-        search_recyclerview.setHasFixedSize(true)
+    private fun searchPostingMore(target: String, board_id: String) {
+        service?.getSearchPostMore("Bearer "+ App.prefs.myJwt,board_id,loadLimit)?.enqueue(object : Callback<LoadPostDTO?> {
+            override fun onResponse(
+                call: Call<LoadPostDTO?>?,
+                response: Response<LoadPostDTO?>
 
-        // 역순출력
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
+            ) {
+                if (response.isSuccessful) {
+                    val result: LoadPostDTO = response.body()!!
+                    if (result.size != 0) {
+                        for (i in 0 until result.size) {
+                            if(result[i].title == target || result[i].content == target)
+                            {
+                                postingDTOlist?.add(
+                                    LoadPostItem(
+                                        result[i].id,
+                                        result[i].title,
+                                        result[i].content,
+                                        result[i].author,
+                                        result[i].code,
+                                        result[i].comments,
+                                        result[i].likeds,
+                                        result[i].viewed,
+                                        result[i].createdAt,
+                                        result[i].header,
+                                        result[i].user_id,
+                                        result[i].is_delected,
+                                        result[i].image
+                                    )
+                                )
+                            }
+                            lastboard_id = result[i].id
+                            searchAdapter.notifyDataSetChanged()
+                        }
 
-        // filter
-        view?.search_edittext_search?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-                (search_recyclerview.adapter as SearchAdapter).filter.filter(p0)
+                        // 어댑터 연결
+                        initAdapter()
+
+                    } else {
+                        //TODO
+                    }
+
+                } else {
+                    // 실패시 resopnse.errorbody를 객체화
+                    val gson = Gson()
+                    val adapter: TypeAdapter<LoadPostDTO> = gson.getAdapter<LoadPostDTO>(
+                        LoadPostDTO::class.java
+                    )
+                    try {
+                        if (response.errorBody() != null) {
+                            val result: LoadPostDTO = adapter.fromJson(
+                                response.errorBody()!!.string()
+                            )
+
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
             }
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                (search_recyclerview.adapter as SearchAdapter).filter.filter(p0)
+            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+                Log.e("onFailure", t.message!!)
             }
         })
 
     }
 
-    private fun showProgress(show: Boolean){
-        search_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-    }
+//    private fun showProgress(show: Boolean){
+//        search_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
+//    }
 }
