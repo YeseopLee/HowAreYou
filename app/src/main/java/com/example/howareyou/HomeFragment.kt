@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.howareyou.Model.LoadPostDTO
-import com.example.howareyou.Model.LoadPostItem
-import com.example.howareyou.Model.StatuscodeResponse
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
@@ -29,11 +28,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var service: ServiceApi? = null
-    val postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
 
+    var postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
     val loadLimit : Int = 100 // 한번에 불러올 게시물 양
 
     private lateinit var scrollListener: EndlessRecyclerViewScrollListener
@@ -50,6 +49,7 @@ class HomeFragment : Fragment() {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home, container, false)
 
         setButton(view)
+
         loadPosting()
 
         return view
@@ -70,8 +70,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        homeAdapter = HomeAdapter(activity!!, postingDTOlist)
-        val linearLayoutManager = LinearLayoutManager(activity)
+        homeAdapter = HomeAdapter(activity!!,postingDTOlist)
+        val linearLayoutManager = LinearLayoutManager(this.context)
         home_recyclerview.layoutManager = linearLayoutManager
 
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -80,20 +80,7 @@ class HomeFragment : Fragment() {
             }
         }
         home_recyclerview.addOnScrollListener(scrollListener)
-
         home_recyclerview.adapter = homeAdapter
-    }
-
-    fun String.toDate(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timeZone: TimeZone = TimeZone.getTimeZone("UTC")): Date {
-        val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
-        parser.timeZone = timeZone
-        return parser.parse(this)
-    }
-
-    fun Date.formatTo(dateFormat: String, timeZone: TimeZone = TimeZone.getDefault()): String {
-        val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
-        formatter.timeZone = timeZone
-        return formatter.format(this)
     }
 
     // 게시글 불러오기
@@ -133,7 +120,9 @@ class HomeFragment : Fragment() {
                             lastboard_id = result[i].id
 
                         }
+
                         initAdapter()
+
                     } else {
                         //TODO
                     }
@@ -203,7 +192,7 @@ class HomeFragment : Fragment() {
 
                                 lastboard_id = result[i].id
                             }
-                            // 리사이클러뷰 새로고침
+                            // 리사이클러뷰 데이터 갱신
                             homeAdapter.notifyDataSetChanged()
                         } else {
                             //TODO
@@ -245,6 +234,17 @@ class HomeFragment : Fragment() {
         home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
     }
 
+    override fun onRefresh() {
+        // 데이터 list 초기화
+        postingDTOlist.clear()
+        loadPosting()
+        home_swipelayout.isRefreshing = false
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        home_swipelayout.setOnRefreshListener(this)
+    }
 
 
 }
