@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.item_imageupload.view.*
 import kotlinx.android.synthetic.main.item_recomment.view.*
 import kotlin.collections.ArrayList
 
-class Detail_imageAdapter(val context: Context, val uriList : ArrayList<ImageDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DetailImageAdapter(val context: Context, val uriList : ArrayList<ImageDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     val TAG : String = "Detail_imageAdapter"
 

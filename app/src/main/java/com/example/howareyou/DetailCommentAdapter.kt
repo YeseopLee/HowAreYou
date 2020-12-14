@@ -34,7 +34,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class DetailAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DetailCommentAdapter(val context: Context, val detailDTO: ArrayList<Comment>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private var service: ServiceApi? = null
 

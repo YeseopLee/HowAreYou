@@ -48,7 +48,6 @@ class ConvertTime  //GMT to KOREA
             return if( diff < 60) diff.toString()+"분 전"
             else SimpleDateFormat(today).format(date)
         }
-
         return SimpleDateFormat(notToday).format(date)
     }
 

@@ -5,7 +5,6 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -24,8 +23,6 @@ import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.activity_writing.*
-import kotlinx.android.synthetic.main.item_imageshow.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -40,13 +37,15 @@ class DetailActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
 
+    private lateinit var board_id: String
+
     //comment recyclerview data / adapter
     var commentDTOList : ArrayList<Comment> = arrayListOf()
-    var mAdapter = DetailAdapter(this, commentDTOList)
+    private lateinit var mCommentAdapter : DetailCommentAdapter
 
     //image recyclerview data / adapter
     var imageList : ArrayList<ImageDTO> = arrayListOf()
-    var mImageAdapter = Detail_imageAdapter(this, imageList)
+    private lateinit var mImageAdapter : DetailImageAdapter
 
     //commnet image uri
     var commentImageUriList : ArrayList<Uri> = arrayListOf()
@@ -61,24 +60,33 @@ class DetailActivity : AppCompatActivity() {
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
         // posting activity에서 클릭한 게시물의 id를 받아온다
-        var board_id: String = intent.getStringExtra("board_id")
+        board_id = intent.getStringExtra("board_id")
+
+        Log.d("currentId",App.prefs.myId)
+        Log.d("currentBoardid",board_id)
+
+        setButton()
+        initCommnetAdapter()
+        initImageAdpater()
         loadPostingContent(board_id)
-
-        detail_recyclerview_comment.adapter = mAdapter
-        val lm = LinearLayoutManager(this)
-        detail_recyclerview_comment.layoutManager = lm
-        detail_recyclerview_comment.setHasFixedSize(true)
-
-        detail_recyclerview_imageview.adapter = mImageAdapter
-        val lm2 = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-        detail_recyclerview_imageview.layoutManager = lm2
-        detail_recyclerview_imageview.setHasFixedSize(true)
-
         getAlarm(App.prefs.myId,board_id)
-        System.out.println("현재id"+App.prefs.myId)
-        System.out.println("현재board"+board_id)
 
-        // buttons
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // 대댓글 비활성화
+        App.prefs.tempCommentId = "none"
+        mCommentAdapter.notifyDataSetChanged()
+    }
+
+    fun setButton(){
+
         detail_button_back.setOnClickListener { //뒤로가기 버튼
             //finish()
         }
@@ -86,7 +94,7 @@ class DetailActivity : AppCompatActivity() {
         detail_button_postcomment.setOnClickListener { // 댓글등록 버튼
             if(App.prefs.tempCommentId == "none") attemptComment(board_id, null)
             else attemptComment(board_id, App.prefs.tempCommentId)
-            mAdapter.notifyDataSetChanged()
+            mCommentAdapter.notifyDataSetChanged()
 
         }
 
@@ -144,17 +152,24 @@ class DetailActivity : AppCompatActivity() {
 
             }
         })
+
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun initCommnetAdapter(){
+
+        detail_recyclerview_comment.adapter = mCommentAdapter
+        val lm = LinearLayoutManager(this)
+        detail_recyclerview_comment.layoutManager = lm
+        detail_recyclerview_comment.setHasFixedSize(true)
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // 대댓글 비활성화
-        App.prefs.tempCommentId = "none"
-        mAdapter.notifyDataSetChanged()
+    private fun initImageAdpater(){
+
+        detail_recyclerview_imageview.adapter = mImageAdapter
+        val lm = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        detail_recyclerview_imageview.layoutManager = lm
+        detail_recyclerview_imageview.setHasFixedSize(true)
     }
 
     private fun showSingleImage(uri : Uri){
@@ -234,7 +249,7 @@ class DetailActivity : AppCompatActivity() {
                         }
                     }
 
-                    mAdapter?.notifyDataSetChanged()
+                    mCommentAdapter?.notifyDataSetChanged()
 
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
@@ -315,7 +330,7 @@ class DetailActivity : AppCompatActivity() {
                     System.out.println("왜안돼")
                     var comment_id = result._id
                     if(commentImageUriList.isNotEmpty()) uploadImage(comment_id)
-                    mAdapter?.notifyDataSetChanged()
+                    mCommentAdapter?.notifyDataSetChanged()
 
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
