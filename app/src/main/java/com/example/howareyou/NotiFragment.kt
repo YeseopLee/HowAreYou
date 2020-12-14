@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Model.NotiItem
@@ -29,7 +30,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class NotiFragment : Fragment() {
+class NotiFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var service: ServiceApi? = null
 
@@ -66,8 +67,17 @@ class NotiFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+
+    override fun onRefresh() {
+        // 데이터 list 초기화
+        notiDTOList.clear()
+        loadNotification()
+        notification_swipelayout.isRefreshing = false
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        notification_swipelayout.setOnRefreshListener(this)
     }
 
     private fun initAdapter(){

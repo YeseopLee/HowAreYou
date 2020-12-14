@@ -59,15 +59,23 @@
         app:layout_constraintTop_toBottomOf="@id/notification_textview_logo"></LinearLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notification_recyclerview"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/notification_swipelayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/colorBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notification_division_TopBarDivision"/>
+        app:layout_constraintTop_toBottomOf="@id/notification_division_TopBarDivision">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notification_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <ProgressBar
         android:id="@+id/notification_progressbar"
@@ -78,7 +86,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/notification_recyclerview" />
+        app:layout_constraintTop_toTopOf="@+id/notification_swipelayout" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

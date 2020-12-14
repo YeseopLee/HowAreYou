@@ -157,6 +157,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initCommnetAdapter(){
 
+        mCommentAdapter = DetailCommentAdapter(applicationContext,commentDTOList)
         detail_recyclerview_comment.adapter = mCommentAdapter
         val lm = LinearLayoutManager(this)
         detail_recyclerview_comment.layoutManager = lm
@@ -166,6 +167,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initImageAdpater(){
 
+        mImageAdapter = DetailImageAdapter(applicationContext,imageList)
         detail_recyclerview_imageview.adapter = mImageAdapter
         val lm = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
         detail_recyclerview_imageview.layoutManager = lm
