@@ -102,11 +102,12 @@ class NotiFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             ) {
                 if (response.isSuccessful) {
-                    //showProgress(false)
+                    showProgress(false)
                     val result: NotiResponseDTO = response.body()!!
                     for ( i in 0 until result.size){
                         if(App.prefs.myId == result[i].user_id) notiDTOList.add(NotiItem(result[i].user_id,result[i].content,result[i].createdAt,result[i].board,result[i]._id,result[i].viewed))
                     }
+                    Log.d("NotificationList",notiDTOList.toString())
                     notiAdapter.notifyDataSetChanged()
 
                 } else {
@@ -130,16 +131,16 @@ class NotiFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onFailure(call: Call<NotiResponseDTO?>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
-                //showProgress(false)
+                showProgress(false)
             }
         })
 
     }
 
 
-//    private fun showProgress(show: Boolean){
-//        home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-//    }
+    private fun showProgress(show: Boolean){
+        notification_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
+    }
 
 
 }

@@ -57,6 +57,19 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         loadPosting()
     }
 
+    override fun onRefresh() {
+        // 데이터 list 초기화
+        postingDTOlist.clear()
+        loadPosting()
+        home_swipelayout.isRefreshing = false
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        home_swipelayout.setOnRefreshListener(this)
+    }
+
+
     private fun setButton(view: View){
         view.home_button_refresh.setOnClickListener {
             //fragment refresh
@@ -99,24 +112,26 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (result.size != 0) {
                         for (i in 0..postSize) {
 
-                            postingDTOlist?.add(
-                                LoadPostItem(
-                                    result[i].id,
-                                    result[i].title,
-                                    result[i].content,
-                                    result[i].author,
-                                    result[i].code,
-                                    result[i].comments,
-                                    result[i].likeds,
-                                    result[i].viewed,
-                                    result[i].createdAt,
-                                    result[i].header,
-                                    result[i].user_id,
-                                    result[i].is_delected,
-                                    result[i].image
+                            if(!result[i].is_deleted)
+                            {
+                                postingDTOlist?.add(
+                                    LoadPostItem(
+                                        result[i].id,
+                                        result[i].title,
+                                        result[i].content,
+                                        result[i].author,
+                                        result[i].code,
+                                        result[i].comments,
+                                        result[i].likeds,
+                                        result[i].viewed,
+                                        result[i].createdAt,
+                                        result[i].header,
+                                        result[i].user_id,
+                                        result[i].is_deleted,
+                                        result[i].image
+                                    )
                                 )
-                            )
-
+                            }
                             lastboard_id = result[i].id
 
                         }
@@ -186,7 +201,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                         result[i].createdAt,
                                         result[i].header,
                                         result[i].user_id,
-                                        result[i].is_delected,
+                                        result[i].is_deleted,
                                         result[i].image
                                     )
                                 )
@@ -233,18 +248,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun showProgress(show: Boolean){
         home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-    }
-
-    override fun onRefresh() {
-        // 데이터 list 초기화
-        postingDTOlist.clear()
-        loadPosting()
-        home_swipelayout.isRefreshing = false
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        home_swipelayout.setOnRefreshListener(this)
     }
 
 

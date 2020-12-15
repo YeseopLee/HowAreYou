@@ -16,7 +16,7 @@ data class LoadPostItem(
     @SerializedName("createdAt") val createdAt: String,
     @SerializedName("header") val header: String,
     @SerializedName("user_id") val user_id: String, // 글쓴이 id = 사용자 id 수정 삭제 위해 불러옴
-    @SerializedName("is_delected") val is_delected: Boolean,
+    @SerializedName("is_deleted") val is_deleted: Boolean,
     @SerializedName("image") val image: List<Image>?
 )
 

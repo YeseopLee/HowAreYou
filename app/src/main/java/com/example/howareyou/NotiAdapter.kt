@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
+import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
@@ -62,7 +63,10 @@ class NotiAdapter(val context: Context, val notiDTOList : ArrayList<NotiItem>) :
 
         view.notification_textview_title.text = notiDTOList[position].board.title
         view.notification_textview_content.text = notiDTOList[position].content
-        view.notification_textview_date.text = notiDTOList[position].createdAt
+
+        // 시간 convert
+        val convtime = ConvertTime()
+        view.notification_textview_date.text = convtime.showTime(notiDTOList[position].createdAt)
 
         view.setOnClickListener {
             // 이동

@@ -3,6 +3,7 @@ package com.example.howareyou
 import android.content.Context
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -10,19 +11,23 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -33,7 +38,7 @@ import java.io.File
 import java.io.IOException
 
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private var service: ServiceApi? = null
 
@@ -47,7 +52,7 @@ class DetailActivity : AppCompatActivity() {
     var imageList : ArrayList<ImageDTO> = arrayListOf()
     private lateinit var mImageAdapter : DetailImageAdapter
 
-    //commnet image uri
+    //comment image uri
     var commentImageUriList : ArrayList<Uri> = arrayListOf()
 
     //alarm check
@@ -71,6 +76,7 @@ class DetailActivity : AppCompatActivity() {
         loadPostingContent(board_id)
         getAlarm(App.prefs.myId,board_id)
 
+
     }
 
 
@@ -85,7 +91,19 @@ class DetailActivity : AppCompatActivity() {
         mCommentAdapter.notifyDataSetChanged()
     }
 
-    fun setButton(){
+    override fun onRefresh() {
+        // 데이터 list 초기화
+        commentDTOList.clear()
+        imageList.clear()
+        commentImageUriList.clear()
+        loadPostingContent(board_id)
+        detail_swipelayout.isRefreshing = false
+
+    }
+
+    private fun setButton(){
+
+        detail_swipelayout.setOnRefreshListener(this)
 
         detail_button_back.setOnClickListener { //뒤로가기 버튼
             //finish()
@@ -127,6 +145,23 @@ class DetailActivity : AppCompatActivity() {
             }
         })
 
+//        detail_button_morevert.setOnClickListener(object : OnSingleClickListener(){
+//            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+//            override fun onSingleClick(view: View) {
+//                val items = arrayOf(getString(R.string.more_delete), getString(R.string.more_report))
+//
+//                MaterialAlertDialogBuilder(this@DetailActivity)
+//                    .setItems(items) { dialog, which ->
+//                        when (which) {
+//                            0 -> Log.d("Dialog",0.toString())
+//                            1 -> Log.d("Dialog",1.toString())
+//                        }
+//
+//                    }
+//                    .show()
+//            }
+//        })
+
         // alert dialog value
         val builder = AlertDialog.Builder(this).create()
         detail_button_morevert.setOnClickListener(object : OnSingleClickListener() {
@@ -157,7 +192,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initCommnetAdapter(){
 
-        mCommentAdapter = DetailCommentAdapter(applicationContext,commentDTOList)
+        mCommentAdapter = DetailCommentAdapter(this@DetailActivity,commentDTOList)
         detail_recyclerview_comment.adapter = mCommentAdapter
         val lm = LinearLayoutManager(this)
         detail_recyclerview_comment.layoutManager = lm
@@ -167,7 +202,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun initImageAdpater(){
 
-        mImageAdapter = DetailImageAdapter(applicationContext,imageList)
+        mImageAdapter = DetailImageAdapter(this@DetailActivity,imageList)
         detail_recyclerview_imageview.adapter = mImageAdapter
         val lm = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
         detail_recyclerview_imageview.layoutManager = lm
@@ -329,14 +364,12 @@ class DetailActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val result: PostCommentResponseDTO = response.body()!!
-                    System.out.println("왜안돼")
                     var comment_id = result._id
                     if(commentImageUriList.isNotEmpty()) uploadImage(comment_id)
                     mCommentAdapter?.notifyDataSetChanged()
 
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
-                    System.out.println("왜안돼2")
                     val gson = Gson()
                     val adapter: TypeAdapter<PostCommentResponseDTO> = gson.getAdapter<PostCommentResponseDTO>(
                         PostCommentResponseDTO::class.java
@@ -356,14 +389,11 @@ class DetailActivity : AppCompatActivity() {
                 }
 
                 // 댓글 등록 후 새로고침
-                val intent = intent
-                finish()
-                startActivity(intent)
+                onRefresh()
 
             }
 
             override fun onFailure(call: Call<PostCommentResponseDTO?>?, t: Throwable) {
-                System.out.println("왜안돼3")
                 Log.e("onFailure", t.message!!)
             }
         })
@@ -423,7 +453,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun deletePosting(board_id: String) {
-        service?.deletePost("Bearer " + App.prefs.myJwt, board_id)?.enqueue(object : Callback<Void> {
+        service?.deletePost("Bearer " + App.prefs.myJwt, board_id, deleteDTO(true))?.enqueue(object : Callback<Void> {
             override fun onResponse(
                 call: Call<Void>?,
                 response: Response<Void>
@@ -545,4 +575,5 @@ class DetailActivity : AppCompatActivity() {
     private fun showProgress(show: Boolean){
         detail_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
     }
+
 }

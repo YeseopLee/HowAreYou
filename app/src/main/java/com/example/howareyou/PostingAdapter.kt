@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Model.PostingDTO
+import com.example.howareyou.Util.ConvertTime
+import kotlinx.android.synthetic.main.item_notification.view.*
 import kotlinx.android.synthetic.main.item_posting.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -59,9 +61,12 @@ class PostingAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIt
 
         view.posting_textview_title.text = postingDTOfilter[position].title
         view.posting_textview_author.text = postingDTOfilter[position].author
-        view.posting_textview_date.text = postingDTOfilter[position].createdAt
         view.posting_textview_comment.text = postingDTOfilter[position].comments?.size.toString()
         view.posting_textview_favorite.text = postingDTOfilter[position].likeds?.size.toString()
+
+        // 시간 convert
+        val convtime = ConvertTime()
+        view.posting_textview_date.text = convtime.showTime(postingDTOfilter[position].createdAt)
 
         view.setOnClickListener{
             val intent = Intent(context,DetailActivity::class.java)
