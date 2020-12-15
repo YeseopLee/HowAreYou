@@ -52,6 +52,16 @@ class SearchFragment : Fragment() {
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initListener(view)
+        initAdapter()
+    }
+
+    private fun initListener(view: View){
         // key listener
         view.search_edittext_search.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
@@ -61,8 +71,6 @@ class SearchFragment : Fragment() {
             }
             false
         })
-
-        return view
     }
 
     private fun initAdapter() {
@@ -105,7 +113,7 @@ class SearchFragment : Fragment() {
                                         result[i].createdAt,
                                         result[i].header,
                                         result[i].user_id,
-                                        result[i].is_delected,
+                                        result[i].is_deleted,
                                         result[i].image
                                     )
                                 )
@@ -174,7 +182,7 @@ class SearchFragment : Fragment() {
                                         result[i].createdAt,
                                         result[i].header,
                                         result[i].user_id,
-                                        result[i].is_delected,
+                                        result[i].is_deleted,
                                         result[i].image
                                     )
                                 )

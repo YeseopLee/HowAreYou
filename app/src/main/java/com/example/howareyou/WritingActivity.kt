@@ -52,6 +52,12 @@ class WritingActivity : AppCompatActivity() {
 
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
 
+        initListener()
+
+    }
+
+    private fun initListener(){
+
         // alert dialog value
         val builder = AlertDialog.Builder(this).create()
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.item_posting.view.posting_textview_title
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HomeAdapter(val context: Context, val postingDTO : ArrayList<LoadPostItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class HomeAdapter(val context: Context, val postingDTO: ArrayList<LoadPostItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

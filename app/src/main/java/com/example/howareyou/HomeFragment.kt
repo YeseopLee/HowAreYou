@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
-import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
@@ -24,8 +23,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -33,8 +30,8 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var service: ServiceApi? = null
 
     var postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
-    val loadLimit : Int = 100 // 한번에 불러올 게시물 양
 
+    private val loadLimit : Int = 100 // 한번에 불러올 게시물 양
     private lateinit var scrollListener: EndlessRecyclerViewScrollListener
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var lastboard_id: String // loadMore를 위한 마지막 게시물 id
@@ -48,19 +45,35 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         //fragment view에 담는다
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home, container, false)
 
-        setButton(view)
-
-        loadPosting()
-
         return view
     }
 
-    private fun setButton(view: View){
+    // view가 전부 생성된 뒤에 호출
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        setButton(view)
+        initAdapter()
+        loadPosting()
+    }
+
+    override fun onRefresh() {
+        // 데이터 list 초기화
+        postingDTOlist.clear()
+        loadPosting()
+        home_swipelayout.isRefreshing = false
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        home_swipelayout.setOnRefreshListener(this)
+    }
+
+
+    private fun setButton(view: View){
         view.home_button_refresh.setOnClickListener {
             //fragment refresh
-            val ft = fragmentManager!!.beginTransaction()
-            ft.detach(this).attach(this).commit()
+            postingDTOlist.clear()
             loadPosting()
         }
 
@@ -71,7 +84,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun initAdapter() {
         homeAdapter = HomeAdapter(activity!!,postingDTOlist)
-        val linearLayoutManager = LinearLayoutManager(this.context)
+        val linearLayoutManager = LinearLayoutManager(activity)
         home_recyclerview.layoutManager = linearLayoutManager
 
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -99,29 +112,32 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (result.size != 0) {
                         for (i in 0..postSize) {
 
-                            postingDTOlist?.add(
-                                LoadPostItem(
-                                    result[i].id,
-                                    result[i].title,
-                                    result[i].content,
-                                    result[i].author,
-                                    result[i].code,
-                                    result[i].comments,
-                                    result[i].likeds,
-                                    result[i].viewed,
-                                    result[i].createdAt,
-                                    result[i].header,
-                                    result[i].user_id,
-                                    result[i].is_delected,
-                                    result[i].image
+                            if(!result[i].is_deleted)
+                            {
+                                postingDTOlist?.add(
+                                    LoadPostItem(
+                                        result[i].id,
+                                        result[i].title,
+                                        result[i].content,
+                                        result[i].author,
+                                        result[i].code,
+                                        result[i].comments,
+                                        result[i].likeds,
+                                        result[i].viewed,
+                                        result[i].createdAt,
+                                        result[i].header,
+                                        result[i].user_id,
+                                        result[i].is_deleted,
+                                        result[i].image
+                                    )
                                 )
-                            )
-
+                            }
                             lastboard_id = result[i].id
 
                         }
 
-                        initAdapter()
+                        //
+                        homeAdapter.notifyDataSetChanged()
 
                     } else {
                         //TODO
@@ -185,7 +201,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                         result[i].createdAt,
                                         result[i].header,
                                         result[i].user_id,
-                                        result[i].is_delected,
+                                        result[i].is_deleted,
                                         result[i].image
                                     )
                                 )
@@ -232,18 +248,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun showProgress(show: Boolean){
         home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-    }
-
-    override fun onRefresh() {
-        // 데이터 list 초기화
-        postingDTOlist.clear()
-        loadPosting()
-        home_swipelayout.isRefreshing = false
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        home_swipelayout.setOnRefreshListener(this)
     }
 
 

@@ -44,6 +44,9 @@ interface ServiceApi {
     @PUT("/notifications/{noti_id}")
     fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Call<Void>?
 
+    @PUT("boards/{board_id}")
+    fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String, @Body data: deleteDTO ): Call<Void>?
+
     @GET("/Codes")
     fun getCode(): Call<LoadCodeResponseDTO>?
 
@@ -79,9 +82,6 @@ interface ServiceApi {
 
     @GET("/alarms")
     fun getAlarms(): Call<AlarmResponseDTO>?
-
-    @DELETE("boards/{board_id}")
-    fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String): Call<Void>?
 
     @DELETE("/notifications/{noti_id}")
     fun deleteNoti(@Path("noti_id")noti_id: String): Call<Void>?

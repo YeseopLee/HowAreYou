@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Model.NotiItem
@@ -29,11 +30,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class NotiFragment : Fragment() {
+class NotiFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var service: ServiceApi? = null
 
     val notiDTOList: ArrayList<NotiItem> = arrayListOf()
+
+    private lateinit var notiAdapter: NotiAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,25 +49,50 @@ class NotiFragment : Fragment() {
         //fragment view에 담는다
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_notification, container, false)
 
-        loadNotification()
-
-        view.notification_button_myaccount.setOnClickListener {
-            startActivity(Intent(activity,AccountActivity::class.java))
-        }
-
         return view
     }
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        loadPosting()
-//    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onResume() {
-        super.onResume()
+        setButton(view)
+        initAdapter()
+        loadNotification()
+
     }
 
+    fun setButton(view: View){
+        view.notification_button_myaccount.setOnClickListener {
+            startActivity(Intent(activity,AccountActivity::class.java))
+        }
+    }
+
+
+    override fun onRefresh() {
+        // 데이터 list 초기화
+        notiDTOList.clear()
+        loadNotification()
+        notification_swipelayout.isRefreshing = false
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        notification_swipelayout.setOnRefreshListener(this)
+    }
+
+    private fun initAdapter(){
+        //어댑터 연결
+        notiAdapter = NotiAdapter(activity!!,notiDTOList)
+        notification_recyclerview.adapter = notiAdapter
+        val lm = LinearLayoutManager(activity)
+        notification_recyclerview.layoutManager = lm
+        notification_recyclerview.setHasFixedSize(true)
+
+        // 역순출력
+        lm.reverseLayout = true
+        lm.stackFromEnd = true
+
+    }
 
     private fun loadNotification() {
         service?.getNoti()?.enqueue(object : Callback<NotiResponseDTO?> {
@@ -74,12 +102,14 @@ class NotiFragment : Fragment() {
 
             ) {
                 if (response.isSuccessful) {
-                    //showProgress(false)
+                    showProgress(false)
                     val result: NotiResponseDTO = response.body()!!
                     for ( i in 0 until result.size){
                         if(App.prefs.myId == result[i].user_id) notiDTOList.add(NotiItem(result[i].user_id,result[i].content,result[i].createdAt,result[i].board,result[i]._id,result[i].viewed))
                     }
-                    attachAdapter()
+                    Log.d("NotificationList",notiDTOList.toString())
+                    notiAdapter.notifyDataSetChanged()
+
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
@@ -101,29 +131,16 @@ class NotiFragment : Fragment() {
 
             override fun onFailure(call: Call<NotiResponseDTO?>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
-                //showProgress(false)
+                showProgress(false)
             }
         })
 
     }
 
-    private fun attachAdapter(){
-        //어댑터 연결
-        notification_recyclerview.adapter = NotiAdapter(activity!!,notiDTOList)
-        val lm = LinearLayoutManager(activity)
-        notification_recyclerview.layoutManager = lm
-        notification_recyclerview.setHasFixedSize(true)
 
-        // 역순출력
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
-
-
+    private fun showProgress(show: Boolean){
+        notification_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
     }
-
-//    private fun showProgress(show: Boolean){
-//        home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-//    }
 
 
 }

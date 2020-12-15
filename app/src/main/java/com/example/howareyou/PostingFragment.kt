@@ -26,6 +26,8 @@ class PostingFragment : Fragment() {
     private var service: ServiceApi? = null
     var postingDTOlist : ArrayList<LoadPostItem> = arrayListOf()
 
+    private lateinit var postingAdapter: PostingAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,18 +39,6 @@ class PostingFragment : Fragment() {
         //fragment view에 담는다
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_posting, container, false )
 
-        // button
-
-        view.posting_button_back.setOnClickListener {
-
-            val transaction = activity!!.supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.main_framelayout, BoardFragment())
-            transaction.disallowAddToBackStack()
-            transaction.commit()
-        }
-
-        // 데이터 불러오기
-        loadPosting()
 
         return view
     }
@@ -58,6 +48,38 @@ class PostingFragment : Fragment() {
 
         PostingAdapter(activity!!, postingDTOlist).notifyDataSetChanged()
         
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setButton(view)
+        initAdapter()
+        loadPosting()
+    }
+
+    private fun setButton(view: View){
+
+        view.posting_button_back.setOnClickListener {
+
+            val transaction = activity!!.supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.main_framelayout, BoardFragment())
+            transaction.disallowAddToBackStack()
+            transaction.commit()
+        }
+    }
+
+    private fun initAdapter(){
+
+        postingAdapter = PostingAdapter(activity!!, postingDTOlist)
+        posting_recyclerview.adapter = postingAdapter
+        val lm = LinearLayoutManager(activity)
+        posting_recyclerview.layoutManager = lm
+        posting_recyclerview.setHasFixedSize(true)
+
+        // 리사이클러뷰 역순 출력
+        lm.reverseLayout = true
+        lm.stackFromEnd = true
     }
 
     private fun loadPosting() {
@@ -78,14 +100,13 @@ class PostingFragment : Fragment() {
 
                             postingDTOlist?.add(
                                 LoadPostItem(result[i].id,result[i].title,result[i].content,result[i].author,result[i].code,result[i].comments,result[i].likeds,result[i].viewed,result[i].createdAt
-                                ,result[i].header,result[i].user_id,result[i].is_delected,result[i].image)
+                                ,result[i].header,result[i].user_id,result[i].is_deleted,result[i].image)
 
                             )
 
                         }
                         // 리사이클러뷰 데이터 갱신
-                        attachAdapter()
-                        //mAdapter?.notifyDataSetChanged()
+                        postingAdapter.notifyDataSetChanged()
                     }else{
                         //TODO
                     }
@@ -113,19 +134,6 @@ class PostingFragment : Fragment() {
             }
         })
 
-    }
-
-    private fun attachAdapter(){
-
-        //어댑터 연결
-        posting_recyclerview.adapter = PostingAdapter(activity!!, postingDTOlist)
-        val lm = LinearLayoutManager(activity)
-        posting_recyclerview.layoutManager = lm
-        posting_recyclerview.setHasFixedSize(true)
-
-        // 리사이클러뷰 역순 출력
-        lm.reverseLayout = true
-        lm.stackFromEnd = true
     }
 
 }
