@@ -20,6 +20,10 @@ data class LoadPostItem(
     @SerializedName("image") val image: List<Image>?
 )
 
+data class deleteDTO(
+    @SerializedName("is_deleted") val is_deleted: Boolean
+)
+
 data class Code(
     val id: String
 )

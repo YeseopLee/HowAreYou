@@ -43,6 +43,8 @@ import java.io.IOException
 class WritingActivity : AppCompatActivity() {
 
     private var service: ServiceApi? = null
+
+    private lateinit var board_id: String
     var _uriList: ArrayList<Uri> = arrayListOf()
     var uriList: ArrayList<Uri> = arrayListOf()
 
@@ -180,13 +182,17 @@ class WritingActivity : AppCompatActivity() {
                 if(response.isSuccessful)
                 {
                     val result: PostingResponseDTO = response.body()!!
-//                    movePostingPage()
-                    if(_uriList.isNotEmpty())  uploadImage(result._id) // 이미지를 올렸다면 이미지 post를 호출한다.
-
-                    val intent = Intent(applicationContext,DetailActivity::class.java)
-                    intent.putExtra("board_id",result._id)
-                    startActivity(intent)
-                    finish()
+                    board_id = result._id
+                    if(_uriList.isNotEmpty())
+                    {
+                        uploadImage(result._id) // 이미지를 올렸다면 이미지 post를 호출한다.
+                    }
+                    else {
+                        val intent = Intent(applicationContext,DetailActivity::class.java)
+                        intent.putExtra("board_id",board_id)
+                        startActivity(intent)
+                        finish()
+                    }
 
                 }else {
                     // 실패시 resopnse.errorbody를 객체화
@@ -256,11 +262,14 @@ class WritingActivity : AppCompatActivity() {
                 for (index in 0 until result.size){
                     System.out.println("test"+result[index]._id)
                 }
+                val intent = Intent(applicationContext,DetailActivity::class.java)
+                intent.putExtra("board_id",board_id)
+                startActivity(intent)
+                finish()
             }
 
             override fun onFailure(call: Call<UploadImageResponseDTO?>, t: Throwable) {
-                System.out.println("fail")
-                Log.d("??",t.message)
+                Log.d("onFailure",t.message)
             }
 
         })

@@ -93,6 +93,7 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
 
     override fun onRefresh() {
         // 데이터 list 초기화
+        showProgress(false)
         commentDTOList.clear()
         imageList.clear()
         commentImageUriList.clear()
@@ -109,7 +110,8 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
             //finish()
         }
 
-        detail_button_postcomment.setOnClickListener { // 댓글등록 버튼
+        detail_button_postcomment.setOnClickListener { // 댓글등록
+            showProgress(true)
             if(App.prefs.tempCommentId == "none") attemptComment(board_id, null)
             else attemptComment(board_id, App.prefs.tempCommentId)
             mCommentAdapter.notifyDataSetChanged()
@@ -218,7 +220,6 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
 
     // 게시물, 댓글, 대댓글 정보 전부 불러옴
     private fun loadPostingContent(board_id: String) {
-        showProgress(true);
         service?.getPostContent(board_id)?.enqueue(object : Callback<LoadPostItem?> {
             override fun onResponse(
                 call: Call<LoadPostItem?>?,
@@ -363,10 +364,16 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
             ) {
 
                 if (response.isSuccessful) {
+                    showProgress(false)
                     val result: PostCommentResponseDTO = response.body()!!
                     var comment_id = result._id
-                    if(commentImageUriList.isNotEmpty()) uploadImage(comment_id)
-                    mCommentAdapter?.notifyDataSetChanged()
+                    if(commentImageUriList.isNotEmpty())
+                    {
+                        uploadImage(comment_id) // 이미지가 업로드 되었다면 이미지 post
+                    }
+                    else {
+                        onRefresh()
+                    }
 
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
@@ -388,12 +395,10 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
                     }
                 }
 
-                // 댓글 등록 후 새로고침
-                onRefresh()
-
             }
 
             override fun onFailure(call: Call<PostCommentResponseDTO?>?, t: Throwable) {
+                showProgress(false)
                 Log.e("onFailure", t.message!!)
             }
         })
@@ -418,15 +423,14 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
                 call: Call<UploadImageResponseDTO?>,
                 response: Response<UploadImageResponseDTO?>
             ) {
+                showProgress(false)
                 var result : UploadImageResponseDTO = response.body()!!
-                for (index in 0 until result.size){
-                    System.out.println("test"+result[index]._id)
-                }
+                onRefresh()
             }
 
             override fun onFailure(call: Call<UploadImageResponseDTO?>, t: Throwable) {
-                System.out.println("fail")
-                Log.d("??",t.message)
+                showProgress(false)
+                Log.d("onFailure",t.message)
             }
 
         })
