@@ -211,14 +211,6 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
                 return true
             }
 
-            R.id.action_board -> {
-                var FragmentB = BoardFragment()
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_framelayout, FragmentB).commit()
-
-                return true
-            }
-
             R.id.action_search -> {
                 var FragmentC = SearchFragment()
                 supportFragmentManager.beginTransaction()
