@@ -6,11 +6,6 @@
         android:enabled="true"
         android:title="@string/b_home"/>
     <item
-        android:id="@+id/action_board"
-        android:icon="@drawable/ic_board"
-        android:enabled="true"
-        android:title="@string/b_board"/>
-    <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_white"
         android:enabled="true"

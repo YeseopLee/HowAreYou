@@ -66,6 +66,7 @@ class SearchFragment : Fragment() {
         view.search_edittext_search.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 target = view.search_edittext_search.text.toString()
+                showProgress(true)
                 searchPosting()
                 return@OnKeyListener true
             }
@@ -94,6 +95,7 @@ class SearchFragment : Fragment() {
 
             ) {
                 if (response.isSuccessful) {
+                    showProgress(false)
                     val result: LoadPostDTO = response.body()!!
                     if (result.size != 0) {
                         for (i in 0 until result.size) {
@@ -150,6 +152,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+                showProgress(false)
                 Log.e("onFailure", t.message!!)
             }
         })
@@ -164,6 +167,7 @@ class SearchFragment : Fragment() {
 
             ) {
                 if (response.isSuccessful) {
+                    showProgress(false)
                     val result: LoadPostDTO = response.body()!!
                     if (result.size != 0) {
                         for (i in 0 until result.size) {
@@ -218,13 +222,14 @@ class SearchFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
+                showProgress(false)
                 Log.e("onFailure", t.message!!)
             }
         })
 
     }
 
-//    private fun showProgress(show: Boolean){
-//        search_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-//    }
+    private fun showProgress(show: Boolean){
+        search_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
+    }
 }

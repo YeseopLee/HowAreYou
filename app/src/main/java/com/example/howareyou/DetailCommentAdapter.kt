@@ -1,18 +1,14 @@
 package com.example.howareyou
 
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.res.TypedArrayUtils.getText
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.howareyou.Model.Comment
@@ -23,11 +19,8 @@ import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
-import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.activity_detail.view.*
 import kotlinx.android.synthetic.main.activity_imageview_detail.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
-import kotlinx.android.synthetic.main.item_home_posting.view.*
 import kotlinx.android.synthetic.main.item_recomment.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -61,7 +54,7 @@ class DetailCommentAdapter(val context: Context, val detailDTO: ArrayList<Commen
                 ReCommentViewHolder(view)
             }
 
-            else -> throw RuntimeException("에러")
+            else -> throw RuntimeException("error")
         }
     }
 
@@ -102,7 +95,14 @@ class DetailCommentAdapter(val context: Context, val detailDTO: ArrayList<Commen
 
             // 좋아요
             view.comment_imageview_liked.setOnClickListener {
-                postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, null, detailDTO[position].id),view,holder)
+                postLiked(
+                    PostLikedDTO(
+                        App.prefs.myEmail,
+                        App.prefs.myId,
+                        null,
+                        detailDTO[position].id
+                    ), view, holder
+                )
             }
 
             // 사용자 좋아요 상태 체크
@@ -132,7 +132,7 @@ class DetailCommentAdapter(val context: Context, val detailDTO: ArrayList<Commen
 
             //더보기 버튼
             view.comment_button_morevert.setOnClickListener(object : OnSingleClickListener() {
-                override fun onSingleClick(view: View) {
+                override fun onSingleClick(view_: View) {
 
                     val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
                     val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
@@ -146,7 +146,6 @@ class DetailCommentAdapter(val context: Context, val detailDTO: ArrayList<Commen
                         builder.dismiss()
                     }
                     BtnRecomment.setOnClickListener {
-
                         App.prefs.tempCommentId = detailDTO[position].id
                         builder.dismiss()
                     }
@@ -167,7 +166,14 @@ class DetailCommentAdapter(val context: Context, val detailDTO: ArrayList<Commen
 
             // 좋아요
             view.recomment_imageview_liked.setOnClickListener {
-                postLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, null, detailDTO[position].id),view,holder)
+                postLiked(
+                    PostLikedDTO(
+                        App.prefs.myEmail,
+                        App.prefs.myId,
+                        null,
+                        detailDTO[position].id
+                    ), view, holder
+                )
             }
 
             // 사용자 좋아요 상태 체크
@@ -229,13 +235,14 @@ class DetailCommentAdapter(val context: Context, val detailDTO: ArrayList<Commen
                 response: Response<PostingResponseDTO?>
 
             ) {
-                if(holder.itemViewType == 0)
-                {
+                if (holder.itemViewType == 0) {
                     view.comment_imageview_liked.setBackgroundResource(R.drawable.ic_thumbsup)
-                    view.comment_textview_liked.text = (view.comment_textview_liked.text.toString().toInt() + 1).toString()
+                    view.comment_textview_liked.text =
+                        (view.comment_textview_liked.text.toString().toInt() + 1).toString()
                 } else {
                     view.recomment_imageview_liked.setBackgroundResource(R.drawable.ic_thumbsup)
-                    view.recomment_textview_liked.text = (view.recomment_textview_liked.text.toString().toInt() + 1).toString()
+                    view.recomment_textview_liked.text =
+                        (view.recomment_textview_liked.text.toString().toInt() + 1).toString()
                 }
             }
 

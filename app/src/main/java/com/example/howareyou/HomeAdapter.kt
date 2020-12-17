@@ -51,8 +51,8 @@ class HomeAdapter(val context: Context, val postingDTO: ArrayList<LoadPostItem>)
 
         view.homeposting_textview_content.text = text_content
 
-        if(text_content.length >= 50){
-            pre_text_content = text_content.substring(0,50) + "..."
+        if(text_content.length >= 100){
+            pre_text_content = text_content.substring(0,100) + "..."
             view.homeposting_textview_content.text = pre_text_content
         }
         else {

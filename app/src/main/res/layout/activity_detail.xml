@@ -289,8 +289,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detail_layout_loading"
-        android:visibility="gone"
         android:background="@color/colorWhite"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

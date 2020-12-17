@@ -13,6 +13,3 @@ data class PostingDTO(
     //@SerializedName("image") val image: List<Image>
 )
 
-data class deleteDTO(
-    @SerializedName("is_deleted") val is_deleted: Boolean
-)

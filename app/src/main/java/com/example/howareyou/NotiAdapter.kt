@@ -73,6 +73,7 @@ class NotiAdapter(val context: Context, val notiDTOList : ArrayList<NotiItem>) :
             val intent = Intent(context,DetailActivity::class.java)
             intent.putExtra("board_id",notiDTOList[position].board._id)
             context.startActivity(intent)
+
             // 갱신(viewed)
             updateNotification(notiDTOList[position]._id)
             view.setBackgroundColor(Color.WHITE)

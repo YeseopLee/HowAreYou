@@ -57,14 +57,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/home_textview_logo"></LinearLayout>
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/home_tablayout"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        app:tabMode="scrollable"
+        app:tabContentStart="0dp"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabIndicatorFullWidth="false"
+        app:layout_constraintTop_toBottomOf="@id/home_division_TopBarDivision"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/freeboard"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/qna"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tipsboard"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/studyboard"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bestboard"/>
+
+
+
+    </com.google.android.material.tabs.TabLayout>
+
     <FrameLayout
+        android:id="@+id/home_framelayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/colorBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_division_TopBarDivision">
+        app:layout_constraintTop_toBottomOf="@id/home_tablayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

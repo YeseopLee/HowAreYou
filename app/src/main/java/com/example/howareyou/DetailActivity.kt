@@ -3,7 +3,6 @@ package com.example.howareyou
 import android.content.Context
 import android.graphics.Rect
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -11,7 +10,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,12 +20,10 @@ import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -59,6 +55,9 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
     var alarmisRunning : Boolean = false
     var alarm_id : String = ""
 
+    //recomment check
+    var recommentisRunning : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -67,15 +66,15 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
         // posting activity에서 클릭한 게시물의 id를 받아온다
         board_id = intent.getStringExtra("board_id")
 
-        Log.d("currentId",App.prefs.myId)
-        Log.d("currentBoardid",board_id)
+        Log.d("currentId", App.prefs.myId)
+        Log.d("currentBoardid", board_id)
 
+        showProgress(true)
         setButton()
         initCommnetAdapter()
         initImageAdpater()
         loadPostingContent(board_id)
-        getAlarm(App.prefs.myId,board_id)
-
+        getAlarm(App.prefs.myId, board_id)
 
     }
 
@@ -87,18 +86,27 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
     override fun onDestroy() {
         super.onDestroy()
         // 대댓글 비활성화
+        recommentisRunning = false
         App.prefs.tempCommentId = "none"
         mCommentAdapter.notifyDataSetChanged()
     }
 
     override fun onRefresh() {
         // 데이터 list 초기화
+        showProgress(false)
         commentDTOList.clear()
         imageList.clear()
         commentImageUriList.clear()
         loadPostingContent(board_id)
         detail_swipelayout.isRefreshing = false
 
+    }
+
+    override fun onBackPressed() {
+        if(App.prefs.tempCommentId == "none") super.onBackPressed()
+        else {
+            App.prefs.tempCommentId = "none"
+        }
     }
 
     private fun setButton(){
@@ -109,7 +117,8 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
             //finish()
         }
 
-        detail_button_postcomment.setOnClickListener { // 댓글등록 버튼
+        detail_button_postcomment.setOnClickListener { // 댓글등록
+            showProgress(true)
             if(App.prefs.tempCommentId == "none") attemptComment(board_id, null)
             else attemptComment(board_id, App.prefs.tempCommentId)
             mCommentAdapter.notifyDataSetChanged()
@@ -130,17 +139,16 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
         })
 
         //알람버튼
-        detail_button_notification.setOnClickListener(object : OnSingleClickListener(){ //알람버튼
+        detail_button_notification.setOnClickListener(object : OnSingleClickListener() { //알람버튼
             override fun onSingleClick(view: View) {
-                if(alarmisRunning) {
+                if (alarmisRunning) {
                     deleteAlarm(board_id)
                     detail_button_notification.setBackgroundResource(R.drawable.ic_notification_gray)
-                    Toast.makeText(applicationContext,"댓글 알림을 받지 않습니다.",Toast.LENGTH_SHORT).show()
-                }
-                else {
+                    Toast.makeText(applicationContext, "댓글 알림을 받지 않습니다.", Toast.LENGTH_SHORT).show()
+                } else {
                     postAlarm(board_id)
                     detail_button_notification.setBackgroundResource(R.drawable.ic_notification)
-                    Toast.makeText(applicationContext,"댓글 알림을 받습니다.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "댓글 알림을 받습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -192,24 +200,23 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
 
     private fun initCommnetAdapter(){
 
-        mCommentAdapter = DetailCommentAdapter(this@DetailActivity,commentDTOList)
+        mCommentAdapter = DetailCommentAdapter(this@DetailActivity, commentDTOList)
         detail_recyclerview_comment.adapter = mCommentAdapter
         val lm = LinearLayoutManager(this)
         detail_recyclerview_comment.layoutManager = lm
         detail_recyclerview_comment.setHasFixedSize(true)
-
     }
 
     private fun initImageAdpater(){
 
-        mImageAdapter = DetailImageAdapter(this@DetailActivity,imageList)
+        mImageAdapter = DetailImageAdapter(this@DetailActivity, imageList)
         detail_recyclerview_imageview.adapter = mImageAdapter
-        val lm = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        val lm = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         detail_recyclerview_imageview.layoutManager = lm
         detail_recyclerview_imageview.setHasFixedSize(true)
     }
 
-    private fun showSingleImage(uri : Uri){
+    private fun showSingleImage(uri: Uri){
         commentImageUriList.add(uri)
         Glide.with(this).load(commentImageUriList[0]).into(detail_imageview_commentimage)
         detail_imageview_commentimage.visibility = View.VISIBLE
@@ -218,7 +225,6 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
 
     // 게시물, 댓글, 대댓글 정보 전부 불러옴
     private fun loadPostingContent(board_id: String) {
-        showProgress(true);
         service?.getPostContent(board_id)?.enqueue(object : Callback<LoadPostItem?> {
             override fun onResponse(
                 call: Call<LoadPostItem?>?,
@@ -277,12 +283,15 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
                     }
 
                     // 이미지 담기
-                    if(result.image?.isNotEmpty()!!)
-                    {
-                        for (i in 0 until result.image.size)
-                        {
+                    if (result.image?.isNotEmpty()!!) {
+                        for (i in 0 until result.image.size) {
                             /// 축소된 이미지를 불러온다.
-                            imageList.add(ImageDTO(RetrofitClient.BASE_URL+result.image[i].formats.thumbnail.url,RetrofitClient.BASE_URL+result.image[i].url))
+                            imageList.add(
+                                ImageDTO(
+                                    RetrofitClient.BASE_URL + result.image[i].formats.thumbnail.url,
+                                    RetrofitClient.BASE_URL + result.image[i].url
+                                )
+                            )
                         }
                     }
 
@@ -307,7 +316,7 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
                     }
 
                     finish()
-                    Toast.makeText(applicationContext,"불러올 수 없는 글입니다.",Toast.LENGTH_SHORT);
+                    Toast.makeText(applicationContext, "불러올 수 없는 글입니다.", Toast.LENGTH_SHORT);
                 }
 
             }
@@ -315,7 +324,7 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
             override fun onFailure(call: Call<LoadPostItem?>?, t: Throwable) {
                 Log.e("onFailure", t.message!!)
                 finish()
-                Toast.makeText(applicationContext,"불러올 수 없는 글입니다.",Toast.LENGTH_SHORT);
+                Toast.makeText(applicationContext, "불러올 수 없는 글입니다.", Toast.LENGTH_SHORT);
             }
         })
 
@@ -363,17 +372,23 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
             ) {
 
                 if (response.isSuccessful) {
+                    showProgress(false)
                     val result: PostCommentResponseDTO = response.body()!!
                     var comment_id = result._id
-                    if(commentImageUriList.isNotEmpty()) uploadImage(comment_id)
-                    mCommentAdapter?.notifyDataSetChanged()
+                    if (commentImageUriList.isNotEmpty()) {
+                        uploadImage(comment_id) // 이미지가 업로드 되었다면 이미지 post
+                        detail_imageview_commentimage.visibility = View.GONE
+                    } else {
+                        onRefresh()
+                    }
 
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
                     val gson = Gson()
-                    val adapter: TypeAdapter<PostCommentResponseDTO> = gson.getAdapter<PostCommentResponseDTO>(
-                        PostCommentResponseDTO::class.java
-                    )
+                    val adapter: TypeAdapter<PostCommentResponseDTO> =
+                        gson.getAdapter<PostCommentResponseDTO>(
+                            PostCommentResponseDTO::class.java
+                        )
                     try {
                         if (response.errorBody() != null) {
                             val result: PostCommentResponseDTO = adapter.fromJson(
@@ -388,12 +403,10 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
                     }
                 }
 
-                // 댓글 등록 후 새로고침
-                onRefresh()
-
             }
 
             override fun onFailure(call: Call<PostCommentResponseDTO?>?, t: Throwable) {
+                showProgress(false)
                 Log.e("onFailure", t.message!!)
             }
         })
@@ -405,28 +418,28 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
         for (index in 0 until commentImageUriList.size) {
             val file = File(commentImageUriList[index].path)
             val surveyBody = RequestBody.create(MediaType.parse("image/*"), file)
-            images.add(MultipartBody.Part.createFormData("files",file.name,surveyBody))
+            images.add(MultipartBody.Part.createFormData("files", file.name, surveyBody))
         }
 
-        val ref = RequestBody.create(MediaType.parse("text/plain"),"comment")
-        val refId = RequestBody.create(MediaType.parse("text/plain"),comment_id)
-        val field = RequestBody.create(MediaType.parse("text/plain"),"image")
+        val ref = RequestBody.create(MediaType.parse("text/plain"), "comment")
+        val refId = RequestBody.create(MediaType.parse("text/plain"), comment_id)
+        val field = RequestBody.create(MediaType.parse("text/plain"), "image")
 
 
-        service?.uploadFile(images,ref,refId,field)?.enqueue(object : Callback<UploadImageResponseDTO?> {
+        service?.uploadFile(images, ref, refId, field)?.enqueue(object :
+            Callback<UploadImageResponseDTO?> {
             override fun onResponse(
                 call: Call<UploadImageResponseDTO?>,
                 response: Response<UploadImageResponseDTO?>
             ) {
-                var result : UploadImageResponseDTO = response.body()!!
-                for (index in 0 until result.size){
-                    System.out.println("test"+result[index]._id)
-                }
+                showProgress(false)
+                var result: UploadImageResponseDTO = response.body()!!
+                onRefresh()
             }
 
             override fun onFailure(call: Call<UploadImageResponseDTO?>, t: Throwable) {
-                System.out.println("fail")
-                Log.d("??",t.message)
+                showProgress(false)
+                Log.d("onFailure", t.message)
             }
 
         })
@@ -440,7 +453,8 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
 
             ) {
                 detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
-                detail_textview_liked.text = (detail_textview_liked.text.toString().toInt() + 1).toString()
+                detail_textview_liked.text =
+                    (detail_textview_liked.text.toString().toInt() + 1).toString()
 
             }
 
@@ -453,7 +467,8 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
     }
 
     private fun deletePosting(board_id: String) {
-        service?.deletePost("Bearer " + App.prefs.myJwt, board_id, deleteDTO(true))?.enqueue(object : Callback<Void> {
+        service?.deletePost("Bearer " + App.prefs.myJwt, board_id, deleteDTO(true))?.enqueue(object :
+            Callback<Void> {
             override fun onResponse(
                 call: Call<Void>?,
                 response: Response<Void>
@@ -464,7 +479,7 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
                     finish()
                 } else {
                     // 실패시 resopnse.errorbody를 객체화
-                    Toast.makeText(applicationContext,"글쓴이가 아닙니다.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "글쓴이가 아닙니다.", Toast.LENGTH_SHORT).show()
                     val gson = Gson()
                     val adapter: TypeAdapter<LoadPostItem> = gson.getAdapter<LoadPostItem>(
                         LoadPostItem::class.java
@@ -490,16 +505,16 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
 
     }
 
-    private fun getAlarm(user_id : String, board_id: String) {
+    private fun getAlarm(user_id: String, board_id: String) {
         service?.getAlarms()?.enqueue(object : Callback<AlarmResponseDTO?> {
             override fun onResponse(
                 call: Call<AlarmResponseDTO?>?,
                 response: Response<AlarmResponseDTO?>
             ) {
                 if (response.isSuccessful) {
-                    var result : AlarmResponseDTO = response.body()!!
-                    for (i in 0 until result.size){
-                        if(user_id == result[i].user_id && board_id == result[i].board._id ){
+                    var result: AlarmResponseDTO = response.body()!!
+                    for (i in 0 until result.size) {
+                        if (user_id == result[i].user_id && board_id == result[i].board._id) {
                             // 해당 글에 대한 알람을 받는상태.
                             alarm_id = result[i]._id
                             detail_button_notification.setBackgroundResource(R.drawable.ic_notification)
@@ -507,7 +522,7 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
                         } else {
                         }
                     }
-                    if(!alarmisRunning) detail_button_notification.setBackgroundResource(R.drawable.ic_notification_gray)
+                    if (!alarmisRunning) detail_button_notification.setBackgroundResource(R.drawable.ic_notification_gray)
                 }
             }
 
@@ -518,13 +533,14 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
     }
 
     private fun deleteAlarm(board_id: String) {
-        service?.deleteAlarm("Bearer "+App.prefs.myJwt,alarm_id,board_id)?.enqueue(object : Callback<Void?> {
+        service?.deleteAlarm("Bearer " + App.prefs.myJwt, alarm_id, board_id)?.enqueue(object :
+            Callback<Void?> {
             override fun onResponse(
                 call: Call<Void?>?,
                 response: Response<Void?>
             ) {
                 if (response.isSuccessful) {
-                    Log.d("onSuccess",alarm_id)
+                    Log.d("onSuccess", alarm_id)
                     alarmisRunning = false
                 }
             }
@@ -536,21 +552,22 @@ class DetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener
     }
 
     private fun postAlarm(board_id: String) {
-        service?.postAlarm("Bearer "+App.prefs.myJwt, AlarmDTO(App.prefs.myId,board_id))?.enqueue(object : Callback<Void?> {
-            override fun onResponse(
-                call: Call<Void?>?,
-                response: Response<Void?>
-            ) {
-                if (response.isSuccessful) {
-                    Log.d("onSuccess",alarm_id)
-                    alarmisRunning = true
+        service?.postAlarm("Bearer " + App.prefs.myJwt, AlarmDTO(App.prefs.myId, board_id))?.enqueue(
+            object : Callback<Void?> {
+                override fun onResponse(
+                    call: Call<Void?>?,
+                    response: Response<Void?>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d("onSuccess", alarm_id)
+                        alarmisRunning = true
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<Void?>?, t: Throwable) {
-                Log.e("onFailure", t.message!!)
-            }
-        })
+                override fun onFailure(call: Call<Void?>?, t: Throwable) {
+                    Log.e("onFailure", t.message!!)
+                }
+            })
     }
 
 
