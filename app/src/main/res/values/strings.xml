@@ -11,7 +11,7 @@
     <string name="author">닉네임</string>
 
     <!-- BoardName -->
-    <string name="all">전체</string>
+    <string name="allboard">전체</string>
     <string name="board">게시판</string>
     <string name="freeboard">자유게시판</string>
     <string name="tipsboard">Tips</string>
