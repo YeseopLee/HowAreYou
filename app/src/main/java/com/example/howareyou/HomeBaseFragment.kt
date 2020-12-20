@@ -2,8 +2,10 @@ package com.example.howareyou
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -27,23 +29,28 @@ import retrofit2.Response
 import java.io.IOException
 import kotlin.collections.ArrayList
 
-class HomeAllFragment : HomeBaseFragment(){
+open class HomeBaseFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    // view가 전부 생성된 뒤에 호출
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    var service: ServiceApi? = null
 
-        showProgress(true)
-        App.prefs.myCode = App.prefs.codeFree
-        postingDTOlist.clear()
-        initAdapter()
-        loadPosting()
-    }
+    var postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
 
-    override fun onResume() {
-        super.onResume()
-        getAllPost = true
-        forceTouch()
+    val loadLimit : Int = 100 // 한번에 불러올 게시물 양
+    var getAllPost : Boolean = true // 전체 게시물 탭인지 체크
+    lateinit var scrollListener: EndlessRecyclerViewScrollListener
+    lateinit var homeAdapter: HomeAdapter
+    lateinit var lastboard_id: String // loadMore를 위한 마지막 게시물 id
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // retrofit 연결
+        service = RetrofitClient.client!!.create(ServiceApi::class.java)
+        //fragment view에 담는다
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home_all, container, false)
+
+        return view
     }
 
     override fun onRefresh() {
@@ -51,27 +58,31 @@ class HomeAllFragment : HomeBaseFragment(){
         postingDTOlist.clear()
 
         // 전체 게시물 tab 체크
-        loadPosting()
+        loadSelectedPosting()
         all_swipelayout.isRefreshing = false
     }
 
-    override fun initAdapter() {
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        all_swipelayout.setOnRefreshListener(this)
+    }
+
+    open fun initAdapter() {
         homeAdapter = HomeAdapter(activity!!,postingDTOlist)
         val linearLayoutManager = LinearLayoutManager(activity)
         all_recyclerview.layoutManager = linearLayoutManager
 
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                loadPostingMore()
+                loadSelectedPostingMore()
             }
         }
         all_recyclerview.addOnScrollListener(scrollListener)
         all_recyclerview.adapter = homeAdapter
     }
 
-    // 전체게시글 불러오기
-    private fun loadPosting() {
-        service?.getAllPost("Bearer " + App.prefs.myJwt)?.enqueue(object : Callback<LoadPostDTO?> {
+    fun loadSelectedPosting() {
+        service?.getPost(App.prefs.myCode)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
                 response: Response<LoadPostDTO?>
@@ -147,8 +158,8 @@ class HomeAllFragment : HomeBaseFragment(){
 
     }
 
-    private fun loadPostingMore() {
-        service?.getAllPostMore("Bearer " + App.prefs.myJwt, lastboard_id, loadLimit)?.enqueue(
+    private fun loadSelectedPostingMore() {
+        service?.getPostMore(lastboard_id, loadLimit, App.prefs.myCode)?.enqueue(
             object : Callback<LoadPostDTO?> {
                 override fun onResponse(
                     call: Call<LoadPostDTO?>?,
@@ -156,7 +167,7 @@ class HomeAllFragment : HomeBaseFragment(){
 
                 ) {
                     if (response.isSuccessful) {
-                        showProgress(false)
+                        //showProgress(false)
                         val result: LoadPostDTO = response.body()!!
                         val postSize: Int = result.size - 1
                         if (result.size != 0) {
@@ -213,10 +224,30 @@ class HomeAllFragment : HomeBaseFragment(){
 
                 override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
                     Log.e("onFailure", t.message!!)
-                    showProgress(false)
+                    //showProgress(false)
                 }
             })
 
     }
+
+    fun showProgress(show: Boolean){
+        all_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
+    }
+
+    fun forceTouch(){
+        val downTime: Long = SystemClock.uptimeMillis()
+        val eventTime: Long = SystemClock.uptimeMillis()
+        val down_event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, 0f, 0f, 0)
+        val up_event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, 0f, 0f, 0)
+
+        all_framelayout.dispatchTouchEvent(down_event)
+        all_framelayout.dispatchTouchEvent(up_event)
+
+        all_recyclerview.dispatchTouchEvent(down_event)
+        all_recyclerview.dispatchTouchEvent(up_event)
+    }
+
+
+
 }
 

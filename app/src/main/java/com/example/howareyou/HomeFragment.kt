@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         val pagerAdapter = HomeViewAdapter(activity!!)
         home_viewpager.adapter = pagerAdapter
 
-        showProgress(false)
+        //showProgress(false)
         initListener(view)
         initTab()
     }
@@ -83,20 +83,20 @@ class HomeFragment : Fragment() {
         TabLayoutMediator(home_tablayout, home_viewpager) {
                 tab, position ->
             when(position) {
-                0 -> { tab.setText(getString(R.string.allboard)) }
+                0 -> {tab.setText(getString(R.string.allboard)) }
                 1 -> {tab.setText(getString(R.string.freeboard))}
                 2 -> {tab.setText(getString(R.string.qna))}
                 3 -> {tab.setText(getString(R.string.tipsboard))}
-                4 -> { tab.setText(getString(R.string.studyboard)) }
+                4 -> {tab.setText(getString(R.string.studyboard)) }
                 5 -> {tab.setText(getString(R.string.bestboard))}
             }
         }.attach()
 
     }
 
-    private fun showProgress(show: Boolean){
-        home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-    }
+//    private fun showProgress(show: Boolean){
+//        home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
+//    }
 
 
 }
