@@ -1,34 +1,27 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Noti
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.howareyou.Views.Detail.DetailActivity
 import com.example.howareyou.Model.*
-import com.example.howareyou.Util.App
+import com.example.howareyou.R
 import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
-import kotlinx.android.synthetic.main.item_home_posting.view.*
 import kotlinx.android.synthetic.main.item_notification.view.*
-import kotlinx.android.synthetic.main.item_posting.view.*
-import kotlinx.android.synthetic.main.item_posting.view.posting_textview_title
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import java.util.*
 import kotlin.collections.ArrayList
 
 class NotiAdapter(val context: Context, val notiDTOList : ArrayList<NotiItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -58,7 +51,9 @@ class NotiAdapter(val context: Context, val notiDTOList : ArrayList<NotiItem>) :
 
         var view = holder.itemView
 
-        if(notiDTOList[position].viewed == false) view.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight))
+        if(notiDTOList[position].viewed == false) view.setBackgroundColor(ContextCompat.getColor(context,
+            R.color.colorPrimaryLight
+        ))
         else view.setBackgroundColor(Color.WHITE)
 
         view.notification_textview_title.text = notiDTOList[position].board.title
@@ -70,7 +65,7 @@ class NotiAdapter(val context: Context, val notiDTOList : ArrayList<NotiItem>) :
 
         view.setOnClickListener {
             // 이동
-            val intent = Intent(context,DetailActivity::class.java)
+            val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("board_id",notiDTOList[position].board._id)
             context.startActivity(intent)
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SigninActivity">
+    tools:context=".Views.Auth.SigninActivity">
 
     <ImageView
         android:id="@+id/signin_imageview_logo"

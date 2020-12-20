@@ -1,4 +1,4 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Auth
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,9 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.example.howareyou.MainActivity
 import com.example.howareyou.Model.*
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
@@ -152,13 +154,13 @@ class SigninActivity : AppCompatActivity() {
     private fun moveMainpage() {
         System.out.println(App.prefs.myJwt+"jwt")
         if(App.prefs.myJwt != ""){
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
     }
 
     private fun moveSignupPage() {
-        startActivity(Intent(this,SignupActivity::class.java))
+        startActivity(Intent(this, SignupActivity::class.java))
     }
 
 

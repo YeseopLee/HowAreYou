@@ -1,8 +1,10 @@
-package com.example.howareyou;
+package com.example.howareyou.Views.Auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.howareyou.R;
 
 public class AccountActivity extends AppCompatActivity {
 

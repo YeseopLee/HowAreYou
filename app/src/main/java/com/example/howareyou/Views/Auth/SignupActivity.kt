@@ -1,4 +1,4 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Auth
 
 import android.content.Context
 import android.graphics.Rect
@@ -15,6 +15,7 @@ import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.Model.SignupDTO
 import com.example.howareyou.Model.SignupResponseDTO
 import com.example.howareyou.Model.StatuscodeResponse
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter

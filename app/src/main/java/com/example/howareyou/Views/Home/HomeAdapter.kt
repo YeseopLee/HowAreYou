@@ -1,23 +1,20 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Home
 
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
-import com.example.howareyou.Model.PostingDTO
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
+import com.example.howareyou.Util.ConvertTime
+import com.example.howareyou.Views.Detail.DetailActivity
 import kotlinx.android.synthetic.main.item_home_posting.view.*
-import kotlinx.android.synthetic.main.item_posting.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchAdapter(val context: Context, val postingDTO : ArrayList<LoadPostItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class HomeAdapter(val context: Context, val postingDTO: ArrayList<LoadPostItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -47,8 +44,8 @@ class SearchAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIte
 
         view.homeposting_textview_content.text = text_content
 
-        if(text_content.length >= 50){
-            pre_text_content = text_content.substring(0,50) + "..."
+        if(text_content.length >= 100){
+            pre_text_content = text_content.substring(0,100) + "..."
             view.homeposting_textview_content.text = pre_text_content
         }
         else {
@@ -66,23 +63,30 @@ class SearchAdapter(val context: Context, val postingDTO : ArrayList<LoadPostIte
 
         view.homeposting_textview_title.text = postingDTO[position].title
         view.homeposting_textview_author.text = postingDTO[position].author
-        view.homeposting_textview_date.text = postingDTO[position].createdAt
         view.homeposting_textview_comment.text = postingDTO[position].comments?.size.toString()
         view.homeposting_textview_favorite.text = postingDTO[position].likeds?.size.toString()
         view.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup_white)
 
+        // 시간 convert
+        val convtime = ConvertTime()
+        view.homeposting_textview_date.text = convtime.showTime(postingDTO[position].createdAt)
+
         // 좋아요 체크
         for ( i in  1..postingDTO[position].likeds!!.size)
         {
-            if( postingDTO[position].likeds!![i-1].user_id == App.prefs.myId) view.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup)
+            if( postingDTO[position].likeds!![i-1].user_id == App.prefs.myId) view.homeposting_button_favorite.setBackgroundResource(
+                R.drawable.ic_thumbsup
+            )
         }
 
 
         view.setOnClickListener{
-            val intent = Intent(context,DetailActivity::class.java)
+            val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("board_id",postingDTO[position].id)
             context.startActivity(intent)
         }
+
+
     }
 
 }

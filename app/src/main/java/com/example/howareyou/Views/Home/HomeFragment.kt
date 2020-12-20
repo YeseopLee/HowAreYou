@@ -1,25 +1,20 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
-import com.example.howareyou.Model.LoadPostItem
-import com.example.howareyou.Util.App
-import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
+import com.example.howareyou.Views.Auth.AccountActivity
+import com.example.howareyou.R
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home_all.*
 
 class HomeFragment : Fragment() {
 

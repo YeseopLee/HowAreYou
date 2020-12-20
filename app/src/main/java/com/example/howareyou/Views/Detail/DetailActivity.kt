@@ -1,4 +1,4 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Detail
 
 import android.content.Context
 import android.graphics.Rect
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.example.howareyou.Model.*
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
