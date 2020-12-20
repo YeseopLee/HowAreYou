@@ -9,12 +9,16 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import com.example.howareyou.Views.Home.HomeFragment
 import com.example.howareyou.Model.LoadCodeResponseDTO
 import com.example.howareyou.Model.PostdeviceTokenDTO
 import com.example.howareyou.Model.StatuscodeResponse
 import com.example.howareyou.Model.UpdateSetResponseDTO
+import com.example.howareyou.Views.Noti.NotiFragment
+import com.example.howareyou.Views.Search.SearchFragment
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.PreferenceUtil
+import com.example.howareyou.Views.Writing.WritingActivity
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -235,7 +239,7 @@ class MainActivity : AppCompatActivity(),BottomNavigationView.OnNavigationItemSe
 
             R.id.action_write -> {
 
-                startActivity(Intent(this,WritingActivity::class.java))
+                startActivity(Intent(this, WritingActivity::class.java))
                 return true
             }
 

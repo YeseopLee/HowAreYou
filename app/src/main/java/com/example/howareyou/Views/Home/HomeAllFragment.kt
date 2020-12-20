@@ -1,60 +1,29 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Home
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.Model.*
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
-import com.example.howareyou.network.RetrofitClient
-import com.example.howareyou.network.ServiceApi
-import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home_all.*
+import kotlinx.android.synthetic.main.fragment_home_viewpager.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
-import kotlin.collections.ArrayList
 
-class HomeAllFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
-
-    private var service: ServiceApi? = null
-
-    var postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
-
-    private val loadLimit : Int = 100 // 한번에 불러올 게시물 양
-    private var getAllPost : Boolean = true // 전체 게시물 탭인지 체크
-    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
-    private lateinit var homeAdapter: HomeAdapter
-    private lateinit var lastboard_id: String // loadMore를 위한 마지막 게시물 id
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // retrofit 연결
-        service = RetrofitClient.client!!.create(ServiceApi::class.java)
-        //fragment view에 담는다
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home_all, container, false)
-
-        return view
-    }
+class HomeAllFragment : HomeBaseFragment(){
 
     // view가 전부 생성된 뒤에 호출
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        showProgress(true)
+        App.prefs.myCode = App.prefs.codeFree
         postingDTOlist.clear()
         initAdapter()
         loadPosting()
@@ -63,8 +32,7 @@ class HomeAllFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onResume() {
         super.onResume()
         getAllPost = true
-        all_swipelayout.requestFocus()
-        Log.e("all","onResume")
+        forceTouch()
     }
 
     override fun onRefresh() {
@@ -73,30 +41,21 @@ class HomeAllFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         // 전체 게시물 tab 체크
         loadPosting()
-        all_swipelayout.isRefreshing = false
+        viewpager_swipelayout.isRefreshing = false
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        all_swipelayout.setOnRefreshListener(this)
-    }
-
-
-    private fun initListener(view: View){
-    }
-
-    private fun initAdapter() {
+    override fun initAdapter() {
         homeAdapter = HomeAdapter(activity!!,postingDTOlist)
         val linearLayoutManager = LinearLayoutManager(activity)
-        all_recyclerview.layoutManager = linearLayoutManager
+        viewpager_recyclerview.layoutManager = linearLayoutManager
 
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                 loadPostingMore()
             }
         }
-        all_recyclerview.addOnScrollListener(scrollListener)
-        all_recyclerview.adapter = homeAdapter
+        viewpager_recyclerview.addOnScrollListener(scrollListener)
+        viewpager_recyclerview.adapter = homeAdapter
     }
 
     // 전체게시글 불러오기
@@ -248,10 +207,5 @@ class HomeAllFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             })
 
     }
-    private fun showProgress(show: Boolean){
-        all_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-    }
-
-
 }
 

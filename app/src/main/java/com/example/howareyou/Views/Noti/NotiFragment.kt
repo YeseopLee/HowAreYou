@@ -1,6 +1,5 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Noti
 
-import android.accounts.Account
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,18 +9,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.howareyou.Views.Auth.AccountActivity
 import com.example.howareyou.Model.LoadPostDTO
-import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Model.NotiItem
 import com.example.howareyou.Model.NotiResponseDTO
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.home_button_refresh
 import kotlinx.android.synthetic.main.fragment_notification.*
 import kotlinx.android.synthetic.main.fragment_notification.view.*
 import retrofit2.Call
@@ -62,7 +59,8 @@ class NotiFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     fun setButton(view: View){
         view.notification_button_myaccount.setOnClickListener {
-            startActivity(Intent(activity,AccountActivity::class.java))
+            startActivity(Intent(activity,
+                AccountActivity::class.java))
         }
     }
 

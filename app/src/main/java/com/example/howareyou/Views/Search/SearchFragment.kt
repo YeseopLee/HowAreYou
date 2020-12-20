@@ -1,9 +1,6 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Search
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -14,13 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import retrofit2.Call

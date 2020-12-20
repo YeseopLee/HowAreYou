@@ -1,14 +1,11 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Writing
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -16,21 +13,18 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
+import com.example.howareyou.Views.Detail.DetailActivity
 import com.example.howareyou.Model.*
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.OnSingleClickListener
-import com.example.howareyou.Util.PermissionCheck
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import gun0912.tedimagepicker.builder.TedImagePicker
-import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_writing.*
-import kotlinx.android.synthetic.main.item_imageupload.view.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -72,7 +66,7 @@ class WritingActivity : AppCompatActivity() {
 
         writing_button_imageupload.setOnClickListener {
             TedImagePicker.with(this)
-                .max(5-_uriList.size,R.string.ted_image_picker_max_count)
+                .max(5-_uriList.size, R.string.ted_image_picker_max_count)
                 .startMultiImage { uriList -> showMultiImage(uriList) }
         }
 
@@ -188,7 +182,7 @@ class WritingActivity : AppCompatActivity() {
                         uploadImage(result._id) // 이미지를 올렸다면 이미지 post를 호출한다.
                     }
                     else {
-                        val intent = Intent(applicationContext,DetailActivity::class.java)
+                        val intent = Intent(applicationContext, DetailActivity::class.java)
                         intent.putExtra("board_id",board_id)
                         startActivity(intent)
                         finish()
@@ -262,7 +256,7 @@ class WritingActivity : AppCompatActivity() {
                 for (index in 0 until result.size){
                     System.out.println("test"+result[index]._id)
                 }
-                val intent = Intent(applicationContext,DetailActivity::class.java)
+                val intent = Intent(applicationContext, DetailActivity::class.java)
                 intent.putExtra("board_id",board_id)
                 startActivity(intent)
                 finish()

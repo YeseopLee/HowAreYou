@@ -1,16 +1,14 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Auth
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
-import kotlinx.android.synthetic.main.activity_splash.*
-import java.io.IOException
 
 class SplashActivity : AppCompatActivity() {
 

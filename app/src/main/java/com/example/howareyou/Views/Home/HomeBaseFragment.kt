@@ -1,9 +1,10 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Home
 
-import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -11,33 +12,31 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.Model.*
+import com.example.howareyou.R
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
-import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home_all.*
+import kotlinx.android.synthetic.main.fragment_home_viewpager.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import kotlin.collections.ArrayList
 
-class HomeBestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+open class HomeBaseFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    private var service: ServiceApi? = null
+    var service: ServiceApi? = null
 
     var postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
 
-    private val loadLimit : Int = 100 // 한번에 불러올 게시물 양
-    private var getAllPost : Boolean = true // 전체 게시물 탭인지 체크
-    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
-    private lateinit var homeAdapter: HomeAdapter
-    private lateinit var lastboard_id: String // loadMore를 위한 마지막 게시물 id
+    val loadLimit : Int = 100 // 한번에 불러올 게시물 양
+    var getAllPost : Boolean = true // 전체 게시물 탭인지 체크
+    lateinit var scrollListener: EndlessRecyclerViewScrollListener
+    lateinit var homeAdapter: HomeAdapter
+    lateinit var lastboard_id: String // loadMore를 위한 마지막 게시물 id
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,21 +45,9 @@ class HomeBestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
         //fragment view에 담는다
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home_all, container, false)
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home_viewpager, container, false)
 
         return view
-    }
-
-    // view가 전부 생성된 뒤에 호출
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        //initListener(view)
-        //initTab()
-        App.prefs.myCode = App.prefs.codeBest
-        postingDTOlist.clear()
-        initAdapter()
-        loadSelectedPosting()
     }
 
     override fun onRefresh() {
@@ -69,35 +56,29 @@ class HomeBestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         // 전체 게시물 tab 체크
         loadSelectedPosting()
-        all_swipelayout.isRefreshing = false
+        viewpager_swipelayout.isRefreshing = false
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        all_swipelayout.setOnRefreshListener(this)
+        viewpager_swipelayout.setOnRefreshListener(this)
     }
 
-    override fun onResume() {
-        super.onResume()
-        App.prefs.myCode = App.prefs.codeBest
-        all_swipelayout.requestFocus()
-    }
-
-    private fun initAdapter() {
+    open fun initAdapter() {
         homeAdapter = HomeAdapter(activity!!,postingDTOlist)
         val linearLayoutManager = LinearLayoutManager(activity)
-        all_recyclerview.layoutManager = linearLayoutManager
+        viewpager_recyclerview.layoutManager = linearLayoutManager
 
         scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                 loadSelectedPostingMore()
             }
         }
-        all_recyclerview.addOnScrollListener(scrollListener)
-        all_recyclerview.adapter = homeAdapter
+        viewpager_recyclerview.addOnScrollListener(scrollListener)
+        viewpager_recyclerview.adapter = homeAdapter
     }
 
-    private fun loadSelectedPosting() {
+    fun loadSelectedPosting() {
         service?.getPost(App.prefs.myCode)?.enqueue(object : Callback<LoadPostDTO?> {
             override fun onResponse(
                 call: Call<LoadPostDTO?>?,
@@ -246,9 +227,23 @@ class HomeBestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     }
 
-    private fun showProgress(show: Boolean){
-        all_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
+    fun showProgress(show: Boolean){
+        viewpager_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
     }
+
+    fun forceTouch(){
+        val downTime: Long = SystemClock.uptimeMillis()
+        val eventTime: Long = SystemClock.uptimeMillis()
+        val down_event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, 0f, 0f, 0)
+        val up_event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, 0f, 0f, 0)
+
+        viewpager_framelayout.dispatchTouchEvent(down_event)
+        viewpager_framelayout.dispatchTouchEvent(up_event)
+
+        viewpager_recyclerview.dispatchTouchEvent(down_event)
+        viewpager_recyclerview.dispatchTouchEvent(up_event)
+    }
+
 
 
 }

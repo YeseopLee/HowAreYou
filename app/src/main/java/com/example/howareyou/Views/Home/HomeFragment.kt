@@ -1,25 +1,20 @@
-package com.example.howareyou
+package com.example.howareyou.Views.Home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
-import com.example.howareyou.Model.LoadPostItem
-import com.example.howareyou.Util.App
-import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
+import com.example.howareyou.Views.Auth.AccountActivity
+import com.example.howareyou.R
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home_all.*
 
 class HomeFragment : Fragment() {
 
@@ -45,7 +40,7 @@ class HomeFragment : Fragment() {
         val pagerAdapter = HomeViewAdapter(activity!!)
         home_viewpager.adapter = pagerAdapter
 
-        showProgress(false)
+        //showProgress(false)
         initListener(view)
         initTab()
     }
@@ -83,20 +78,20 @@ class HomeFragment : Fragment() {
         TabLayoutMediator(home_tablayout, home_viewpager) {
                 tab, position ->
             when(position) {
-                0 -> { tab.setText(getString(R.string.allboard)) }
+                0 -> {tab.setText(getString(R.string.allboard)) }
                 1 -> {tab.setText(getString(R.string.freeboard))}
                 2 -> {tab.setText(getString(R.string.qna))}
                 3 -> {tab.setText(getString(R.string.tipsboard))}
-                4 -> { tab.setText(getString(R.string.studyboard)) }
+                4 -> {tab.setText(getString(R.string.studyboard)) }
                 5 -> {tab.setText(getString(R.string.bestboard))}
             }
         }.attach()
 
     }
 
-    private fun showProgress(show: Boolean){
-        home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-    }
+//    private fun showProgress(show: Boolean){
+//        home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
+//    }
 
 
 }
