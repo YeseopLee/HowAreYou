@@ -20,7 +20,6 @@ import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.home_recyclerview
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.home_button_refresh
 import kotlinx.android.synthetic.main.fragment_notification.*

@@ -7,36 +7,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.howareyou.Model.*
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.Util.App
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
-import com.google.gson.TypeAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.fragment_home_all.*
 
-class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class HomeFragment : Fragment() {
 
     private var service: ServiceApi? = null
-
-    var postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
-
-    private val loadLimit : Int = 100 // 한번에 불러올 게시물 양
-    private var getAllPost : Boolean = true // 전체 게시물 탭인지 체크
-    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
-    private lateinit var homeAdapter: HomeAdapter
-    private lateinit var lastboard_id: String // loadMore를 위한 마지막 게시물 id
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +34,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         //fragment view에 담는다
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home, container, false)
 
+
         return view
     }
 
@@ -54,399 +42,55 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val pagerAdapter = HomeViewAdapter(activity!!)
+        home_viewpager.adapter = pagerAdapter
+
+        showProgress(false)
         initListener(view)
         initTab()
-        initAdapter()
-        loadPosting()
     }
 
-    override fun onRefresh() {
-        // 데이터 list 초기화
-        postingDTOlist.clear()
+    private inner class HomeViewAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
 
-        // 전체 게시물 tab 체크
-        if(getAllPost) loadPosting()
-        else loadSelectedPosting()
-        home_swipelayout.isRefreshing = false
+        override fun getItemCount(): Int = 6
+
+        override fun createFragment(position: Int): Fragment {
+
+            if (position == 0) {
+                return HomeAllFragment()
+            } else if (position == 1) {
+                return HomeFreeFragment()
+            } else if (position == 2) {
+                return HomeQAFragment()
+            } else if (position == 3) {
+                return HomeTipsFragment()
+            } else if (position == 4) {
+                return HomeStudyFragment()
+            } else {
+                return HomeBestFragment()
+            }
+        }
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        home_swipelayout.setOnRefreshListener(this)
-    }
-
 
     private fun initListener(view: View){
-        view.home_button_refresh.setOnClickListener {
-            //fragment refresh
-            onRefresh()
-        }
-
         view.home_button_myaccount.setOnClickListener {
             startActivity(Intent(activity, AccountActivity::class.java))
         }
     }
 
     private fun initTab(){
-        home_tablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(tab?.position){
-                    0 -> {
-                        getAllPost = true
-                    }
-                    1 -> { // 자유게시판
-                        getAllPost = false
-                        App.prefs.myCode = App.prefs.codeFree
-                    }
-                    2 -> { // Q&A 게시판
-                        getAllPost = false
-                        App.prefs.myCode = App.prefs.codeQA
-                    }
-                    3 -> {
-                        getAllPost = false
-                        App.prefs.myCode = App.prefs.codeTips
-                    }
-                    4 -> {
-                        getAllPost = false
-                        App.prefs.myCode = App.prefs.codeStudy
-                    }
-                    5 -> {
-                        getAllPost = false
-                        App.prefs.myCode = App.prefs.codeBest
-                    }
-                }
 
-                // recyclerview 데이터 초기화
-                showProgress(true)
-                postingDTOlist.clear()
-                scrollListener.resetState()
-                initAdapter()
-
-                if(getAllPost) loadPosting()
-                else loadSelectedPosting()
+        TabLayoutMediator(home_tablayout, home_viewpager) {
+                tab, position ->
+            when(position) {
+                0 -> { tab.setText(getString(R.string.allboard)) }
+                1 -> {tab.setText(getString(R.string.freeboard))}
+                2 -> {tab.setText(getString(R.string.qna))}
+                3 -> {tab.setText(getString(R.string.tipsboard))}
+                4 -> { tab.setText(getString(R.string.studyboard)) }
+                5 -> {tab.setText(getString(R.string.bestboard))}
             }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-        })
-    }
-
-    private fun initAdapter() {
-        homeAdapter = HomeAdapter(activity!!,postingDTOlist)
-        val linearLayoutManager = LinearLayoutManager(activity)
-        home_recyclerview.layoutManager = linearLayoutManager
-
-        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                if(getAllPost) loadPostingMore()
-                else loadSelectedPostingMore()
-            }
-        }
-        home_recyclerview.addOnScrollListener(scrollListener)
-        home_recyclerview.adapter = homeAdapter
-    }
-
-    // 전체게시글 불러오기
-    private fun loadPosting() {
-        service?.getAllPost("Bearer " + App.prefs.myJwt)?.enqueue(object : Callback<LoadPostDTO?> {
-            override fun onResponse(
-                call: Call<LoadPostDTO?>?,
-                response: Response<LoadPostDTO?>
-
-            ) {
-                if (response.isSuccessful) {
-                    showProgress(false)
-                    val result: LoadPostDTO = response.body()!!
-                    val postSize: Int = result.size - 1
-
-                    if (result.size != 0) {
-                        for (i in 0..postSize) {
-
-                            if(!result[i].is_deleted)
-                            {
-                                postingDTOlist?.add(
-                                    LoadPostItem(
-                                        result[i].id,
-                                        result[i].title,
-                                        result[i].content,
-                                        result[i].author,
-                                        result[i].code,
-                                        result[i].comments,
-                                        result[i].likeds,
-                                        result[i].viewed,
-                                        result[i].createdAt,
-                                        result[i].header,
-                                        result[i].user_id,
-                                        result[i].is_deleted,
-                                        result[i].image
-                                    )
-                                )
-                            }
-                            lastboard_id = result[i].id
-
-                        }
-
-                        //
-                        homeAdapter.notifyDataSetChanged()
-
-                    } else {
-                        //TODO
-                    }
-
-                } else {
-                    // 실패시 resopnse.errorbody를 객체화
-                    val gson = Gson()
-                    val adapter: TypeAdapter<StatuscodeResponse> =
-                        gson.getAdapter<StatuscodeResponse>(
-                            StatuscodeResponse::class.java
-                        )
-                    try {
-                        if (response.errorBody() != null) {
-                            val result: StatuscodeResponse = adapter.fromJson(
-                                response.errorBody()!!.string()
-                            )
-                            if (result.statusCode == 401) // jwt 토큰 만료
-                            {
-
-                            }
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                Log.e("onFailure", t.message!!)
-                showProgress(false)
-            }
-        })
-
-    }
-
-    private fun loadPostingMore() {
-        service?.getAllPostMore("Bearer " + App.prefs.myJwt, lastboard_id, loadLimit)?.enqueue(
-            object : Callback<LoadPostDTO?> {
-                override fun onResponse(
-                    call: Call<LoadPostDTO?>?,
-                    response: Response<LoadPostDTO?>
-
-                ) {
-                    if (response.isSuccessful) {
-                        showProgress(false)
-                        val result: LoadPostDTO = response.body()!!
-                        val postSize: Int = result.size - 1
-                        if (result.size != 0) {
-                            for (i in 0..postSize) {
-                                postingDTOlist?.add(
-                                    LoadPostItem(
-                                        result[i].id,
-                                        result[i].title,
-                                        result[i].content,
-                                        result[i].author,
-                                        result[i].code,
-                                        result[i].comments,
-                                        result[i].likeds,
-                                        result[i].viewed,
-                                        result[i].createdAt,
-                                        result[i].header,
-                                        result[i].user_id,
-                                        result[i].is_deleted,
-                                        result[i].image
-                                    )
-                                )
-
-                                lastboard_id = result[i].id
-                            }
-                            // 리사이클러뷰 데이터 갱신
-                            homeAdapter.notifyDataSetChanged()
-                        } else {
-                            //TODO
-                        }
-
-                    } else {
-                        // 실패시 resopnse.errorbody를 객체화
-                        val gson = Gson()
-                        val adapter: TypeAdapter<StatuscodeResponse> =
-                            gson.getAdapter<StatuscodeResponse>(
-                                StatuscodeResponse::class.java
-                            )
-                        try {
-                            if (response.errorBody() != null) {
-                                val result: StatuscodeResponse = adapter.fromJson(
-                                    response.errorBody()!!.string()
-                                )
-                                if (result.statusCode == 401) // jwt 토큰 만료
-                                {
-
-                                }
-
-                            }
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                    Log.e("onFailure", t.message!!)
-                    showProgress(false)
-                }
-            })
-
-    }
-
-    private fun loadSelectedPosting() {
-        service?.getPost(App.prefs.myCode)?.enqueue(object : Callback<LoadPostDTO?> {
-            override fun onResponse(
-                call: Call<LoadPostDTO?>?,
-                response: Response<LoadPostDTO?>
-
-            ) {
-                if (response.isSuccessful) {
-                    showProgress(false)
-                    val result: LoadPostDTO = response.body()!!
-                    val postSize: Int = result.size - 1
-
-                    if (result.size != 0) {
-                        for (i in 0..postSize) {
-
-                            if(!result[i].is_deleted)
-                            {
-                                postingDTOlist?.add(
-                                    LoadPostItem(
-                                        result[i].id,
-                                        result[i].title,
-                                        result[i].content,
-                                        result[i].author,
-                                        result[i].code,
-                                        result[i].comments,
-                                        result[i].likeds,
-                                        result[i].viewed,
-                                        result[i].createdAt,
-                                        result[i].header,
-                                        result[i].user_id,
-                                        result[i].is_deleted,
-                                        result[i].image
-                                    )
-                                )
-                            }
-                            lastboard_id = result[i].id
-
-                        }
-
-                        //
-                        homeAdapter.notifyDataSetChanged()
-
-                    } else {
-                        //TODO
-                    }
-
-                } else {
-                    // 실패시 resopnse.errorbody를 객체화
-                    val gson = Gson()
-                    val adapter: TypeAdapter<StatuscodeResponse> =
-                        gson.getAdapter<StatuscodeResponse>(
-                            StatuscodeResponse::class.java
-                        )
-                    try {
-                        if (response.errorBody() != null) {
-                            val result: StatuscodeResponse = adapter.fromJson(
-                                response.errorBody()!!.string()
-                            )
-                            if (result.statusCode == 401) // jwt 토큰 만료
-                            {
-
-                            }
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                Log.e("onFailure", t.message!!)
-                showProgress(false)
-            }
-        })
-
-    }
-
-    private fun loadSelectedPostingMore() {
-        service?.getPostMore(lastboard_id, loadLimit, App.prefs.myCode)?.enqueue(
-            object : Callback<LoadPostDTO?> {
-                override fun onResponse(
-                    call: Call<LoadPostDTO?>?,
-                    response: Response<LoadPostDTO?>
-
-                ) {
-                    if (response.isSuccessful) {
-                        showProgress(false)
-                        val result: LoadPostDTO = response.body()!!
-                        val postSize: Int = result.size - 1
-                        if (result.size != 0) {
-                            for (i in 0..postSize) {
-                                postingDTOlist?.add(
-                                    LoadPostItem(
-                                        result[i].id,
-                                        result[i].title,
-                                        result[i].content,
-                                        result[i].author,
-                                        result[i].code,
-                                        result[i].comments,
-                                        result[i].likeds,
-                                        result[i].viewed,
-                                        result[i].createdAt,
-                                        result[i].header,
-                                        result[i].user_id,
-                                        result[i].is_deleted,
-                                        result[i].image
-                                    )
-                                )
-
-                                lastboard_id = result[i].id
-                            }
-                            // 리사이클러뷰 데이터 갱신
-                            homeAdapter.notifyDataSetChanged()
-                        } else {
-                            //TODO
-                        }
-
-                    } else {
-                        // 실패시 resopnse.errorbody를 객체화
-                        val gson = Gson()
-                        val adapter: TypeAdapter<StatuscodeResponse> =
-                            gson.getAdapter<StatuscodeResponse>(
-                                StatuscodeResponse::class.java
-                            )
-                        try {
-                            if (response.errorBody() != null) {
-                                val result: StatuscodeResponse = adapter.fromJson(
-                                    response.errorBody()!!.string()
-                                )
-                                if (result.statusCode == 401) // jwt 토큰 만료
-                                {
-
-                                }
-
-                            }
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<LoadPostDTO?>?, t: Throwable) {
-                    Log.e("onFailure", t.message!!)
-                    showProgress(false)
-                }
-            })
+        }.attach()
 
     }
 
