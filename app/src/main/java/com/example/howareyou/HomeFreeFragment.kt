@@ -71,7 +71,9 @@ class HomeFreeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onResume() {
         super.onResume()
+        Log.e("Free","OnResume")
         App.prefs.myCode = App.prefs.codeFree
+        all_swipelayout.requestFocus()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

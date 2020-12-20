@@ -77,7 +77,10 @@ class HomeQAFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onResume() {
         super.onResume()
+
+        Log.e("qa","onResume")
         App.prefs.myCode = App.prefs.codeQA
+        all_swipelayout.requestFocus()
     }
 
 

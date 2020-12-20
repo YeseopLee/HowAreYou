@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout android:id="@+id/all_framelayout"
+    android:focusable="true"
+    android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
@@ -12,8 +14,10 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/all_swipelayout"
+            android:clickable="true"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@color/colorBackground"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -21,9 +25,11 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/all_recyclerview"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/colorWhite"/>
+                android:background="@color/colorBackground"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

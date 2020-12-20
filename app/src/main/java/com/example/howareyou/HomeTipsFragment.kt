@@ -78,7 +78,10 @@ class HomeTipsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onResume() {
         super.onResume()
+
+        Log.e("tips","onResume")
         App.prefs.myCode = App.prefs.codeTips
+        all_swipelayout.requestFocus()
     }
 
 

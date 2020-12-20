@@ -1,11 +1,13 @@
 package com.example.howareyou
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,9 +46,8 @@ class HomeStudyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     ): View? {
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
-        //fragment view에 담는다
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home_all, container, false)
 
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home_all, container, false)
         return view
     }
 
@@ -54,8 +55,6 @@ class HomeStudyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //initListener(view)
-        //initTab()
         App.prefs.myCode = App.prefs.codeStudy
         postingDTOlist.clear()
         initAdapter()
@@ -69,29 +68,24 @@ class HomeStudyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         // 전체 게시물 tab 체크
         loadSelectedPosting()
         all_swipelayout.isRefreshing = false
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         all_swipelayout.setOnRefreshListener(this)
+        all_framelayout.requestFocus()
+        all_framelayout.performClick()
     }
 
     override fun onResume() {
         super.onResume()
+        Log.e("study","OnResume")
         App.prefs.myCode = App.prefs.codeStudy
+
     }
 
-
-
     private fun initListener(view: View){
-//        view.home_button_refresh.setOnClickListener {
-//            //fragment refresh
-//            onRefresh()
-//        }
-//
-//        view.home_button_myaccount.setOnClickListener {
-//            startActivity(Intent(activity, AccountActivity::class.java))
-//        }
     }
 
     private fun initAdapter() {

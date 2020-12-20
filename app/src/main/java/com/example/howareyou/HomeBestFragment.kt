@@ -80,6 +80,7 @@ class HomeBestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onResume() {
         super.onResume()
         App.prefs.myCode = App.prefs.codeBest
+        all_swipelayout.requestFocus()
     }
 
     private fun initAdapter() {

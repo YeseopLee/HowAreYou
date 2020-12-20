@@ -19,6 +19,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_home_all.*
 
 class HomeFragment : Fragment() {
 
@@ -41,7 +42,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pagerAdapter = HomeViewAdapter(activity!!,6)
+        val pagerAdapter = HomeViewAdapter(activity!!)
         home_viewpager.adapter = pagerAdapter
 
         showProgress(false)
@@ -49,41 +50,25 @@ class HomeFragment : Fragment() {
         initTab()
     }
 
-    private inner class HomeViewAdapter(fa: FragmentActivity, pagenum: Int) : FragmentStateAdapter(
-        fa
-    ) {
-
-        var mCount = pagenum
+    private inner class HomeViewAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
 
         override fun getItemCount(): Int = 6
 
         override fun createFragment(position: Int): Fragment {
-            val index = getRealPosition(position)
 
-            if (index == 0) {
-                Log.e("position", position.toString())
+            if (position == 0) {
                 return HomeAllFragment()
-            } else if (index == 1) {
-                Log.e("position", position.toString())
+            } else if (position == 1) {
                 return HomeFreeFragment()
-            } else if (index == 2) {
-                Log.e("position", position.toString())
+            } else if (position == 2) {
                 return HomeQAFragment()
-            } else if (index == 3) {
-                Log.e("position", position.toString())
+            } else if (position == 3) {
                 return HomeTipsFragment()
-            } else if (index == 4) {
-                Log.e("position", position.toString())
+            } else if (position == 4) {
                 return HomeStudyFragment()
             } else {
-                Log.e("position", position.toString())
                 return HomeBestFragment()
             }
-
-        }
-
-        fun getRealPosition(position: Int): Int {
-            return position % mCount
         }
     }
 
@@ -98,11 +83,11 @@ class HomeFragment : Fragment() {
         TabLayoutMediator(home_tablayout, home_viewpager) {
                 tab, position ->
             when(position) {
-                0 -> {tab.setText(getString(R.string.allboard))}
+                0 -> { tab.setText(getString(R.string.allboard)) }
                 1 -> {tab.setText(getString(R.string.freeboard))}
                 2 -> {tab.setText(getString(R.string.qna))}
                 3 -> {tab.setText(getString(R.string.tipsboard))}
-                4 -> {tab.setText(getString(R.string.studyboard))}
+                4 -> { tab.setText(getString(R.string.studyboard)) }
                 5 -> {tab.setText(getString(R.string.bestboard))}
             }
         }.attach()

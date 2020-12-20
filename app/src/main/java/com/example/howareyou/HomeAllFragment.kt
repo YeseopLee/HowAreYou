@@ -63,6 +63,8 @@ class HomeAllFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onResume() {
         super.onResume()
         getAllPost = true
+        all_swipelayout.requestFocus()
+        Log.e("all","onResume")
     }
 
     override fun onRefresh() {
