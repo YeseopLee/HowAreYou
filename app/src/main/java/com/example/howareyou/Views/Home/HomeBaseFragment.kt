@@ -232,16 +232,15 @@ open class HomeBaseFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     fun forceTouch(){
+
+        Log.e("BaseFragment","forceTouch")
         val downTime: Long = SystemClock.uptimeMillis()
         val eventTime: Long = SystemClock.uptimeMillis()
         val down_event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, 0f, 0f, 0)
         val up_event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, 0f, 0f, 0)
 
-        viewpager_framelayout.dispatchTouchEvent(down_event)
-        viewpager_framelayout.dispatchTouchEvent(up_event)
-
-        viewpager_recyclerview.dispatchTouchEvent(down_event)
-        viewpager_recyclerview.dispatchTouchEvent(up_event)
+        viewpager_swipelayout.dispatchTouchEvent(down_event)
+        viewpager_swipelayout.dispatchTouchEvent(up_event)
     }
 
 
