@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.howareyou.views.Detail.DetailActivity
-import com.example.howareyou.Model.*
+import com.example.howareyou.model.*
 import com.example.howareyou.R
 import com.example.howareyou.App
 import com.example.howareyou.Util.OnSingleClickListener

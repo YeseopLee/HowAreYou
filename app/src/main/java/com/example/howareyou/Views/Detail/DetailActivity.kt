@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
-import com.example.howareyou.Model.*
+import com.example.howareyou.model.*
 import com.example.howareyou.R
 import com.example.howareyou.App
 import com.example.howareyou.Util.OnSingleClickListener

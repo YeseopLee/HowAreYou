@@ -10,9 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.howareyou.Model.Comment
-import com.example.howareyou.Model.PostLikedDTO
-import com.example.howareyou.Model.PostingResponseDTO
+import com.example.howareyou.model.Comment
+import com.example.howareyou.model.PostLikedDTO
+import com.example.howareyou.model.PostingResponseDTO
 import com.example.howareyou.R
 import com.example.howareyou.App
 import com.example.howareyou.Util.ConvertTime

@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.views.auth.AccountActivity
-import com.example.howareyou.Model.LoadPostDTO
-import com.example.howareyou.Model.NotiItem
-import com.example.howareyou.Model.NotiResponseDTO
+import com.example.howareyou.model.LoadPostDTO
+import com.example.howareyou.model.NotiItem
+import com.example.howareyou.model.NotiResponseDTO
 import com.example.howareyou.R
 import com.example.howareyou.App
 import com.example.howareyou.network.RetrofitClient

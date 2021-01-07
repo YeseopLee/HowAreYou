@@ -1,4 +1,4 @@
-package com.example.howareyou.Model
+package com.example.howareyou.model
 
 import com.google.gson.annotations.SerializedName
 

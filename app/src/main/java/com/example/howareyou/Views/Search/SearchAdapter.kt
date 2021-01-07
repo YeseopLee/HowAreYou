@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.views.Detail.DetailActivity
-import com.example.howareyou.Model.LoadPostItem
+import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.R
 import com.example.howareyou.App
 import kotlinx.android.synthetic.main.item_home_posting.view.*

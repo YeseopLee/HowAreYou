@@ -1,6 +1,6 @@
 package com.example.howareyou.repository
 
-import com.example.howareyou.Model.*
+import com.example.howareyou.model.*
 
 interface AuthRepository {
 

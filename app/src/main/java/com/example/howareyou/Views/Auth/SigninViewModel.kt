@@ -1,28 +1,15 @@
 package com.example.howareyou.views.auth
 
-import android.content.Intent
-import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.howareyou.App
-import com.example.howareyou.MainActivity
-import com.example.howareyou.Model.*
+import com.example.howareyou.model.*
 import com.example.howareyou.Util.Event
 import com.example.howareyou.repository.AuthRepository
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.Gson
-import com.google.gson.TypeAdapter
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
 
 class SigninViewModel @ViewModelInject constructor(
     private val authRepository: AuthRepository
@@ -40,13 +27,10 @@ class SigninViewModel @ViewModelInject constructor(
     init {
         email.value = ""
         password.value = ""
-        Log.e("init!!!","init")
     }
 
     fun attemptLogin() {
 
-        Log.e("else","elese")
-        Log.e("????","?????")
         startLogin(SigninDTO(email.value!!, password.value!!))
 
     }
@@ -67,13 +51,6 @@ class SigninViewModel @ViewModelInject constructor(
 
     }
 
-    fun startJoin(data: SignupDTO) {
-
-        viewModelScope.launch {
-            val signupInfo = authRepository.signup(data)
-            postDeviceToken(PostdeviceTokenDTO(signupInfo.user._id, App.prefs.myDevice, true))
-        }
-    }
 
     fun postDeviceToken(data: PostdeviceTokenDTO) {
         viewModelScope.launch {

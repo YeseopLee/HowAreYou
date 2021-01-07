@@ -1,6 +1,4 @@
-package com.example.howareyou.Model
-
-import com.google.gson.annotations.SerializedName
+package com.example.howareyou.model
 
 
 class LoadCodeResponseDTO : ArrayList<CodeItem>()

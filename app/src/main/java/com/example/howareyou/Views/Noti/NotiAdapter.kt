@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.views.Detail.DetailActivity
-import com.example.howareyou.Model.*
+import com.example.howareyou.model.*
 import com.example.howareyou.R
 import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.network.RetrofitClient

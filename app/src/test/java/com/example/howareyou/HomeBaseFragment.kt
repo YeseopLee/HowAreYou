@@ -1,4 +1,4 @@
-package com.example.howareyou.views.Home
+package com.example.howareyou
 
 import android.os.Bundle
 import android.os.SystemClock
@@ -7,18 +7,21 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.howareyou.Model.*
-import com.example.howareyou.R
-import com.example.howareyou.App
+import com.example.howareyou.model.*
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
+import com.example.howareyou.views.home.HomeAdapter
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home_viewpager.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,16 +29,20 @@ import retrofit2.Response
 import java.io.IOException
 import kotlin.collections.ArrayList
 
-open class HomeBaseFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+@AndroidEntryPoint
+abstract class HomeBaseFragment<B : ViewDataBinding>(@LayoutRes val layoutId: Int) : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+
+    lateinit var binding: B
 
     var service: ServiceApi? = null
+
+    lateinit var homeAdapter: HomeAdapter
 
     var postingDTOlist: ArrayList<LoadPostItem> = arrayListOf()
 
     val loadLimit : Int = 100 // 한번에 불러올 게시물 양
     var getAllPost : Boolean = true // 전체 게시물 탭인지 체크
     lateinit var scrollListener: EndlessRecyclerViewScrollListener
-    lateinit var homeAdapter: HomeAdapter
     lateinit var lastboard_id: String // loadMore를 위한 마지막 게시물 id
 
     override fun onCreateView(
@@ -44,10 +51,9 @@ open class HomeBaseFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     ): View? {
         // retrofit 연결
         service = RetrofitClient.client!!.create(ServiceApi::class.java)
-        //fragment view에 담는다
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home_viewpager, container, false)
 
-        return view
+        binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
+        return binding.root
     }
 
     override fun onRefresh() {
@@ -65,7 +71,7 @@ open class HomeBaseFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     open fun initAdapter() {
-        homeAdapter = HomeAdapter(activity!!,postingDTOlist)
+        homeAdapter = HomeAdapter(requireActivity())
         val linearLayoutManager = LinearLayoutManager(activity)
         viewpager_recyclerview.layoutManager = linearLayoutManager
 

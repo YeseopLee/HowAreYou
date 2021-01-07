@@ -1,6 +1,6 @@
 package com.example.howareyou.network
 
-import com.example.howareyou.Model.*
+import com.example.howareyou.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -59,7 +59,7 @@ interface ServiceApi {
 //    fun getAllPost(): Call<LoadPostDTO?>?
 
     @GET("/boards?_sort=_id:DESC&_limit=30")
-    fun getAllPost(@Header("authorization") authHeader: String): Call<LoadPostDTO?>?
+    suspend fun getAllPost(@Header("authorization") authHeader: String): LoadPostDTO
 
     @GET("/boards?_sort=_id:DESC")
     fun getAllPostMore(@Header("authorization") authHeader: String, @Query ("id_lt")id_lt: String, @Query("_limit")_limit : Int): Call<LoadPostDTO?>?

@@ -1,15 +1,13 @@
 package com.example.howareyou.views.auth
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.howareyou.App
-import com.example.howareyou.Model.PostdeviceTokenDTO
-import com.example.howareyou.Model.SigninDTO
-import com.example.howareyou.Model.SignupDTO
+import com.example.howareyou.model.PostdeviceTokenDTO
+import com.example.howareyou.model.SignupDTO
 import com.example.howareyou.Util.Event
 import com.example.howareyou.repository.AuthRepository
 import kotlinx.coroutines.launch

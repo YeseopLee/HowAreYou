@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.howareyou.Model.ImageDTO
+import com.example.howareyou.model.ImageDTO
 import com.example.howareyou.R
 import kotlinx.android.synthetic.main.activity_imageview_detail.view.*
 import kotlinx.android.synthetic.main.item_imageshow.view.*

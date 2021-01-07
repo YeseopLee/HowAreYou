@@ -1,4 +1,4 @@
-package com.example.howareyou.views.Home
+package com.example.howareyou.views.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,37 +7,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.howareyou.views.auth.AccountActivity
 import com.example.howareyou.R
+import com.example.howareyou.databinding.FragmentHomeBinding
+import com.example.howareyou.databinding.FragmentHomeViewpagerBinding
+import com.example.howareyou.views.auth.AccountActivity
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
+import com.example.howareyou.views.BaseFragment
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
-class HomeFragment : Fragment() {
+@AndroidEntryPoint
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
-    private var service: ServiceApi? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // retrofit 연결
-        service = RetrofitClient.client!!.create(ServiceApi::class.java)
-        //fragment view에 담는다
-        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home, container, false)
-
-
-        return view
-    }
+    private val homeViewModel by viewModels<HomeViewModel>()
 
     // view가 전부 생성된 뒤에 호출
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pagerAdapter = HomeViewAdapter(activity!!)
+        binding.viewModel = homeViewModel
+
+        val pagerAdapter = HomeViewAdapter(requireActivity())
         home_viewpager.adapter = pagerAdapter
 
         //showProgress(false)
@@ -53,17 +48,19 @@ class HomeFragment : Fragment() {
 
             if (position == 0) {
                 return HomeAllFragment()
-            } else if (position == 1) {
-                return HomeFreeFragment()
-            } else if (position == 2) {
-                return HomeQAFragment()
-            } else if (position == 3) {
-                return HomeTipsFragment()
-            } else if (position == 4) {
-                return HomeStudyFragment()
-            } else {
-                return HomeBestFragment()
             }
+//            else if (position == 1) {
+//                return com.example.howareyou.HomeFreeFragment()
+//            } else if (position == 2) {
+//                return com.example.howareyou.HomeQAFragment()
+//            } else if (position == 3) {
+//                return com.example.howareyou.HomeTipsFragment()
+//            } else if (position == 4) {
+//                return com.example.howareyou.HomeStudyFragment()
+//            } else {
+//                return com.example.howareyou.HomeBestFragment()
+//            }
+            else return HomeAllFragment()
         }
     }
 
