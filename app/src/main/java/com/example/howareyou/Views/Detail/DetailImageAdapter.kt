@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Detail
+package com.example.howareyou.views.Detail
 
 import android.content.Context
 import android.view.LayoutInflater

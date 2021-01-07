@@ -1,9 +1,9 @@
-package com.example.howareyou.Views.Home
+package com.example.howareyou.views.Home
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
 
 class HomeFreeFragment : HomeBaseFragment() {
 

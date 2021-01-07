@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Noti
+package com.example.howareyou.views.Noti
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.howareyou.Views.Auth.AccountActivity
+import com.example.howareyou.views.auth.AccountActivity
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.NotiItem
 import com.example.howareyou.Model.NotiResponseDTO
 import com.example.howareyou.R
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson

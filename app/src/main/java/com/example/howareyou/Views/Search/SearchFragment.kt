@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Search
+package com.example.howareyou.views.Search
 
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.LoadPostDTO
 import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.R
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi

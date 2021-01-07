@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Writing
+package com.example.howareyou.views.Writing
 
 import android.content.Context
 import android.net.Uri

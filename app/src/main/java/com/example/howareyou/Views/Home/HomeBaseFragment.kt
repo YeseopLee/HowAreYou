@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Home
+package com.example.howareyou.views.Home
 
 import android.os.Bundle
 import android.os.SystemClock
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.Model.*
 import com.example.howareyou.R
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi

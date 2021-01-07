@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Home
+package com.example.howareyou.views.Home
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.howareyou.Views.Auth.AccountActivity
+import com.example.howareyou.views.auth.AccountActivity
 import com.example.howareyou.R
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi

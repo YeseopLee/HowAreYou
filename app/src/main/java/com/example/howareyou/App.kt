@@ -1,7 +1,10 @@
-package com.example.howareyou.Util
+package com.example.howareyou
 
 import android.app.Application
+import com.example.howareyou.Util.SharedPref
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App : Application() {
 
     companion object {

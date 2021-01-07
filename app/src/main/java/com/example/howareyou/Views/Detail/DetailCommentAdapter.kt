@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Detail
+package com.example.howareyou.views.Detail
 
 import android.content.Context
 import android.util.Log
@@ -14,7 +14,7 @@ import com.example.howareyou.Model.Comment
 import com.example.howareyou.Model.PostLikedDTO
 import com.example.howareyou.Model.PostingResponseDTO
 import com.example.howareyou.R
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
 import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient

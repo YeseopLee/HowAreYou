@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Home
+package com.example.howareyou.views.Home
 
 import android.os.Bundle
 import android.util.Log
@@ -6,7 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.*
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
 import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter

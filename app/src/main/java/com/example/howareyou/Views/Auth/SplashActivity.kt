@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Auth
+package com.example.howareyou.views.auth
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import com.example.howareyou.R
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
+import com.example.howareyou.databinding.ActivitySplashBinding
+import com.example.howareyou.views.BaseActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_splash){
 
     val SPLASH_VIEW_TIME: Long = 2000
 
@@ -18,10 +20,6 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // token 처리
-        // jwt 토큰 확인하고,
-
-        getFCMToken()
 
         Handler().postDelayed({ //delay를 위한 handler
             startActivity(Intent(this, SigninActivity::class.java))
@@ -30,19 +28,5 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
-    private fun getFCMToken(){
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("get Token", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            // Get new FCM registration token
-            val token = task.result
-            Log.d("get token", token)
-
-            App.prefs.myDevice = token!!
-            System.out.println("mytoken"+App.prefs.myDevice)
-        })
-    }
 
 }

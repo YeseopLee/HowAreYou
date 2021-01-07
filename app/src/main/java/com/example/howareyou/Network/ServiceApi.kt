@@ -4,16 +4,21 @@ import com.example.howareyou.Model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 
 interface ServiceApi {
 
+    companion object {
+        const val BASE_URL = "http://211.208.220.233:1337"
+    }
+
     @POST("/auth/local/register")
-    fun userJoin(@Body data: SignupDTO?): Call<SignupResponseDTO?>?
+    suspend fun userJoin(@Body data: SignupDTO?): SignupResponseDTO
 
     @POST("/auth/local")
-    fun userLogin(@Body data: SigninDTO?): Call<SigninResponseDTO?>?
+    suspend fun userLogin(@Body data: SigninDTO?): SigninResponseDTO
 
     @POST("/boards")
     fun userPost(@Header("authorization") authHeader :String, @Body data: PostingDTO?): Call<PostingResponseDTO?>?
@@ -25,7 +30,7 @@ interface ServiceApi {
     fun userLiked(@Body data: PostLikedDTO): Call<PostingResponseDTO>?
 
     @POST("/usersettings")
-    fun userSetting(@Body data: PostdeviceTokenDTO): Call<Void>?
+    suspend fun userSetting(@Body data: PostdeviceTokenDTO): Response<Unit>
 
     @POST("/alarms")
     fun postAlarm(@Header("authorization") authHeader: String, @Body data: AlarmDTO): Call<Void>?

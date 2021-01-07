@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Home
+package com.example.howareyou.views.Home
 
 import android.content.Context
 import android.content.Intent
@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.Model.LoadPostItem
 import com.example.howareyou.R
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
 import com.example.howareyou.Util.ConvertTime
-import com.example.howareyou.Views.Detail.DetailActivity
+import com.example.howareyou.views.Detail.DetailActivity
 import kotlinx.android.synthetic.main.item_home_posting.view.*
 import kotlin.collections.ArrayList
 

@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Auth;
+package com.example.howareyou.views.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 

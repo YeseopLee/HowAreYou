@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Noti
+package com.example.howareyou.views.Noti
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.howareyou.Views.Detail.DetailActivity
+import com.example.howareyou.views.Detail.DetailActivity
 import com.example.howareyou.Model.*
 import com.example.howareyou.R
 import com.example.howareyou.Util.ConvertTime

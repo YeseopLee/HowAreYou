@@ -1,4 +1,4 @@
-package com.example.howareyou.Views.Writing
+package com.example.howareyou.views.Writing
 
 import android.content.Context
 import android.content.Intent
@@ -14,10 +14,10 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.howareyou.Views.Detail.DetailActivity
+import com.example.howareyou.views.Detail.DetailActivity
 import com.example.howareyou.Model.*
 import com.example.howareyou.R
-import com.example.howareyou.Util.App
+import com.example.howareyou.App
 import com.example.howareyou.Util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
@@ -162,12 +162,16 @@ class WritingActivity : AppCompatActivity() {
         if (cancel) {
             focusView?.requestFocus()
         } else {
-            startPost(PostingDTO(App.prefs.myEmail,App.prefs.myId,App.prefs.myName,title,content,"header",App.prefs.myCode))
+            startPost(PostingDTO(
+                App.prefs.myEmail,
+                App.prefs.myId,
+                App.prefs.myName,title,content,"header",
+                App.prefs.myCode))
         }
     }
 
     private fun startPost(data: PostingDTO) {
-        service?.userPost("Bearer "+App.prefs.myJwt,data)?.enqueue(object : Callback<PostingResponseDTO?> {
+        service?.userPost("Bearer "+ App.prefs.myJwt,data)?.enqueue(object : Callback<PostingResponseDTO?> {
             override fun onResponse(
                 call: Call<PostingResponseDTO?>?,
                 response: Response<PostingResponseDTO?>
