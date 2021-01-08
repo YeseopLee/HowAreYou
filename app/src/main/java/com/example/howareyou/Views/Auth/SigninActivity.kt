@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.example.howareyou.MainActivity
+import com.example.howareyou.views.MainActivity
 import com.example.howareyou.R
 import com.example.howareyou.views.BaseActivity
 import com.example.howareyou.databinding.ActivitySigninBinding

@@ -23,7 +23,7 @@
         <activity android:name=".views.auth.SigninActivity" />
         <activity android:name=".views.Writing.WritingActivity" />
         <activity android:name=".views.auth.SignupActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".views.MainActivity" />
         <activity android:name=".views.auth.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,71 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
+        <variable
+            name="viewModel"
+            type="com.example.howareyou.views.MainViewModel" />
 
-<!--    <Button-->
-<!--        android:id="@+id/main_button_notification"-->
-<!--        android:layout_width="30dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        android:layout_marginRight="10dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/main_button_myaccount"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/main_division_TopBarDivision"-->
-<!--        android:background="@drawable/ic_notification_white"/>-->
+    </data>
 
-<!--    <Button-->
-<!--        android:id="@+id/main_button_search"-->
-<!--        android:layout_width="30dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        android:layout_marginRight="10dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/main_button_notification"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/main_division_TopBarDivision"-->
-<!--        android:background="@drawable/ic_search_white"/>-->
-
-
-    <LinearLayout
-        android:id="@+id/main_division_TopBarDivision"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:background="@color/colorDivision"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/main_framelayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/colorBackground"
-        app:layout_constraintTop_toBottomOf="@id/main_division_TopBarDivision"
-        app:layout_constraintBottom_toTopOf="@id/main_bottom_navigation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_bottom_navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        app:menu="@menu/bottom_navigation_main">
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        tools:context=".views.MainActivity">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!--    <Button-->
+        <!--        android:id="@+id/main_button_notification"-->
+        <!--        android:layout_width="30dp"-->
+        <!--        android:layout_height="0dp"-->
+        <!--        android:layout_marginTop="10dp"-->
+        <!--        android:layout_marginBottom="10dp"-->
+        <!--        android:layout_marginRight="10dp"-->
+        <!--        app:layout_constraintEnd_toStartOf="@id/main_button_myaccount"-->
+        <!--        app:layout_constraintTop_toTopOf="parent"-->
+        <!--        app:layout_constraintBottom_toTopOf="@id/main_division_TopBarDivision"-->
+        <!--        android:background="@drawable/ic_notification_white"/>-->
+
+        <!--    <Button-->
+        <!--        android:id="@+id/main_button_search"-->
+        <!--        android:layout_width="30dp"-->
+        <!--        android:layout_height="0dp"-->
+        <!--        android:layout_marginTop="10dp"-->
+        <!--        android:layout_marginBottom="10dp"-->
+        <!--        android:layout_marginRight="10dp"-->
+        <!--        app:layout_constraintEnd_toStartOf="@id/main_button_notification"-->
+        <!--        app:layout_constraintTop_toTopOf="parent"-->
+        <!--        app:layout_constraintBottom_toTopOf="@id/main_division_TopBarDivision"-->
+        <!--        android:background="@drawable/ic_search_white"/>-->
+
+
+        <LinearLayout
+            android:id="@+id/main_division_TopBarDivision"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:background="@color/colorDivision"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/main_framelayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorBackground"
+            app:layout_constraintTop_toBottomOf="@id/main_division_TopBarDivision"
+            app:layout_constraintBottom_toTopOf="@id/main_bottom_navigation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/main_bottom_navigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/colorWhite"
+            app:menu="@menu/bottom_navigation_main"></com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -44,7 +44,7 @@ interface ServiceApi {
     fun uploadFile(@Part imageFile: ArrayList<MultipartBody.Part>, @Part ("ref") ref: RequestBody, @Part ("refId") refId: RequestBody, @Part ("field") field: RequestBody): Call<UploadImageResponseDTO>?
 
     @PUT("/usersettings/{id}")
-    fun userUpdatesetting(@Path("id")setting_id : String, @Body data: PostdeviceTokenDTO): Call<Void>?
+    suspend fun userUpdatesetting(@Path("id")setting_id : String, @Body data: PostdeviceTokenDTO): Response<Unit>
 
     @PUT("/notifications/{noti_id}")
     fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Call<Void>?
@@ -53,7 +53,7 @@ interface ServiceApi {
     fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String, @Body data: deleteDTO ): Call<Void>?
 
     @GET("/Codes")
-    fun getCode(): Call<LoadCodeResponseDTO>?
+    suspend fun getCode(): LoadCodeResponseDTO
 
 //    @GET("/boards")
 //    fun getAllPost(): Call<LoadPostDTO?>?
@@ -86,7 +86,7 @@ interface ServiceApi {
     fun getNoti(): Call<NotiResponseDTO>?
 
     @GET("/usersettings")
-    fun getUsersettings(): Call<UpdateSetResponseDTO>?
+    suspend fun getUsersettings(): UpdateSetResponseDTO
 
     @GET("/alarms")
     fun getAlarms(): Call<AlarmResponseDTO>?
