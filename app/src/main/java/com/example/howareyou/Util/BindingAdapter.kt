@@ -1,9 +1,12 @@
 package com.example.howareyou.Util
 
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.views.home.HomeAdapter
+import com.example.howareyou.views.home.HomePagerViewModel
+import com.example.howareyou.views.home.HomeViewModel
 
 
 object BindingAdapter {
@@ -22,6 +25,19 @@ object BindingAdapter {
         if (data != null) {
             adapter.setItem(data)
         }
+    }
+
+    // endless scroll
+    @BindingAdapter("endlessScroll")
+    @JvmStatic
+    fun setEndlessScroll(recyclerView: RecyclerView, viewModel: HomePagerViewModel) {
+        val scrollListener = object : EndlessRecyclerViewScrollListener(recyclerView.layoutManager as LinearLayoutManager){
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.loadPostMore()
+            }
+        }
+        recyclerView.addOnScrollListener(scrollListener)
+        //recyclerView.adapter = recyclerView.adapter as HomeAdapter
     }
 
     // recyclerview 아이템 클릭 리스너

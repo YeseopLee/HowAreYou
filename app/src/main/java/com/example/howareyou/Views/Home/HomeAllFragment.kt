@@ -8,6 +8,7 @@ import com.example.howareyou.R
 import com.example.howareyou.databinding.FragmentHomeViewpagerBinding
 import com.example.howareyou.views.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_home_viewpager.*
 
 @AndroidEntryPoint
 class HomeAllFragment : BaseFragment<FragmentHomeViewpagerBinding>(R.layout.fragment_home_viewpager){

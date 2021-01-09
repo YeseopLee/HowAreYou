@@ -1,8 +1,6 @@
 package com.example.howareyou.model
 
-data class LoadCodeResponseDTO(
-    val items: ArrayList<CodeItem>
-)
+class LoadCodeResponseDTO : ArrayList<CodeItem>()
 
 data class CodeItem(
     val __v: Int,

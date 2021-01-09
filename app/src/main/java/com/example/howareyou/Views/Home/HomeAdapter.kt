@@ -50,7 +50,7 @@ class HomeAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>
 
         holder.onBind(postingDTO[position])
 
-        Log.e("adapter!!",postingDTO.toString())
+//        Log.e("adapter!!",postingDTO.toString())
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)

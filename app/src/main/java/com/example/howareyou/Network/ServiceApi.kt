@@ -62,7 +62,7 @@ interface ServiceApi {
     suspend fun getAllPost(@Header("authorization") authHeader: String): LoadPostDTO
 
     @GET("/boards?_sort=_id:DESC")
-    fun getAllPostMore(@Header("authorization") authHeader: String, @Query ("id_lt")id_lt: String, @Query("_limit")_limit : Int): Call<LoadPostDTO?>?
+    suspend fun getAllPostMore(@Header("authorization") authHeader: String, @Query ("id_lt")id_lt: String, @Query("_limit")_limit : Int): LoadPostDTO
 
     @GET("/boards?_sort=_id:DESC&_limit=100")
     fun getSearchPost(): Call<LoadPostDTO?>?

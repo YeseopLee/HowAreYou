@@ -28,12 +28,12 @@ class MainViewModel @ViewModelInject constructor(
     }
 
 
-    fun getCode(){
+    fun getCode(){ //현재 게시판 코드 불러오기
         viewModelScope.launch {
             val codeInfo = homeRepository.getCode()
-            for (i in 0 until codeInfo.items.size) {
-                var temp = codeInfo.items[i].id
-                when(codeInfo.items[i].id){
+            for (i in 0 until codeInfo.size) {
+                var temp = codeInfo[i].id
+                when(codeInfo[i].id){
                     "01" -> App.prefs.codeFree = temp
                     "02" -> App.prefs.codeQA = temp
                     "03" -> App.prefs.codeTips = temp

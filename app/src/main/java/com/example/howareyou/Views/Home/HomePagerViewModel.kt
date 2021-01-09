@@ -17,8 +17,7 @@ class HomePagerViewModel @ViewModelInject constructor(
     private val homeRepository: HomeRepository
 ) : ViewModel() {
 
-    private val _moveMainPage = MutableLiveData<Event<Boolean>>()
-    val  moveMainPage: LiveData<Event<Boolean>> = _moveMainPage
+    lateinit var last_id: String
 
     var postArray = MutableLiveData<ArrayList<LoadPostItem>>()
 
@@ -32,8 +31,24 @@ class HomePagerViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             val postInfo = homeRepository.getAllPost("Bearer " + App.prefs.myJwt)
             postArray.value = postInfo
-            Log.e("test",postArray.value.toString())
+            last_id = postInfo[postInfo.size-1].id
         }
+    }
+
+    fun loadPostMore() {
+
+        viewModelScope.launch {
+            val postInfo = homeRepository.getAllPostMore("Bearer "+ App.prefs.myJwt,last_id,30)
+            for ( i in 0 until postInfo.size){
+                postArray.value?.add(postInfo[i])
+            }
+            if(postInfo.size > 0) last_id = postInfo[postInfo.size-1].id
+            postArray.notifyObserver()
+        }
+    }
+
+    fun <T> MutableLiveData<T>.notifyObserver() {
+        this.value = this.value
     }
 //
 //    private fun loadPosting() {
