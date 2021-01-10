@@ -3,6 +3,7 @@ package com.example.howareyou.views.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.App
 import com.example.howareyou.R
 import com.example.howareyou.databinding.FragmentHomeViewpagerBinding
@@ -11,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home_viewpager.*
 
 @AndroidEntryPoint
-class HomeAllFragment : BaseFragment<FragmentHomeViewpagerBinding>(R.layout.fragment_home_viewpager){
+class HomeAllFragment : BaseFragment<FragmentHomeViewpagerBinding>(R.layout.fragment_home_viewpager) {
 
     private val homePagerViewModel by viewModels<HomePagerViewModel>()
     lateinit var homeAdapter: HomeAdapter
@@ -34,11 +35,6 @@ class HomeAllFragment : BaseFragment<FragmentHomeViewpagerBinding>(R.layout.frag
 //    }
 //
 //    override fun onRefresh() {
-//        // 데이터 list 초기화
-//        postingDTOlist.clear()
-//
-//        // 전체 게시물 tab 체크
-//        loadPosting()
 //        viewpager_swipelayout.isRefreshing = false
 //    }
 
@@ -59,6 +55,7 @@ class HomeAllFragment : BaseFragment<FragmentHomeViewpagerBinding>(R.layout.frag
 //        viewpager_recyclerview.addOnScrollListener(scrollListener)
 //        viewpager_recyclerview.adapter = homeAdapter
     }
+
 
     // 전체게시글 불러오기
 
