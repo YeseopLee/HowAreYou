@@ -2,14 +2,22 @@ package com.example.howareyou.views.home
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.howareyou.App
+import com.example.howareyou.R
+import com.example.howareyou.Util.ConvertTime
 import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.databinding.ItemHomePostingBinding
+import com.example.howareyou.model.Code
 import com.example.howareyou.views.Detail.DetailActivity
+import kotlinx.android.synthetic.main.item_home_posting.view.*
+import java.lang.Exception
 import kotlin.collections.ArrayList
 
 class HomeAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>(){
@@ -50,12 +58,20 @@ class HomeAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>
 
         holder.onBind(postingDTO[position])
 
-//        Log.e("adapter!!",postingDTO.toString())
-
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("board_id",postingDTO[position].id)
             context.startActivity(intent)
+        }
+
+        // 시간 convert
+        val tempText: String
+        val convertTime = ConvertTime()
+        try {
+            postingDTO[position].createdAt = convertTime.showTime(postingDTO[position].createdAt)
+
+        } catch (e : Exception){
+
         }
 //
 //        var view = holder.itemView
@@ -72,32 +88,29 @@ class HomeAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>
 //            view.homeposting_textview_content.text = text_content
 //        }
 //
-//        //get Code
-//        when(postingDTO[position].code?.id){
-//            App.prefs.codeFree -> view.homeposting_textview_boardname.text = "자유게시판"
-//            App.prefs.codeQA -> view.homeposting_textview_boardname.text = "Q&A"
-//            App.prefs.codeTips -> view.homeposting_textview_boardname.text = "Tips"
-//            App.prefs.codeStudy -> view.homeposting_textview_boardname.text = "스터디모집"
-//            App.prefs.codeCourse -> view.homeposting_textview_boardname.text = "진로게시판"
-//        }
+        //get Code
+        when(postingDTO[position].code?.id){
+            App.prefs.codeFree -> postingDTO[position].code = Code("자유게시판")
+            App.prefs.codeQA -> postingDTO[position].code = Code("Q&A")
+            App.prefs.codeTips -> postingDTO[position].code = Code("Tips")
+            App.prefs.codeStudy -> postingDTO[position].code = Code("스터디모집")
+            App.prefs.codeCourse -> postingDTO[position].code = Code("진로게시판")
+        }
 //
 //        view.homeposting_textview_title.text = postingDTO[position].title
 //        view.homeposting_textview_author.text = postingDTO[position].author
 //        view.homeposting_textview_comment.text = postingDTO[position].comments?.size.toString()
 //        view.homeposting_textview_favorite.text = postingDTO[position].likeds?.size.toString()
-//        view.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup_white)
+        holder.itemView.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup_white)
 
-        // 시간 convert
-//        val convtime = ConvertTime()
-//        view.homeposting_textview_date.text = convtime.showTime(postingDTO[position].createdAt)
 
-        // 좋아요 체크
-//        for ( i in  1..postingDTO[position].likeds!!.size)
-//        {
-//            if( postingDTO[position].likeds!![i-1].user_id == App.prefs.myId) view.homeposting_button_favorite.setBackgroundResource(
-//                R.drawable.ic_thumbsup
-//            )
-//        }
+//         좋아요 체크
+        for ( i in  1..postingDTO[position].likeds!!.size)
+        {
+            if( postingDTO[position].likeds!![i-1].user_id == App.prefs.myId) holder.itemView.homeposting_button_favorite.setBackgroundResource(
+                R.drawable.ic_thumbsup
+            )
+        }
 
 
 //        view.setOnClickListener{

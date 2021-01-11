@@ -1,9 +1,15 @@
 package com.example.howareyou.Util
 
 import android.annotation.SuppressLint
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -26,9 +32,8 @@ class ConvertTime  //GMT to KOREA
         val mNow = System.currentTimeMillis()
         val mReDate = Date(mNow)
         val mFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-        val formatDate = mFormat.format(mReDate)
 
-        return formatDate
+        return mFormat.format(mReDate)
     }
 
     // 하루 이내 / 한시간 이내의 글 별도 표기 위함

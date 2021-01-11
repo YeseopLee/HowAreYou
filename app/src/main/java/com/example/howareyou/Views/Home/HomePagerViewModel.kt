@@ -1,6 +1,8 @@
 package com.example.howareyou.views.home
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.databinding.ObservableBoolean
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -13,6 +15,13 @@ import com.example.howareyou.Util.Event
 import com.example.howareyou.model.*
 import com.example.howareyou.repository.HomeRepository
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomePagerViewModel @ViewModelInject constructor(
@@ -24,13 +33,12 @@ class HomePagerViewModel @ViewModelInject constructor(
     var postArray = MutableLiveData<ArrayList<LoadPostItem>>()
 
     init {
-        Log.e("codeTest0",App.prefs.myCode)
+        postArray.value = LoadPostDTO()
         boardBranch()
-        //loadPostAll()
     }
 
+
     fun boardBranch() {
-        Log.e("codeTest",App.prefs.myCode)
         postArray.value?.clear()
         when(App.prefs.myCode){
             App.prefs.key_all -> loadPostAll()
@@ -39,10 +47,14 @@ class HomePagerViewModel @ViewModelInject constructor(
     }
 
     fun loadPostAll() {
-        Log.e("codeTest0",App.prefs.myCode)
         viewModelScope.launch {
             val postInfo = homeRepository.getAllPost("Bearer " + App.prefs.myJwt)
-            postArray.value = postInfo
+            for (i in 0 until postInfo.size) {
+                if(!postInfo[i].is_deleted) {
+                    postArray.value?.add(postInfo[i])
+                } // isDeleted가 아닌 게시물만 불러온다.
+            }
+            postArray.notifyObserver()
             last_id = postInfo[postInfo.size - 1].id
         }
     }
@@ -50,17 +62,27 @@ class HomePagerViewModel @ViewModelInject constructor(
     fun loadPost() {
         viewModelScope.launch {
             val postInfo = homeRepository.getPost(App.prefs.myCode)
-            postArray.value = postInfo
+            for (i in 0 until postInfo.size) {
+                if(!postInfo[i].is_deleted) postArray.value?.add(postInfo[i]) // isDeleted가 아닌 게시물만 불러온다.
+            }
             if (postInfo.size > 0) last_id = postInfo[postInfo.size - 1].id
+            postArray.notifyObserver()
         }
     }
 
     fun onRefresh() {
         isLoading.set(true)
-        postArray.value?.clear()
-        loadPostAll()
-        postArray.notifyObserver()
-        Log.e("HomeViewModel",postArray.value.toString())
+        postArray.value = LoadPostDTO()
+        when(App.prefs.myCode){
+            App.prefs.key_all -> loadPostAll()
+            else -> loadPost()
+        }
+        //postArray.notifyObserver()
+
+        /**
+         * Livedata.value.clear() 선언 후 notifyObserver() 실행해도 같은 동작
+         **/
+
         isLoading.set(false)
     }
 
@@ -69,7 +91,7 @@ class HomePagerViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             val postInfo = homeRepository.getAllPostMore("Bearer " + App.prefs.myJwt, last_id, 30)
             for (i in 0 until postInfo.size) {
-                postArray.value?.add(postInfo[i])
+                if(!postInfo[i].is_deleted) postArray.value?.add(postInfo[i])
             }
             if (postInfo.size > 0) last_id = postInfo[postInfo.size - 1].id
             postArray.notifyObserver()
@@ -85,7 +107,7 @@ class HomePagerViewModel @ViewModelInject constructor(
                 postInfo = homeRepository.getPostMore(last_id,30,App.prefs.myCode)
             }
             for (i in 0 until postInfo.size) {
-                postArray.value?.add(postInfo[i])
+                if(!postInfo[i].is_deleted) postArray.value?.add(postInfo[i])
             }
             if (postInfo.size > 0) last_id = postInfo[postInfo.size - 1].id
             postArray.notifyObserver()

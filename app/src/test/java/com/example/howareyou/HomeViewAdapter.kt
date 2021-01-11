@@ -1,8 +1,9 @@
-package com.example.howareyou.views.home
+package com.example.howareyou
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.howareyou.views.home.HomeAllFragment
 
 class HomeViewAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
 

@@ -9,11 +9,11 @@ data class LoadPostItem(
     @SerializedName("title") val title: String,
     @SerializedName("content") val content: String,
     @SerializedName("author") val author: String,
-    @SerializedName("code") val code: Code?,
+    @SerializedName("code") var code: Code?,
     @SerializedName("comments") val comments: List<Comment>?,
     @SerializedName("likeds") val likeds: List<Liked>?,
     @SerializedName("viewed") val viewed: Int,
-    @SerializedName("createdAt") val createdAt: String,
+    @SerializedName("createdAt") var createdAt: String,
     @SerializedName("header") val header: String,
     @SerializedName("user_id") val user_id: String, // 글쓴이 id = 사용자 id 수정 삭제 위해 불러옴
     @SerializedName("is_deleted") val is_deleted: Boolean,

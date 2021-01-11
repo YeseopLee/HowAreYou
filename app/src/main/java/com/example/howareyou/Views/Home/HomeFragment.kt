@@ -85,10 +85,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
     }
 
-//    private fun showProgress(show: Boolean){
-//        home_layout_loading.visibility = (if (show) View.VISIBLE else View.GONE)
-//    }
-
-
 }
 
