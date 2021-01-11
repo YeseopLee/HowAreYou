@@ -17,6 +17,16 @@ interface HomeRepository {
         _limit: Int
     ): LoadPostDTO
 
+    suspend fun getPost(
+        code: String
+    ) : LoadPostDTO
+
+    suspend fun getPostMore(
+        id_lt: String,
+        _limit: Int,
+        code: String
+    ) : LoadPostDTO
+
     suspend fun getCode(
 
     ): LoadCodeResponseDTO
@@ -28,3 +38,5 @@ interface HomeRepository {
 
 
 }
+
+

@@ -18,6 +18,14 @@ class HomeRepositoryImpl @Inject constructor(
         return service.getAllPostMore(Auth, id_lt, _limit)
     }
 
+    override suspend fun getPost(code: String): LoadPostDTO {
+        return service.getPost(code)
+    }
+
+    override suspend fun getPostMore(id_lt: String, _limit: Int, code: String): LoadPostDTO {
+        return service.getPostMore(id_lt,_limit,code)
+    }
+
     override suspend fun getCode(): LoadCodeResponseDTO {
         return service.getCode()
     }

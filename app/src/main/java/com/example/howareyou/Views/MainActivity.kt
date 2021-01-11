@@ -61,6 +61,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main),B
         /////////////// test ////////////////
         Log.e("testcode", App.prefs.myJwt)
         Log.e("testDevicetoken", App.prefs.myDevice)
+        Log.e("testMyCode",App.prefs.myCode)
+        Log.e("?????","????????")
+        Log.e("???????????",App.prefs.myCode+"?????????")
 
     }
 

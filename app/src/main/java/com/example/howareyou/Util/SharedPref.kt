@@ -14,6 +14,7 @@ class SharedPref(context: Context){
     val key_myDeviceToken = "device"
 
     val key_code = "code"
+    val key_all = "all"
     val key_free = "free"
     val key_qa = "qa"
     val key_tip = "tip"

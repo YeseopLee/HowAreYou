@@ -1,6 +1,8 @@
 package com.example.howareyou.views.home
 
 import android.os.Bundle
+import android.os.SystemClock
+import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -8,53 +10,23 @@ import com.example.howareyou.App
 import com.example.howareyou.R
 import com.example.howareyou.databinding.FragmentHomeViewpagerBinding
 import com.example.howareyou.views.BaseFragment
+import com.example.howareyou.views.BaseHomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home_viewpager.*
 
 @AndroidEntryPoint
-class HomeAllFragment : BaseFragment<FragmentHomeViewpagerBinding>(R.layout.fragment_home_viewpager) {
+class HomeAllFragment : BaseHomeFragment(App.prefs.key_all) {
 
-    private val homePagerViewModel by viewModels<HomePagerViewModel>()
-    lateinit var homeAdapter: HomeAdapter
 
     // view가 전부 생성된 뒤에 호출
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        showProgress(true)
-        App.prefs.myCode = App.prefs.codeFree
-        binding.viewModel = homePagerViewModel
-        initAdapter()
-//        loadPosting()
+        App.prefs.myCode = App.prefs.key_all
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        getAllPost = true
-//        forceTouch()
-//    }
-//
-//    override fun onRefresh() {
-//        viewpager_swipelayout.isRefreshing = false
-//    }
 
-    private fun initAdapter() {
 
-        homeAdapter = HomeAdapter(requireActivity())
-        binding.viewpagerRecyclerview.adapter = homeAdapter
 
-//        homeAdapter = HomeAdapter(requireActivity())
-//        val linearLayoutManager = LinearLayoutManager(activity)
-//        viewpager_recyclerview.layoutManager = linearLayoutManager
-//
-//        scrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
-//            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-//                loadPostingMore()
-//            }
-//        }
-//        viewpager_recyclerview.addOnScrollListener(scrollListener)
-//        viewpager_recyclerview.adapter = homeAdapter
-    }
 
 
     // 전체게시글 불러오기

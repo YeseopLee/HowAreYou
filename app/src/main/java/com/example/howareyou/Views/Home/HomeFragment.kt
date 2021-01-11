@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.howareyou.App
 import com.example.howareyou.R
 import com.example.howareyou.databinding.FragmentHomeBinding
 import com.example.howareyou.databinding.FragmentHomeViewpagerBinding
@@ -46,21 +47,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
 
         override fun createFragment(position: Int): Fragment {
 
-            if (position == 0) {
-                return HomeAllFragment()
+            return if (position == 0) {
+                HomeAllFragment()
+            } else if (position == 1) {
+                HomeFreeFragment()
+            } else if (position == 2) {
+                HomeQAFragment()
+            } else if (position == 3) {
+                HomeTipsFragment()
+            } else if (position == 4) {
+                HomeStudyFragment()
+            } else {
+                HomeBestFragment()
             }
-//            else if (position == 1) {
-//                return com.example.howareyou.HomeFreeFragment()
-//            } else if (position == 2) {
-//                return com.example.howareyou.HomeQAFragment()
-//            } else if (position == 3) {
-//                return com.example.howareyou.HomeTipsFragment()
-//            } else if (position == 4) {
-//                return com.example.howareyou.HomeStudyFragment()
-//            } else {
-//                return com.example.howareyou.HomeBestFragment()
-//            }
-            else return HomeAllFragment()
         }
     }
 
