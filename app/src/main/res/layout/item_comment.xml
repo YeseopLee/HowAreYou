@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="commentItem"
+            type="com.example.howareyou.model.Comment" />
+
+        <variable
+            name="viewModel01"
+            type="com.example.howareyou.views.detail.DetailViewModel" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/comment_layout_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
         android:layout_marginTop="1dp"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+        android:background="@color/colorWhite">
 
 
         <TextView
@@ -17,80 +30,82 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            android:text="@string/author"
-            android:textSize="12sp"
+            android:text="@{commentItem.author}"
             android:textColor="@color/colorBlack"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/comment_imageview_liked"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/ic_thumbsup_white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/comment_textview_liked"
-        app:layout_constraintTop_toBottomOf="@id/comment_textview_content"/>
+        <ImageView
+            android:id="@+id/comment_imageview_liked"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="5dp"
+            android:onClick="@{() -> viewModel01.postLiked(viewModel01.board_id)}"
+            android:background="@drawable/ic_thumbsup_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/comment_textview_liked"
+            app:layout_constraintTop_toBottomOf="@id/comment_textview_content" />
 
-    <TextView
-        android:id="@+id/comment_textview_liked"
-        android:layout_width="20dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:gravity="center"
-        android:text="0"
-        android:textColor="@color/colorIcon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/comment_button_morevert"
-        app:layout_constraintTop_toBottomOf="@id/comment_textview_content"/>
+        <TextView
+            android:id="@+id/comment_textview_liked"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="@{Integer.toString(commentItem.likeds.size())}"
+            android:textColor="@color/colorIcon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/comment_button_morevert"
+            app:layout_constraintTop_toBottomOf="@id/comment_textview_content" />
 
-    <Button
-        android:id="@+id/comment_button_morevert"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_more_hori"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/comment_textview_content"/>
+        <Button
+            android:id="@+id/comment_button_morevert"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_more_hori"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/comment_textview_content" />
 
-    <TextView
-        android:id="@+id/comment_textview_content"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/writing_guide"
-        android:textColor="@color/colorBlack"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comment_imageview_image" />
+        <TextView
+            android:id="@+id/comment_textview_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:text="@{commentItem.content}"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/comment_imageview_image" />
 
-    <TextView
-        android:id="@+id/comment_textview_date"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="15dp"
-        android:text="날짜"
-        android:textColor="@color/colorGray"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/comment_textview_date"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="20dp"
+            android:text="@{commentItem.createdAt}"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/comment_imageview_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/comment_textview_author"
-        app:layout_constraintTop_toBottomOf="@+id/comment_textview_author"
-        tools:srcCompat="@tools:sample/avatars" />
+        <ImageView
+            android:id="@+id/comment_imageview_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/comment_textview_author"
+            app:layout_constraintTop_toBottomOf="@+id/comment_textview_author"
+            tools:srcCompat="@tools:sample/avatars" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.howareyou.views.Detail.DetailActivity" />
+            android:name="com.example.howareyou.views.detail.DetailActivity" />
 
         <service
             android:name=".network.MyFirebaseMessagingService"

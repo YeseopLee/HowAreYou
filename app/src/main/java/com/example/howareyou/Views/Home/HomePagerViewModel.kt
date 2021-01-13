@@ -1,26 +1,14 @@
 package com.example.howareyou.views.home
 
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.databinding.ObservableBoolean
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.howareyou.App
-import com.example.howareyou.Util.Event
 import com.example.howareyou.model.*
 import com.example.howareyou.repository.HomeRepository
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
-import java.util.*
 import kotlin.collections.ArrayList
 
 

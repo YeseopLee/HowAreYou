@@ -2,20 +2,17 @@ package com.example.howareyou.views.home
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.App
 import com.example.howareyou.R
-import com.example.howareyou.Util.ConvertTime
+import com.example.howareyou.util.ConvertTime
 import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.databinding.ItemHomePostingBinding
 import com.example.howareyou.model.Code
-import com.example.howareyou.views.Detail.DetailActivity
+import com.example.howareyou.views.detail.DetailActivity
 import kotlinx.android.synthetic.main.item_home_posting.view.*
 import java.lang.Exception
 import kotlin.collections.ArrayList

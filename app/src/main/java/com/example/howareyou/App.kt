@@ -1,7 +1,7 @@
 package com.example.howareyou
 
 import android.app.Application
-import com.example.howareyou.Util.SharedPref
+import com.example.howareyou.util.SharedPref
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

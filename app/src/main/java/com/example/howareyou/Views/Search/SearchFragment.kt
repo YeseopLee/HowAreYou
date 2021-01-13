@@ -13,7 +13,7 @@ import com.example.howareyou.model.LoadPostDTO
 import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.R
 import com.example.howareyou.App
-import com.example.howareyou.Util.EndlessRecyclerViewScrollListener
+import com.example.howareyou.util.EndlessRecyclerViewScrollListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson

@@ -9,4 +9,8 @@ class HomeViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
 
+    fun dummy() {
+
+    }
+
 }

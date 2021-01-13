@@ -1,312 +1,340 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="@color/colorWhite"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.Detail.DetailActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.howareyou.views.detail.DetailViewModel" />
+
+    </data>
+
+    <FrameLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:background="@color/colorWhite"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".views.detail.DetailActivity">
 
-        <TextView
-            android:id="@+id/posting_textview_boardname"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center_vertical"
-            android:text=""
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/basic"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
-            app:layout_constraintStart_toEndOf="@+id/detail_button_back"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/detail_button_back"
-            android:layout_width="30dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_arrow_back_white"
-            app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:id="@+id/posting_textview_boardname"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/basic"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
+                app:layout_constraintStart_toEndOf="@+id/detail_button_back"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/detail_button_morevert"
-            android:layout_width="30dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_more_hori"
-            app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/detail_button_back"
+                android:layout_width="30dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_arrow_back_white"
+                app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/detail_button_notification"
-            android:layout_width="30dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_notification"
-            app:layout_constraintBottom_toTopOf="@+id/detail_linearlayout_division"
-            app:layout_constraintEnd_toStartOf="@+id/detail_button_morevert"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/detail_button_morevert"
+                android:layout_width="30dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_more_hori"
+                app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/detail_linearlayout_division"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorDivision"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/posting_textview_boardname">
-        </LinearLayout>
+            <Button
+                android:id="@+id/detail_button_notification_gray"
+                android:layout_width="30dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="@{viewModel.alarmIsRunning? View.GONE:View.VISIBLE}"
+                android:background="@drawable/ic_notification_gray"
+                app:layout_constraintBottom_toTopOf="@+id/detail_linearlayout_division"
+                app:layout_constraintEnd_toStartOf="@+id/detail_button_morevert"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/detail_swipelayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="@id/detail_linearlayout_division"
-            app:layout_constraintBottom_toTopOf="@id/detail_constraintlayout_inputcomment"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            <Button
+                android:id="@+id/detail_button_notification_color"
+                android:layout_width="30dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="@{viewModel.alarmIsRunning? View.VISIBLE:View.GONE}"
+                android:background="@drawable/ic_notification"
+                app:layout_constraintBottom_toTopOf="@+id/detail_linearlayout_division"
+                app:layout_constraintEnd_toStartOf="@+id/detail_button_morevert"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/detail_linearlayout_division"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/colorDivision"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/posting_textview_boardname"></LinearLayout>
 
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/nestedScrollView"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@color/colorBackground"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/detail_swipelayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toTopOf="@id/detail_linearlayout_division"
+                app:layout_constraintBottom_toTopOf="@id/detail_constraintlayout_inputcomment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.core.widget.NestedScrollView
+                        android:id="@+id/nestedScrollView"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@color/colorBackground"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="1dp"
-                            android:background="@color/colorWhite"
                             android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/detail_textview_title"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginRight="15dp"
-                                android:text="@string/writing_guide"
-                                android:textColor="@color/colorBlack"
-                                android:textStyle="bold" />
+                                android:layout_marginTop="1dp"
+                                android:background="@color/colorWhite"
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/detail_textview_content"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginRight="15dp"
-                                android:text="@string/writing_guide"
-                                android:textColor="@color/colorBlack" />
+                                <TextView
+                                    android:id="@+id/detail_textview_title"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="15dp"
+                                    android:text="@{viewModel.postTitle}"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/detail_textview_content"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="15dp"
+                                    android:text="@{viewModel.postContent}"
+                                    android:textColor="@color/colorBlack" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/detail_recyclerview_imageview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
+                                    android:layout_marginLeft="20dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="20dp" />
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:layout_marginTop="10dp">
+
+                                    <Button
+                                        android:id="@+id/detail_button_liked"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:background="@drawable/ic_thumbsup_white"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/detail_textview_liked"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/detail_textview_liked"
+                                        android:layout_width="20dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:gravity="center"
+                                        android:text="@{Integer.toString(viewModel.likeSize)}"
+                                        android:textColor="@color/colorIcon"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/detail_button_comment"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <Button
+                                        android:id="@+id/detail_button_comment"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:background="@drawable/ic_comment"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/detail_textview_comment"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/detail_textview_comment"
+                                        android:layout_width="20dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="15dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:gravity="center"
+                                        android:text="@{Integer.toString(viewModel.commentSize)}"
+                                        android:textColor="@color/colorIcon"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                            </LinearLayout>
+
 
                             <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/detail_recyclerview_imageview"
+                                android:id="@+id/detail_recyclerview_comment"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:loadDetailCommentData="@{viewModel.commentArray}"
                                 android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginRight="20dp" />
+                                android:layout_height="match_parent">
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="30dp"
-                                android:layout_marginTop="10dp">
-
-                                <Button
-                                    android:id="@+id/detail_button_liked"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:background="@drawable/ic_thumbsup_white"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@+id/detail_textview_liked"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/detail_textview_liked"
-                                    android:layout_width="20dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:gravity="center"
-                                    android:text="0"
-                                    android:textColor="@color/colorIcon"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@+id/detail_button_comment"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <Button
-                                    android:id="@+id/detail_button_comment"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:background="@drawable/ic_comment"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@+id/detail_textview_comment"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/detail_textview_comment"
-                                    android:layout_width="20dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:gravity="center"
-                                    android:text="0"
-                                    android:textColor="@color/colorIcon"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
+                            </androidx.recyclerview.widget.RecyclerView>
 
                         </LinearLayout>
+                    </androidx.core.widget.NestedScrollView>
 
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/detail_recyclerview_comment"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        </androidx.recyclerview.widget.RecyclerView>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-                    </LinearLayout>
-                </androidx.core.widget.NestedScrollView>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detail_constraintlayout_inputcomment"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@color/colorEditText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <Button
+                    android:id="@+id/detail_button_addphoto"
+                    android:layout_width="30dp"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/ic_addphoto"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/detail_button_postcomment"
+                    android:layout_width="30dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/transparent"
+                    android:text="@string/post"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/detail_edittext_comment"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@null"
+                    android:hint="@string/comment_guide"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/detail_imageview_commentimage"
+                    app:layout_constraintStart_toEndOf="@id/detail_button_addphoto"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/detail_imageview_commentimage"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_marginRight="10dp"
+                    android:visibility="@{viewModel.commentImageUploaded? View.VISIBLE:View.GONE}"
+                    app:imgUriRes="@{viewModel.liveCommentImage}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/detail_button_postcomment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/detail_button_deleteCommentimage"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginRight="2dp"
+                    android:visibility="@{viewModel.commentImageUploaded? View.VISIBLE:View.GONE}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/detail_imageview_commentimage"
+                    android:background="@drawable/ic_close" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/detail_constraintlayout_inputcomment"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:background="@color/colorEditText"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:id="@+id/detail_layout_loading"
+            android:background="@color/colorWhite"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/detail_button_addphoto"
-                android:layout_width="30dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/ic_addphoto"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <Button
-                android:id="@+id/detail_button_postcomment"
-                android:layout_width="30dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/transparent"
-                android:text="@string/post"
+            <ProgressBar
+                android:id="@+id/detail_progressbar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/detail_edittext_comment"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@null"
-                android:hint="@string/comment_guide"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/detail_imageview_commentimage"
-                app:layout_constraintStart_toEndOf="@id/detail_button_addphoto"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/detail_imageview_commentimage"
-                android:layout_width="50dp"
-                android:layout_height="0dp"
-                android:layout_marginRight="10dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/detail_button_postcomment"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/detail_button_deleteCommentimage"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginRight="2dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/detail_imageview_commentimage"
-                android:background="@drawable/ic_close"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/detail_layout_loading"
-        android:background="@color/colorWhite"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:id="@+id/detail_progressbar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</FrameLayout>
+    </FrameLayout>
+</layout>
 
 

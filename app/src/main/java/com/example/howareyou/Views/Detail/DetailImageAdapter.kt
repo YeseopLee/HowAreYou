@@ -1,4 +1,4 @@
-package com.example.howareyou.views.Detail
+package com.example.howareyou.views.detail
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,13 +9,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.howareyou.model.ImageDTO
 import com.example.howareyou.R
+import com.example.howareyou.model.Comment
+import com.example.howareyou.model.LoadPostItem
 import kotlinx.android.synthetic.main.activity_imageview_detail.view.*
 import kotlinx.android.synthetic.main.item_imageshow.view.*
 import kotlin.collections.ArrayList
 
-class DetailImageAdapter(val context: Context, val uriList : ArrayList<ImageDTO>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DetailImageAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-    val TAG : String = "Detail_imageAdapter"
+    var uriList = ArrayList<ImageDTO>()
+
+    fun setItem(data: ArrayList<ImageDTO>){
+        this.uriList.clear()
+        this.uriList.addAll(data)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -42,8 +50,6 @@ class DetailImageAdapter(val context: Context, val uriList : ArrayList<ImageDTO>
         Glide.with(view).load(uriList[position].thumbnail).into(view.imageshow_imageview)
 
         var detailUrl = uriList[position].image
-
-        System.out.println("test"+detailUrl)
 
         view.imageshow_imageview.setOnClickListener {
 

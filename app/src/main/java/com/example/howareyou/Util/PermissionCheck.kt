@@ -1,8 +1,6 @@
-package com.example.howareyou.Util
+package com.example.howareyou.util
 
-import android.content.Context
 import androidx.core.content.ContextCompat
-import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat

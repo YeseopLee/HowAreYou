@@ -14,11 +14,11 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.howareyou.views.Detail.DetailActivity
+import com.example.howareyou.views.detail.DetailActivity
 import com.example.howareyou.model.*
 import com.example.howareyou.R
 import com.example.howareyou.App
-import com.example.howareyou.Util.OnSingleClickListener
+import com.example.howareyou.util.OnSingleClickListener
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson
@@ -251,26 +251,26 @@ class WritingActivity : AppCompatActivity() {
         val field = RequestBody.create(MediaType.parse("text/plain"),"image")
 
 
-        service?.uploadFile(images,ref,refId,field)?.enqueue(object : Callback<UploadImageResponseDTO?> {
-            override fun onResponse(
-                call: Call<UploadImageResponseDTO?>,
-                response: Response<UploadImageResponseDTO?>
-            ) {
-                var result : UploadImageResponseDTO = response.body()!!
-                for (index in 0 until result.size){
-                    System.out.println("test"+result[index]._id)
-                }
-                val intent = Intent(applicationContext, DetailActivity::class.java)
-                intent.putExtra("board_id",board_id)
-                startActivity(intent)
-                finish()
-            }
-
-            override fun onFailure(call: Call<UploadImageResponseDTO?>, t: Throwable) {
-                Log.d("onFailure",t.message)
-            }
-
-        })
+//        service?.uploadFile(images,ref,refId,field)?.enqueue(object : Callback<UploadImageResponseDTO?> {
+//            override fun onResponse(
+//                call: Call<UploadImageResponseDTO?>,
+//                response: Response<UploadImageResponseDTO?>
+//            ) {
+//                var result : UploadImageResponseDTO = response.body()!!
+//                for (index in 0 until result.size){
+//                    System.out.println("test"+result[index]._id)
+//                }
+//                val intent = Intent(applicationContext, DetailActivity::class.java)
+//                intent.putExtra("board_id",board_id)
+//                startActivity(intent)
+//                finish()
+//            }
+//
+//            override fun onFailure(call: Call<UploadImageResponseDTO?>, t: Throwable) {
+//                Log.d("onFailure",t.message)
+//            }
+//
+//        })
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

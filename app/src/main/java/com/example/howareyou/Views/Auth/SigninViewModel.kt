@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.howareyou.App
 import com.example.howareyou.model.*
-import com.example.howareyou.Util.Event
+import com.example.howareyou.util.Event
 import com.example.howareyou.repository.AuthRepository
 import kotlinx.coroutines.launch
 

@@ -9,10 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.howareyou.views.Detail.DetailActivity
+import com.example.howareyou.views.detail.DetailActivity
 import com.example.howareyou.model.*
 import com.example.howareyou.R
-import com.example.howareyou.Util.ConvertTime
+import com.example.howareyou.util.ConvertTime
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.google.gson.Gson

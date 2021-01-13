@@ -1,4 +1,4 @@
-package com.example.howareyou.Util
+package com.example.howareyou.util
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager

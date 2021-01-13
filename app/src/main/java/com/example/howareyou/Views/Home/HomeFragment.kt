@@ -39,6 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home){
         //showProgress(false)
         initListener(view)
         initTab()
+
     }
 
     private inner class HomeViewAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {

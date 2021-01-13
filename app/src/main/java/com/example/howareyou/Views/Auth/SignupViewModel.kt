@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.howareyou.App
 import com.example.howareyou.model.PostdeviceTokenDTO
 import com.example.howareyou.model.SignupDTO
-import com.example.howareyou.Util.Event
+import com.example.howareyou.util.Event
 import com.example.howareyou.repository.AuthRepository
 import kotlinx.coroutines.launch
 

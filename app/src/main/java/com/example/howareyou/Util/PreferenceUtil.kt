@@ -1,4 +1,4 @@
-package com.example.howareyou.Util
+package com.example.howareyou.util
 
 import android.content.Context
 import android.content.SharedPreferences

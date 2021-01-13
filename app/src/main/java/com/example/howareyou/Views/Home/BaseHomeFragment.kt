@@ -1,4 +1,4 @@
-package com.example.howareyou.views
+package com.example.howareyou.views.home
 
 import android.os.Bundle
 import android.os.SystemClock
@@ -8,8 +8,7 @@ import androidx.fragment.app.viewModels
 import com.example.howareyou.App
 import com.example.howareyou.R
 import com.example.howareyou.databinding.FragmentHomeViewpagerBinding
-import com.example.howareyou.views.home.HomeAdapter
-import com.example.howareyou.views.home.HomePagerViewModel
+import com.example.howareyou.views.BaseFragment
 
 abstract class BaseHomeFragment(code: String) : BaseFragment<FragmentHomeViewpagerBinding>(R.layout.fragment_home_viewpager) {
 

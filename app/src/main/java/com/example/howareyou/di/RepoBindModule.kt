@@ -1,9 +1,6 @@
 package com.example.howareyou.di
 
-import com.example.howareyou.repository.AuthRepository
-import com.example.howareyou.repository.AuthRepositoryImpl
-import com.example.howareyou.repository.HomeRepository
-import com.example.howareyou.repository.HomeRepositoryImpl
+import com.example.howareyou.repository.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -18,4 +15,7 @@ abstract class RepoBindModule {
 
     @Binds
     abstract fun bindHome(homeRepo: HomeRepositoryImpl) : HomeRepository
+
+    @Binds
+    abstract fun bindDetail(detailRepo: DetailRepositoryImpl) : DetailRepository
 }

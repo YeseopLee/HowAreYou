@@ -24,16 +24,16 @@ interface ServiceApi {
     fun userPost(@Header("authorization") authHeader :String, @Body data: PostingDTO?): Call<PostingResponseDTO?>?
 
     @POST("/comments")
-    fun userComment(@Header("authorization") authHeader: String, @Body data: PostCommentDTO): Call<PostCommentResponseDTO>?
+    suspend fun userComment(@Header("authorization") authHeader: String, @Body data: PostCommentDTO): PostCommentResponseDTO
 
     @POST("/likeds")
-    fun userLiked(@Body data: PostLikedDTO): Call<PostingResponseDTO>?
+    suspend fun userLiked(@Body data: PostLikedDTO): PostingResponseDTO
 
     @POST("/usersettings")
     suspend fun userSetting(@Body data: PostdeviceTokenDTO): Response<Unit>
 
     @POST("/alarms")
-    fun postAlarm(@Header("authorization") authHeader: String, @Body data: AlarmDTO): Call<Void>?
+    suspend fun postAlarm(@Header("authorization") authHeader: String, @Body data: AlarmDTO): Response<Unit>
 
 //    @Multipart
 //    @POST("/upload")
@@ -41,7 +41,7 @@ interface ServiceApi {
 
     @Multipart
     @POST("/upload")
-    fun uploadFile(@Part imageFile: ArrayList<MultipartBody.Part>, @Part ("ref") ref: RequestBody, @Part ("refId") refId: RequestBody, @Part ("field") field: RequestBody): Call<UploadImageResponseDTO>?
+    suspend fun uploadFile(@Part imageFile: ArrayList<MultipartBody.Part>, @Part ("ref") ref: RequestBody, @Part ("refId") refId: RequestBody, @Part ("field") field: RequestBody): UploadImageResponseDTO
 
     @PUT("/usersettings/{id}")
     suspend fun userUpdatesetting(@Path("id")setting_id : String, @Body data: PostdeviceTokenDTO): Response<Unit>
@@ -50,7 +50,7 @@ interface ServiceApi {
     fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Call<Void>?
 
     @PUT("boards/{board_id}")
-    fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String, @Body data: deleteDTO ): Call<Void>?
+    suspend fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String, @Body data: deleteDTO ): Response<Unit>
 
     @GET("/Codes")
     suspend fun getCode(): LoadCodeResponseDTO
@@ -77,7 +77,7 @@ interface ServiceApi {
     suspend fun getPostMore( @Query ("id_lt")id_lt: String, @Query("_limit")_limit : Int, @Query("code") code: String): LoadPostDTO
 
     @GET("/boards/{board_id}")
-    fun getPostContent(@Path("board_id")board_id : String): Call<LoadPostItem>?
+    suspend fun getPostContent(@Path("board_id")board_id : String): LoadPostItem
 
     @GET("/{url}")
     fun getImage(@Path("url")url : String): Call<imageItem>?
@@ -89,13 +89,13 @@ interface ServiceApi {
     suspend fun getUsersettings(): UpdateSetResponseDTO
 
     @GET("/alarms")
-    fun getAlarms(): Call<AlarmResponseDTO>?
+    suspend fun getAlarms(): AlarmResponseDTO
 
     @DELETE("/notifications/{noti_id}")
     fun deleteNoti(@Path("noti_id")noti_id: String): Call<Void>?
 
     @DELETE("/alarms/{alarm_id}")
-    fun deleteAlarm(@Header("authorization") authHeader: String, @Path("alarm_id")alarm_id : String, @Query("board")board: String): Call<Void>?
+    suspend fun deleteAlarm(@Header("authorization") authHeader: String, @Path("alarm_id")alarm_id : String, @Query("board")board: String): Response<Unit>
 
     /* dynamic query 예시 */
 //    @GET("/api/users")
