@@ -11,7 +11,9 @@ import com.example.howareyou.App
 import com.example.howareyou.databinding.ActivityDetailBinding
 import com.example.howareyou.views.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
+import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.activity_detail.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 @AndroidEntryPoint
@@ -27,12 +29,14 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         binding.lifecycleOwner = this
         binding.viewModel = detailViewModel
 
-        // posting activity에서 클릭한 게시물의 id를 받아온다
+        // home fragment에서 클릭한 게시물의 id를 받아온다
         board_id = intent.getStringExtra("board_id")
 
 //        setButton()
         initAdapter()
-        detailViewModel.loadPostingContent(board_id)
+        detailViewModel.getValue(board_id)
+
+        //detailViewModel.loadPostingContent(board_id)
         //detailViewModel.getAlarm(App.prefs.myId, board_id)
 
     }
@@ -73,7 +77,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         mCommentAdapter = DetailCommentAdapter(this)
         binding.detailRecyclerviewComment.adapter = mCommentAdapter
 
-        mImageAdapter = DetailImageAdapter(this@DetailActivity)
+        mImageAdapter = DetailImageAdapter(this)
         binding.detailRecyclerviewImageview.adapter = mImageAdapter
     }
 
@@ -83,7 +87,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
 //    fun addImage() {
 //        TedImagePicker.with(this)
-//            .start { uri -> showSingleImage(uri) }
+//            .start { uri -> detailViewModel.showSingleImage(uri) }
 //    }
 
 //    fun post() {
@@ -92,37 +96,38 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 //        mCommentAdapter.notifyDataSetChanged()
 //    }
 
-//    private fun attemptComment(board_id: String, comment_id: String?){
-//        //comment_id에 null이 아닌 값이 들어오면 대댓글
-//        detail_edittext_comment.error = null
-//        val content: String = detail_edittext_comment.text.toString()
-//        var cancel = false
-//        var focusView: View? = null
-//
-//        // 유효성 검사
-//        if (content.isEmpty()){
-//            detail_edittext_comment.error = "내용을 입력하세요."
-//            focusView = detail_edittext_comment
-//            cancel = true
-//        }
-//
-//        if(cancel){
-//            focusView?.requestFocus()
-//        } else {
-//            detail_edittext_comment.text = null
-//            detailViewModel.postComment(
-//                PostCommentDTO(
-//                    App.prefs.myEmail,
-//                    App.prefs.myName,
-//                    content,
-//                    App.prefs.myId,
-//                    board_id,
-//                    comment_id
-//                )
-//            )
-//            focusView = null
-//        }
-//    }
+    private fun attemptComment(board_id: String, comment_id: String?){
+        //comment_id에 null이 아닌 값이 들어오면 대댓글
+        detail_edittext_comment.error = null
+        val content: String = detail_edittext_comment.text.toString()
+        var cancel = false
+        var focusView: View? = null
+
+        // 유효성 검사
+        if (content.isEmpty()){
+            detail_edittext_comment.error = "내용을 입력하세요."
+            focusView = detail_edittext_comment
+            cancel = true
+        }
+
+        if(cancel){
+            focusView?.requestFocus()
+        } else {
+            detail_edittext_comment.text = null
+            detailViewModel.postComment(
+                PostCommentDTO(
+                    App.prefs.myEmail,
+                    App.prefs.myName,
+                    content,
+                    App.prefs.myId,
+                    board_id,
+                    comment_id
+                )
+            )
+            focusView = null
+        }
+    }
+
 //    override fun onRefresh() {
 //        // 데이터 list 초기화
 //        commentDTOList.clear()

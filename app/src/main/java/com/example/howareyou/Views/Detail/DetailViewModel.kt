@@ -1,6 +1,7 @@
 package com.example.howareyou.views.detail
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.view.View
@@ -16,9 +17,11 @@ import com.example.howareyou.App
 import com.example.howareyou.R
 import com.example.howareyou.model.*
 import com.example.howareyou.network.RetrofitClient
+import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.repository.DetailRepository
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
+import dagger.hilt.android.qualifiers.ApplicationContext
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.item_comment.view.*
@@ -34,18 +37,22 @@ import java.io.File
 import java.io.IOException
 
 class DetailViewModel @ViewModelInject constructor(
-    private val detailRepository: DetailRepository
-) : ViewModel() {
+    private val detailRepository: DetailRepository,
+    @ApplicationContext private val context: Context
+)  : ViewModel() {
 
     var boardName = MutableLiveData<String>()
     var postTitle = MutableLiveData<String>()
     var postContent = MutableLiveData<String>()
+    var commentContent = MutableLiveData<String>()
     var commentSize = MutableLiveData<Int>()
     var likeSize = MutableLiveData<Int>()
-    var imageArray = MutableLiveData<ArrayList<ImageDTO>>()
     var commentArray = MutableLiveData<ArrayList<Comment>>()
+    //var commentImage = MutableLiveData<Uri>()
+    var imageArray = MutableLiveData<ArrayList<ImageDTO>>()
     var _commentArray = ArrayList<Comment>()
 
+    var commentDTO = ArrayList<PostCommentDTO>()
 
     var commentImageUploaded = MutableLiveData<Boolean>()
     var alarmIsRunning = MutableLiveData<Boolean>()
@@ -62,13 +69,15 @@ class DetailViewModel @ViewModelInject constructor(
 
     init {
         alarm_id = ""
-//        board_id = "5fdb06e9cb3f527e146dc47a"
-//        loadPostingContent(board_id)
-//        tempinit()
         commentImageUploaded.value = false
         alarmIsRunning.value = false
+//        loadPostingContent(board_id)
     }
 
+    fun getValue(data: String) {
+        board_id = data
+        loadPostingContent(board_id)
+    }
 
     fun loadPostingContent(board_id: String) {
         viewModelScope.launch {
@@ -117,73 +126,90 @@ class DetailViewModel @ViewModelInject constructor(
 
             commentArray.value = tempList02
 
-            Log.e("arrayContentFinsihed", commentArray.value.toString())
-
-//                for (i in 1..tempDTOList.size) {
-//                    if (tempDTOList[i - 1].comment == null) { // comment값이 존재하면 해당 id를 가진 댓글에 달려있는 대댓글.
-//                        commentDTOList.add(tempDTOList[i - 1])
-//                        tempId = tempDTOList[i - 1].id
-//                        for (j in i..tempDTOList.size) {
-//                            if (tempDTOList[j - 1].comment == tempId) {
-//                                commentDTOList.add(tempDTOList[j - 1])
-//                            }
-//                        }
-//                    }
-
-            commentArray.notifyObserver()
+            var tempImgArray: ArrayList<ImageDTO> = arrayListOf()
+            if (postInfo.image?.isNotEmpty()!!) {
+                for (i in 0 until postInfo.image.size) { // 썸네일과 원본 불러오기
+                    tempImgArray.add(ImageDTO(ServiceApi.BASE_URL + postInfo.image[i].formats.thumbnail.url, ServiceApi.BASE_URL + postInfo.image[i].url))
+                    Log.e("forloop",i.toString())
+                }
+                imageArray.value = tempImgArray
+            }
+            Log.e("imageArrayValue00",tempImgArray.toString())
+            Log.e("imageArrayValue",imageArray.value.toString())
+            //commentArray.notifyObserver()
         }
     }
 
-//                //LoadPostItem의 comments를 adapter에 연결할 dtolist에 담는다.
-//                // 정렬 이전의 임시 list.
-//                var tempDTOList: ArrayList<Comment> = arrayListOf()
-//
-//                if (result.comments?.size != 0) {
-//                    for (i in 1..result.comments?.size!!) {
-//                        tempDTOList.add(
-//                            Comment(
-//                                result.comments[i - 1].id,
-//                                result.comments[i - 1].author,
-//                                result.comments[i - 1].user_id,
-//                                result.comments[i - 1].comment,
-//                                result.comments[i - 1].content,
-//                                result.comments[i - 1].createdAt,
-//                                result.comments[i - 1].image,
-//                                result.comments[i - 1].likeds
-//                            )
-//                        )
-//                    }
-//                }
-//
-//                //댓글, 대댓글을 상위 id를 가졌는지를 판단하여 정렬, 새로운 list에 담는다.
-//                var tempId: String = ""
-//                for (i in 1..tempDTOList.size) {
-//                    if (tempDTOList[i - 1].comment == null) { // comment값이 존재하면 해당 id를 가진 댓글에 달려있는 대댓글.
-//                        commentDTOList.add(tempDTOList[i - 1])
-//                        tempId = tempDTOList[i - 1].id
-//                        for (j in i..tempDTOList.size) {
-//                            if (tempDTOList[j - 1].comment == tempId) {
-//                                commentDTOList.add(tempDTOList[j - 1])
-//                            }
-//                        }
-//                    }
-//                }
+    fun post() {
+        if (App.prefs.tempCommentId == "none") postComment(PostCommentDTO(App.prefs.myEmail, App.prefs.myName, commentContent.value.toString(),App.prefs.myId, board_id, null ))
+        else postComment(PostCommentDTO(App.prefs.myEmail, App.prefs.myName, commentContent.value.toString(),App.prefs.myId, board_id, App.prefs.tempCommentId ))
+    }
 
     fun postComment(data: PostCommentDTO) {
         viewModelScope.launch {
             val commentInfo = detailRepository.userComment("Bearer "+App.prefs.myJwt, data)
+            var comment_id = commentInfo._id
+
+            commentDTO
+
+            if (commentImageUriList.isNotEmpty()) {
+                uploadImage(comment_id)
+                commentImageUploaded.value = false
+            }
+
         }
     }
 
+//    private fun attemptComment(board_id: String, comment_id: String?){
+//        //comment_id에 null이 아닌 값이 들어오면 대댓글
+//        detail_edittext_comment.error = null
+//        val content: String = detail_edittext_comment.text.toString()
+//        var cancel = false
+//        var focusView: View? = null
+//
+//        // 유효성 검사
+//        if (content.isEmpty()){
+//            detail_edittext_comment.error = "내용을 입력하세요."
+//            focusView = detail_edittext_comment
+//            cancel = true
+//        }
+//
+//        if(cancel){
+//            focusView?.requestFocus()
+//        } else {
+//            detail_edittext_comment.text = null
+//            detailViewModel.postComment(
+//                PostCommentDTO(
+//                    App.prefs.myEmail,
+//                    App.prefs.myName,
+//                    content,
+//                    App.prefs.myId,
+//                    board_id,
+//                    comment_id
+//                )
+//            )
+//            focusView = null
+//        }
+//    }
+
+//            if (response.isSuccessful) {
+//                val result: PostCommentResponseDTO = response.body()!!
+//                var comment_id = result._id
+//                if (commentImageUriList.isNotEmpty()) {
+//                    uploadImage(comment_id) // 이미지가 업로드 되었다면 이미지 post
+//                    detail_imageview_commentimage.visibility = View.GONE
+//                } else {
+//                    onRefresh()
+//                }
 
     /**
     *  Image Handling
     * */
 
-//    fun addImage() {
-//        TedImagePicker.with(getApplication())
-//            .start { uri -> showSingleImage(uri) }
-//    }
+    fun addImage() {
+        TedImagePicker.with(context.applicationContext)
+            .start { uri -> showSingleImage(uri) }
+    }
 
     fun uploadImage(comment_id: String) {
         var images = ArrayList<MultipartBody.Part>()
@@ -201,7 +227,7 @@ class DetailViewModel @ViewModelInject constructor(
         }
     }
 
-    private fun showSingleImage(uri: Uri){
+    fun showSingleImage(uri: Uri){
         commentImageUriList.add(uri)
         liveCommentImage.value = commentImageUriList[0]
         commentImageUploaded.value = true // 이미지뷰 보여주고 X 표시 보여줌
@@ -252,114 +278,6 @@ class DetailViewModel @ViewModelInject constructor(
 }
 
 
-
-//
-//// 게시물, 댓글, 대댓글 정보 전부 불러옴
-//private fun loadPostingContent(board_id: String) {
-//    service?.getPostContent(board_id)?.enqueue(object : Callback<LoadPostItem?> {
-//        override fun onResponse(
-//            call: Call<LoadPostItem?>?,
-//            response: Response<LoadPostItem?>
-//
-//        ) {
-//
-//            if (response.isSuccessful) {
-//                val result: LoadPostItem = response.body()!!
-//                detail_textview_title.text = result.title
-//                detail_textview_content.text = result.content
-//                detail_textview_comment.text = result.comments?.size.toString()!!
-//                detail_textview_liked.text = result.likeds?.size.toString()!!
-//
-//                // 사용자 좋아요 상태 체크
-//                for (i in 1..result.likeds?.size!!) {
-//                    if (result.likeds[i - 1].user_id == App.prefs.myId) {
-//                        detail_button_liked.setBackgroundResource(R.drawable.ic_thumbsup)
-//                    }
-//                }
-//
-//                //LoadPostItem의 comments를 adapter에 연결할 dtolist에 담는다.
-//                // 정렬 이전의 임시 list.
-//                var tempDTOList: ArrayList<Comment> = arrayListOf()
-//
-//                if (result.comments?.size != 0) {
-//                    for (i in 1..result.comments?.size!!) {
-//                        tempDTOList.add(
-//                            Comment(
-//                                result.comments[i - 1].id,
-//                                result.comments[i - 1].author,
-//                                result.comments[i - 1].user_id,
-//                                result.comments[i - 1].comment,
-//                                result.comments[i - 1].content,
-//                                result.comments[i - 1].createdAt,
-//                                result.comments[i - 1].image,
-//                                result.comments[i - 1].likeds
-//                            )
-//                        )
-//                    }
-//                }
-//
-//                //댓글, 대댓글을 상위 id를 가졌는지를 판단하여 정렬, 새로운 list에 담는다.
-//                var tempId: String = ""
-//                for (i in 1..tempDTOList.size) {
-//                    if (tempDTOList[i - 1].comment == null) { // comment값이 존재하면 해당 id를 가진 댓글에 달려있는 대댓글.
-//                        commentDTOList.add(tempDTOList[i - 1])
-//                        tempId = tempDTOList[i - 1].id
-//                        for (j in i..tempDTOList.size) {
-//                            if (tempDTOList[j - 1].comment == tempId) {
-//                                commentDTOList.add(tempDTOList[j - 1])
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                // 이미지 담기
-//                if (result.image?.isNotEmpty()!!) {
-//                    for (i in 0 until result.image.size) {
-//                        /// 축소된 이미지를 불러온다.
-//                        imageList.add(
-//                            ImageDTO(
-//                                RetrofitClient.BASE_URL + result.image[i].formats.thumbnail.url,
-//                                RetrofitClient.BASE_URL + result.image[i].url
-//                            )
-//                        )
-//                    }
-//                }
-//
-//                mCommentAdapter?.notifyDataSetChanged()
-//
-//            } else {
-//                // 실패시 resopnse.errorbody를 객체화
-//
-//                val gson = Gson()
-//                val adapter: TypeAdapter<LoadPostItem> = gson.getAdapter<LoadPostItem>(
-//                    LoadPostItem::class.java
-//                )
-//                try {
-//                    if (response.errorBody() != null) {
-//                        val result: LoadPostItem = adapter.fromJson(
-//                            response.errorBody()!!.string()
-//                        )
-//
-//                    }
-//                } catch (e: IOException) {
-//                    e.printStackTrace()
-//                }
-//
-//                finish()
-//                Toast.makeText(applicationContext, "불러올 수 없는 글입니다.", Toast.LENGTH_SHORT);
-//            }
-//
-//        }
-//
-//        override fun onFailure(call: Call<LoadPostItem?>?, t: Throwable) {
-//            Log.e("onFailure", t.message!!)
-//            finish()
-//            Toast.makeText(applicationContext, "불러올 수 없는 글입니다.", Toast.LENGTH_SHORT);
-//        }
-//    })
-//
-//}
-//
 //private fun attemptComment(board_id: String, comment_id: String?){
 //    //comment_id에 null이 아닌 값이 들어오면 대댓글
 //    detail_edittext_comment.error = null

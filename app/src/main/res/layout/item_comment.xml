@@ -11,6 +11,10 @@
             type="com.example.howareyou.model.Comment" />
 
         <variable
+            name="imageItem"
+            type="com.example.howareyou.model.Image" />
+
+        <variable
             name="viewModel01"
             type="com.example.howareyou.views.detail.DetailViewModel" />
 

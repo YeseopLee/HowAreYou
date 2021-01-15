@@ -7,11 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.howareyou.R
 import com.example.howareyou.databinding.ItemCommentBinding
 import com.example.howareyou.databinding.ItemHomePostingBinding
 import com.example.howareyou.databinding.ItemRecommentBinding
 import com.example.howareyou.model.Comment
 import com.example.howareyou.model.LoadPostItem
+import com.example.howareyou.network.RetrofitClient
+import com.example.howareyou.util.ConvertTime
+import kotlinx.android.synthetic.main.activity_imageview_detail.view.*
+import kotlinx.android.synthetic.main.item_comment.view.*
+import java.lang.Exception
 
 
 class DetailCommentAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>(){
@@ -89,6 +96,7 @@ class DetailCommentAdapter(val context: Context) : RecyclerView.Adapter<CustomVi
         // Get the LayoutInflater from Context
         val layoutInflater:LayoutInflater = LayoutInflater.from(context)
 
+
         // 댓글
         if (holder.itemViewType == 0){
             holder.onBind(commentArray[position])
@@ -101,7 +109,12 @@ class DetailCommentAdapter(val context: Context) : RecyclerView.Adapter<CustomVi
 //            // 시간 convert
 //            val convtime = ConvertTime()
 //            view.comment_textview_date.text = convtime.showTime(commentArray[position].createdAt)
+            // 시간 convert
+            val convertTime = ConvertTime()
+            try {
+                commentArray[position].createdAt = convertTime.showTime(commentArray[position].createdAt)
 
+            } catch (e : Exception){}
             // 좋아요
 //            view.comment_imageview_liked.setOnClickListener {
 //                postLiked(
@@ -122,22 +135,22 @@ class DetailCommentAdapter(val context: Context) : RecyclerView.Adapter<CustomVi
 //            }
 //
 //            //이미지
-//            var tempUrl = commentArray[position].image?.formats?.thumbnail?.url
-//            var detailUrl = commentArray[position].image?.url
-//            if(!tempUrl.isNullOrEmpty())
-//            {
-//                Glide.with(view).load(RetrofitClient.BASE_URL + tempUrl).into(view.comment_imageview_image)
-//                view.comment_imageview_image.visibility = View.VISIBLE
-//            }
-//
-//            view.comment_imageview_image.setOnClickListener {
-//
-//                val dialogView = layoutInflater.inflate(R.layout.activity_imageview_detail, null)
-//                Glide.with(dialogView).load(RetrofitClient.BASE_URL + detailUrl).into(dialogView.imageview_detail)
-//                builder.setView(dialogView)
-//                builder.show()
-//
-//            }
+            var tempUrl = commentArray[position].image?.formats?.thumbnail?.url
+            var detailUrl = commentArray[position].image?.url
+            if(!tempUrl.isNullOrEmpty())
+            {
+                Glide.with(holder.itemView).load(RetrofitClient.BASE_URL + tempUrl).into(holder.itemView.comment_imageview_image)
+                holder.itemView.comment_imageview_image.visibility = View.VISIBLE
+            }
+
+            holder.itemView.comment_imageview_image.setOnClickListener {
+
+                val dialogView = layoutInflater.inflate(R.layout.activity_imageview_detail, null)
+                Glide.with(dialogView).load(RetrofitClient.BASE_URL + detailUrl).into(dialogView.imageview_detail)
+                builder.setView(dialogView)
+                builder.show()
+
+            }
 //
 //            //더보기 버튼
 //            view.comment_button_morevert.setOnClickListener(object : OnSingleClickListener() {

@@ -57,9 +57,9 @@ object BindingAdapter {
     @BindingAdapter("loadDetailImageData")
     @JvmStatic
     fun bindDetailImageRecyclerView(recyclerView: RecyclerView, data: ArrayList<ImageDTO>?) {
-        val adapter = recyclerView.adapter as DetailImageAdapter
+        val adapter = recyclerView.adapter as DetailImageAdapter?
         if (data != null) {
-            adapter.setItem(data)
+            adapter?.setItem(data)
         }
     }
 

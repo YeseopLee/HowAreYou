@@ -34,7 +34,7 @@ data class Comment(
     val user_id: String,
     val comment: String?,
     val content: String,
-    val createdAt: String,
+    var createdAt: String,
     val image: Image?,
     val likeds: List<Liked>?
 )

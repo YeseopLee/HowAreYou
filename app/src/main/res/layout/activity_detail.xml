@@ -6,7 +6,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -15,29 +15,29 @@
     </data>
 
     <FrameLayout
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:background="@color/colorWhite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         tools:context=".views.detail.DetailActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:background="@color/colorWhite"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite">
 
             <TextView
                 android:id="@+id/posting_textview_boardname"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"
+                android:fontFamily="@font/basic"
                 android:gravity="center_vertical"
                 android:text=""
+                android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/basic"
-                android:textColor="@color/colorPrimary"
                 app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
                 app:layout_constraintStart_toEndOf="@+id/detail_button_back"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -46,8 +46,8 @@
                 android:id="@+id/detail_button_back"
                 android:layout_width="30dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/ic_arrow_back_white"
                 app:layout_constraintBottom_toTopOf="@id/detail_linearlayout_division"
@@ -73,8 +73,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:visibility="@{viewModel.alarmIsRunning? View.GONE:View.VISIBLE}"
                 android:background="@drawable/ic_notification_gray"
+                android:visibility="@{viewModel.alarmIsRunning? View.GONE:View.VISIBLE}"
                 app:layout_constraintBottom_toTopOf="@+id/detail_linearlayout_division"
                 app:layout_constraintEnd_toStartOf="@+id/detail_button_morevert"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -86,8 +86,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:visibility="@{viewModel.alarmIsRunning? View.VISIBLE:View.GONE}"
                 android:background="@drawable/ic_notification"
+                android:visibility="@{viewModel.alarmIsRunning? View.VISIBLE:View.GONE}"
                 app:layout_constraintBottom_toTopOf="@+id/detail_linearlayout_division"
                 app:layout_constraintEnd_toStartOf="@+id/detail_button_morevert"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -106,10 +106,10 @@
                 android:id="@+id/detail_swipelayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintTop_toTopOf="@id/detail_linearlayout_division"
                 app:layout_constraintBottom_toTopOf="@id/detail_constraintlayout_inputcomment"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="@id/detail_linearlayout_division">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -164,7 +164,10 @@
                                     android:layout_height="100dp"
                                     android:layout_marginLeft="20dp"
                                     android:layout_marginTop="20dp"
-                                    android:layout_marginRight="20dp" />
+                                    android:layout_marginRight="20dp"
+                                    android:orientation="horizontal"
+                                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                    app:loadDetailImageData="@{viewModel.imageArray}" />
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:layout_width="match_parent"
@@ -227,10 +230,10 @@
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/detail_recyclerview_comment"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                app:loadDetailCommentData="@{viewModel.commentArray}"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="match_parent"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:loadDetailCommentData="@{viewModel.commentArray}">
 
                             </androidx.recyclerview.widget.RecyclerView>
 
@@ -249,8 +252,8 @@
                 android:layout_height="50dp"
                 android:background="@color/colorEditText"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <Button
                     android:id="@+id/detail_button_addphoto"
@@ -260,9 +263,10 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/ic_addphoto"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="@{() -> viewModel.addImage()}"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/detail_button_postcomment"
@@ -273,6 +277,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@color/transparent"
                     android:text="@string/post"
+                    android:onClick="@{() -> viewModel.post()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -283,6 +288,7 @@
                     android:layout_height="0dp"
                     android:background="@null"
                     android:hint="@string/comment_guide"
+                    android:text="@={viewModel.commentContent}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/detail_imageview_commentimage"
                     app:layout_constraintStart_toEndOf="@id/detail_button_addphoto"
@@ -305,10 +311,10 @@
                     android:layout_height="15dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="2dp"
+                    android:background="@drawable/ic_close"
                     android:visibility="@{viewModel.commentImageUploaded? View.VISIBLE:View.GONE}"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/detail_imageview_commentimage"
-                    android:background="@drawable/ic_close" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -316,10 +322,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/detail_layout_loading"
-            android:background="@color/colorWhite"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:visibility="gone">
 
             <ProgressBar
                 android:id="@+id/detail_progressbar"

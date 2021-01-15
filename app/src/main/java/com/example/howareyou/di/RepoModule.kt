@@ -6,6 +6,7 @@ import com.example.howareyou.repository.AuthRepositoryImpl
 import com.example.howareyou.repository.DetailRepositoryImpl
 import com.example.howareyou.repository.HomeRepositoryImpl
 import com.example.howareyou.views.detail.DetailCommentAdapter
+import com.example.howareyou.views.detail.DetailViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,5 +29,8 @@ object RepoModule {
     @Singleton
     @Provides
     fun provideDetailRepo(serviceApi: ServiceApi) = DetailRepositoryImpl(serviceApi)
+
+//    @Provides
+//    fun provideDetailViewModel(context: Context) = DetailViewModel()
 
 }
