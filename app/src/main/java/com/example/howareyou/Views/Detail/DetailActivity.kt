@@ -1,14 +1,17 @@
 package com.example.howareyou.views.detail
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.example.howareyou.model.*
 import com.example.howareyou.R
 import com.example.howareyou.App
 import com.example.howareyou.databinding.ActivityDetailBinding
+import com.example.howareyou.util.OnSingleClickListener
 import com.example.howareyou.views.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import gun0912.tedimagepicker.builder.TedImagePicker
@@ -36,28 +39,30 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         initAdapter()
         detailViewModel.getValue(board_id)
 
+        alertDialog()
+
         //detailViewModel.loadPostingContent(board_id)
         //detailViewModel.getAlarm(App.prefs.myId, board_id)
 
     }
 
     //comment recyclerview data / adapter
-    var commentDTOList : ArrayList<Comment> = arrayListOf()
-    private lateinit var mCommentAdapter : DetailCommentAdapter
+    var commentDTOList: ArrayList<Comment> = arrayListOf()
+    private lateinit var mCommentAdapter: DetailCommentAdapter
 
     //image recyclerview data / adapter
-    var imageList : ArrayList<ImageDTO> = arrayListOf()
-    private lateinit var mImageAdapter : DetailImageAdapter
+    var imageList: ArrayList<ImageDTO> = arrayListOf()
+    private lateinit var mImageAdapter: DetailImageAdapter
 
     //comment image uri
-    var commentImageUriList : ArrayList<Uri> = arrayListOf()
+    var commentImageUriList: ArrayList<Uri> = arrayListOf()
 
     //alarm check
-    var alarmisRunning : Boolean = false
-    var alarm_id : String = ""
+    var alarmisRunning: Boolean = false
+    var alarm_id: String = ""
 
     //recomment check
-    var recommentisRunning : Boolean = false
+    var recommentisRunning: Boolean = false
 
 
 //    override fun onResume() {
@@ -96,7 +101,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 //        mCommentAdapter.notifyDataSetChanged()
 //    }
 
-    private fun attemptComment(board_id: String, comment_id: String?){
+    private fun attemptComment(board_id: String, comment_id: String?) {
         //comment_id에 null이 아닌 값이 들어오면 대댓글
         detail_edittext_comment.error = null
         val content: String = detail_edittext_comment.text.toString()
@@ -104,13 +109,13 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         var focusView: View? = null
 
         // 유효성 검사
-        if (content.isEmpty()){
+        if (content.isEmpty()) {
             detail_edittext_comment.error = "내용을 입력하세요."
             focusView = detail_edittext_comment
             cancel = true
         }
 
-        if(cancel){
+        if (cancel) {
             focusView?.requestFocus()
         } else {
             detail_edittext_comment.text = null
@@ -127,6 +132,36 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
             focusView = null
         }
     }
+
+    fun alertDialog() {
+        // alert dialog value
+        val builder = AlertDialog.Builder(this).create()
+        detail_button_morevert.setOnClickListener(object : OnSingleClickListener() {
+            override fun onSingleClick(view: View) {
+
+                val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
+                val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
+                val BtnRecomment = dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
+                val BtnDelete = dialogView.findViewById<Button>(R.id.moremenu_button_delete)
+                BtnRecomment.visibility = View.GONE
+
+                builder.setView(dialogView)
+                builder.show()
+
+                BtnReport.setOnClickListener {
+                    builder.dismiss()
+                }
+
+                BtnDelete.setOnClickListener {
+                    detailViewModel.deletePost(board_id)
+                    builder.dismiss()
+                }
+
+            }
+        })
+
+    }
+}
 
 //    override fun onRefresh() {
 //        // 데이터 list 초기화
@@ -189,37 +224,6 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 //        })
 //
 //
-//        // alert dialog value
-//        val builder = AlertDialog.Builder(this).create()
-//        detail_button_morevert.setOnClickListener(object : OnSingleClickListener() {
-//            override fun onSingleClick(view: View) {
-//
-//                val dialogView = layoutInflater.inflate(R.layout.activity_more_menu, null)
-//                val BtnReport = dialogView.findViewById<Button>(R.id.moremenu_button_report)
-//                val BtnRecomment = dialogView.findViewById<Button>(R.id.moremenu_button_recomment)
-//                val BtnDelete = dialogView.findViewById<Button>(R.id.moremenu_button_delete)
-//                BtnRecomment.visibility = View.GONE
-//
-//                builder.setView(dialogView)
-//                builder.show()
-//
-//                BtnReport.setOnClickListener {
-//                    builder.dismiss()
-//                }
-//
-//                BtnDelete.setOnClickListener {
-//                    deletePosting(board_id)
-//                    builder.dismiss()
-//                }
-//
-//            }
-//        })
-//
-//    }
 
 
 
-
-
-
-}

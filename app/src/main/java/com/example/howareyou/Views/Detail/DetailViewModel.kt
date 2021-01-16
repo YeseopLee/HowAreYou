@@ -1,10 +1,13 @@
 package com.example.howareyou.views.detail
 
+import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
@@ -15,10 +18,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.howareyou.App
 import com.example.howareyou.R
+import com.example.howareyou.databinding.ActivityDetailBinding.inflate
+import com.example.howareyou.databinding.ActivityMainBinding.inflate
+import com.example.howareyou.databinding.ItemCommentBinding.inflate
 import com.example.howareyou.model.*
 import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.repository.DetailRepository
+import com.example.howareyou.util.OnSingleClickListener
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -111,7 +118,7 @@ class DetailViewModel @ViewModelInject constructor(
 
             var tempId: String = ""
             for ( i in 0 until tempList.size){
-                if(tempList[0].comment == null) { // comment값이 존재한다는것은 해당 id를 가진 댓글에 달려있는 대댓글이란 소리.
+                if(tempList[i].comment == null) { // comment값이 존재한다는것은 해당 id를 가진 댓글에 달려있는 대댓글이란 소리.
                     //commentArray.value?.add(tempList[i])
                     //commentArray.postValue(tempList)
                     tempList02.add(tempList[i])
@@ -125,6 +132,8 @@ class DetailViewModel @ViewModelInject constructor(
             }
 
             commentArray.value = tempList02
+            Log.e("ViewmodelCommentArray",commentArray.value?.size.toString())
+            Log.e("ViewmodelCommentArray",commentArray.value.toString())
 
             var tempImgArray: ArrayList<ImageDTO> = arrayListOf()
             if (postInfo.image?.isNotEmpty()!!) {
@@ -261,7 +270,7 @@ class DetailViewModel @ViewModelInject constructor(
     fun deletePost(board_id: String) {
         viewModelScope.launch {
             detailRepository.deletePost("Bearer " + App.prefs.myJwt, board_id, deleteDTO(true))
-        }
+        } // 실패시 글쓴이가 아님
     }
 
     fun postLiked(board_id: String) {
@@ -274,8 +283,22 @@ class DetailViewModel @ViewModelInject constructor(
         this.value = this.value
     }
 
+    val builder = AlertDialog.Builder(context.applicationContext).create()
+
+
+    fun report() {
+        builder.dismiss()
+    }
+
+    fun delete() {
+        deletePost(board_id)
+        builder.dismiss()
+    }
 
 }
+
+
+
 
 
 //private fun attemptComment(board_id: String, comment_id: String?){
