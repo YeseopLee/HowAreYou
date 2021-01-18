@@ -1,53 +1,35 @@
 package com.example.howareyou.views.detail
 
 import android.app.AlertDialog
-import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
-import android.widget.Toast
+import androidx.databinding.ObservableBoolean
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.howareyou.App
-import com.example.howareyou.R
-import com.example.howareyou.databinding.ActivityDetailBinding.inflate
-import com.example.howareyou.databinding.ActivityMainBinding.inflate
-import com.example.howareyou.databinding.ItemCommentBinding.inflate
 import com.example.howareyou.model.*
-import com.example.howareyou.network.RetrofitClient
 import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.repository.DetailRepository
-import com.example.howareyou.util.OnSingleClickListener
-import com.google.gson.Gson
-import com.google.gson.TypeAdapter
+import com.example.howareyou.util.Event
 import dagger.hilt.android.qualifiers.ApplicationContext
 import gun0912.tedimagepicker.builder.TedImagePicker
-import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.item_comment.view.*
-import kotlinx.android.synthetic.main.item_recomment.view.*
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
-import java.io.IOException
+
 
 class DetailViewModel @ViewModelInject constructor(
     private val detailRepository: DetailRepository,
     @ApplicationContext private val context: Context
-)  : ViewModel() {
+)  : ViewModel(), DetailCommentAdapter.ViewModelCallback {
 
+    // posting contents
     var boardName = MutableLiveData<String>()
     var postTitle = MutableLiveData<String>()
     var postContent = MutableLiveData<String>()
@@ -55,35 +37,68 @@ class DetailViewModel @ViewModelInject constructor(
     var commentSize = MutableLiveData<Int>()
     var likeSize = MutableLiveData<Int>()
     var commentArray = MutableLiveData<ArrayList<Comment>>()
-    //var commentImage = MutableLiveData<Uri>()
     var imageArray = MutableLiveData<ArrayList<ImageDTO>>()
-    var _commentArray = ArrayList<Comment>()
-
-    var commentDTO = ArrayList<PostCommentDTO>()
-
-    var commentImageUploaded = MutableLiveData<Boolean>()
-    var alarmIsRunning = MutableLiveData<Boolean>()
-
-    lateinit var alarm_id : String
-    lateinit var board_id : String
-
-//
-//    var commentImageUriList = MutableLiveData<ArrayList<Uri>>()
-
     //comment image uri
     var commentImageUriList : ArrayList<Uri> = arrayListOf()
     var liveCommentImage = MutableLiveData<Uri>()
 
+    // posting handler
+    var commentImageUploaded = MutableLiveData<Boolean>()
+    var alarmIsRunning = MutableLiveData<Boolean>()
+
+    // posting info
+    lateinit var alarm_id : String
+    lateinit var board_id : String
+
+    // ui handler
+    val isLoading = ObservableBoolean()
+    private val _moveHome = MutableLiveData<Event<Boolean>>()
+    val moveHome: LiveData<Event<Boolean>> = _moveHome
+    val commentHint = MutableLiveData<String>()
+    var recommentHandler : Boolean = false
+
     init {
-        alarm_id = ""
+        commentHint.value = "댓글을 입력하세요."
         commentImageUploaded.value = false
         alarmIsRunning.value = false
+        isLoading.set(false)
 //        loadPostingContent(board_id)
     }
 
     fun getValue(data: String) {
         board_id = data
         loadPostingContent(board_id)
+    }
+
+    fun postRecomment(callback: () -> Unit){
+        commentHint.value = "대댓글을 입력하세요."
+        callback.invoke()
+    }
+
+    override fun returnCallBack(data: Boolean) : Boolean {
+        super.returnCallBack(data)
+        return true
+    }
+
+
+    fun onRefresh() {
+        isLoading.set(true)
+//        commentArray.value = LoadPostDTO()
+//        when(App.prefs.myCode){
+//            App.prefs.key_all -> loadPostAll()
+//            else -> loadPost()
+//        }
+        App.prefs.tempCommentId = "none"
+        commentHint.value = "댓글을 입력하세요."
+        commentArray.value?.clear()
+        loadPostingContent(board_id)
+        commentArray.notifyObserver()
+
+        /**
+         * Livedata.value.clear() 선언 후 notifyObserver() 실행해도 같은 동작
+         **/
+
+        isLoading.set(false)
     }
 
     fun loadPostingContent(board_id: String) {
@@ -132,39 +147,62 @@ class DetailViewModel @ViewModelInject constructor(
             }
 
             commentArray.value = tempList02
-            Log.e("ViewmodelCommentArray",commentArray.value?.size.toString())
-            Log.e("ViewmodelCommentArray",commentArray.value.toString())
+            Log.e("ViewmodelCommentArray", commentArray.value?.size.toString())
+            Log.e("ViewmodelCommentArray", commentArray.value.toString())
 
             var tempImgArray: ArrayList<ImageDTO> = arrayListOf()
             if (postInfo.image?.isNotEmpty()!!) {
                 for (i in 0 until postInfo.image.size) { // 썸네일과 원본 불러오기
-                    tempImgArray.add(ImageDTO(ServiceApi.BASE_URL + postInfo.image[i].formats.thumbnail.url, ServiceApi.BASE_URL + postInfo.image[i].url))
-                    Log.e("forloop",i.toString())
+                    tempImgArray.add(
+                        ImageDTO(
+                            ServiceApi.BASE_URL + postInfo.image[i].formats.thumbnail.url,
+                            ServiceApi.BASE_URL + postInfo.image[i].url
+                        )
+                    )
+                    Log.e("forloop", i.toString())
                 }
                 imageArray.value = tempImgArray
             }
-            Log.e("imageArrayValue00",tempImgArray.toString())
-            Log.e("imageArrayValue",imageArray.value.toString())
+            Log.e("imageArrayValue00", tempImgArray.toString())
+            Log.e("imageArrayValue", imageArray.value.toString())
             //commentArray.notifyObserver()
         }
     }
 
     fun post() {
-        if (App.prefs.tempCommentId == "none") postComment(PostCommentDTO(App.prefs.myEmail, App.prefs.myName, commentContent.value.toString(),App.prefs.myId, board_id, null ))
-        else postComment(PostCommentDTO(App.prefs.myEmail, App.prefs.myName, commentContent.value.toString(),App.prefs.myId, board_id, App.prefs.tempCommentId ))
+        if (App.prefs.tempCommentId == "none") postComment(
+            PostCommentDTO(
+                App.prefs.myEmail,
+                App.prefs.myName,
+                commentContent.value.toString(),
+                App.prefs.myId,
+                board_id,
+                null
+            )
+        )
+        else postComment(
+            PostCommentDTO(
+                App.prefs.myEmail,
+                App.prefs.myName,
+                commentContent.value.toString(),
+                App.prefs.myId,
+                board_id,
+                App.prefs.tempCommentId
+            )
+        )
     }
 
     fun postComment(data: PostCommentDTO) {
         viewModelScope.launch {
-            val commentInfo = detailRepository.userComment("Bearer "+App.prefs.myJwt, data)
+            val commentInfo = detailRepository.userComment("Bearer " + App.prefs.myJwt, data)
             var comment_id = commentInfo._id
-
-            commentDTO
 
             if (commentImageUriList.isNotEmpty()) {
                 uploadImage(comment_id)
                 commentImageUploaded.value = false
             }
+
+            onRefresh()
 
         }
     }
@@ -244,7 +282,12 @@ class DetailViewModel @ViewModelInject constructor(
 
     fun postAlarm(board_id: String) {
         viewModelScope.launch {
-            detailRepository.postAlarm("Bearer " + App.prefs.myJwt, AlarmDTO(App.prefs.myId, board_id))
+            detailRepository.postAlarm(
+                "Bearer " + App.prefs.myJwt, AlarmDTO(
+                    App.prefs.myId,
+                    board_id
+                )
+            )
         }
     }
 
@@ -271,11 +314,20 @@ class DetailViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             detailRepository.deletePost("Bearer " + App.prefs.myJwt, board_id, deleteDTO(true))
         } // 실패시 글쓴이가 아님
+        // activit 전환
+        moveHome()
     }
 
     fun postLiked(board_id: String) {
         viewModelScope.launch {
-            detailRepository.userLiked(PostLikedDTO(App.prefs.myEmail, App.prefs.myId, board_id, null))
+            detailRepository.userLiked(
+                PostLikedDTO(
+                    App.prefs.myEmail,
+                    App.prefs.myId,
+                    board_id,
+                    null
+                )
+            )
         }
     }
 
@@ -286,13 +338,9 @@ class DetailViewModel @ViewModelInject constructor(
     val builder = AlertDialog.Builder(context.applicationContext).create()
 
 
-    fun report() {
-        builder.dismiss()
-    }
-
-    fun delete() {
-        deletePost(board_id)
-        builder.dismiss()
+    // activity 전환 트리거
+    fun moveHome() {
+        _moveHome.value = Event(true)
     }
 
 }

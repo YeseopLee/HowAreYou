@@ -1,18 +1,22 @@
 package com.example.howareyou.views.detail
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.example.howareyou.model.*
 import com.example.howareyou.R
 import com.example.howareyou.App
 import com.example.howareyou.databinding.ActivityDetailBinding
 import com.example.howareyou.util.OnSingleClickListener
 import com.example.howareyou.views.BaseActivity
+import com.example.howareyou.views.MainActivity
+import com.example.howareyou.views.auth.SigninActivity
 import dagger.hilt.android.AndroidEntryPoint
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -41,6 +45,8 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
         alertDialog()
 
+        movePage()
+
         //detailViewModel.loadPostingContent(board_id)
         //detailViewModel.getAlarm(App.prefs.myId, board_id)
 
@@ -64,6 +70,8 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
     //recomment check
     var recommentisRunning: Boolean = false
 
+    var testValue = 0
+
 
 //    override fun onResume() {
 //        super.onResume()
@@ -79,11 +87,21 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
     private fun initAdapter() {
 
-        mCommentAdapter = DetailCommentAdapter(this)
+        mCommentAdapter = DetailCommentAdapter(this,detailViewModel)
         binding.detailRecyclerviewComment.adapter = mCommentAdapter
 
         mImageAdapter = DetailImageAdapter(this)
         binding.detailRecyclerviewImageview.adapter = mImageAdapter
+    }
+
+    override fun onBackPressed() {
+        if(detailViewModel.recommentHandler) {
+            detailViewModel.commentHint.value = "댓글을 입력하세요."
+            detailViewModel.recommentHandler = false
+            App.prefs.tempCommentId = "none"
+        } else {
+            super.onBackPressed()
+        }
     }
 
     fun onBack() { // 뒤로가기 버튼
@@ -133,6 +151,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
         }
     }
 
+
     fun alertDialog() {
         // alert dialog value
         val builder = AlertDialog.Builder(this).create()
@@ -160,6 +179,15 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
             }
         })
 
+    }
+
+    private fun movePage() {
+        detailViewModel.moveHome.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        })
     }
 }
 

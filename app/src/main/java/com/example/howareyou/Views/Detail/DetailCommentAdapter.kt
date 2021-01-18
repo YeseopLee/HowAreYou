@@ -24,10 +24,14 @@ import kotlinx.android.synthetic.main.item_comment.view.*
 import java.lang.Exception
 
 
-class DetailCommentAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>() {
+class DetailCommentAdapter(val context: Context, val viewModel: DetailViewModel) : RecyclerView.Adapter<CustomViewHolder>() {
 
 
     var commentArray = ArrayList<Comment>()
+
+    var tempBoolean = false
+
+    private val myViewCallBack: ViewModelCallback? = null
 
     //클릭 인터페이스 정의
     interface ItemClickListener {
@@ -178,6 +182,8 @@ class DetailCommentAdapter(val context: Context) : RecyclerView.Adapter<CustomVi
                     }
                     BtnRecomment.setOnClickListener {
                         App.prefs.tempCommentId = commentArray[position].id
+                        viewModel.commentHint.value ="대댓글을 입력하세요."
+                        viewModel.recommentHandler = true
                         builder.dismiss()
                     }
 
@@ -185,6 +191,16 @@ class DetailCommentAdapter(val context: Context) : RecyclerView.Adapter<CustomVi
             })
 
         }
+    }
+
+    interface ViewModelCallback {
+        fun returnCallBack(data: Boolean) : Boolean {
+            return data
+        }
+    }
+
+    fun foo() {
+        Log.e("CallbackTEst",myViewCallBack?.returnCallBack(true).toString())
     }
 
 //        else{ // 대댓글
