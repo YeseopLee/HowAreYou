@@ -16,6 +16,8 @@ import com.example.howareyou.views.detail.DetailImageAdapter
 import com.example.howareyou.views.home.HomeAdapter
 import com.example.howareyou.views.home.HomePagerViewModel
 import com.example.howareyou.views.noti.NotiAdapter
+import com.example.howareyou.views.search.SearchAdapter
+import com.example.howareyou.views.search.SearchViewModel
 
 
 object BindingAdapter {
@@ -41,6 +43,15 @@ object BindingAdapter {
             adapter.setItem(data)
         }
     }
+    // recyclerview search
+    @BindingAdapter("loadSearchData")
+    @JvmStatic
+    fun bindSearchRecyclerView(recyclerView: RecyclerView, data: ArrayList<LoadPostItem>?) {
+        val adapter = recyclerView.adapter as SearchAdapter
+        if (data != null) {
+            adapter.setItem(data)
+        }
+    }
 
     // recyclerview noti
     @BindingAdapter("loadNotiData")
@@ -59,6 +70,19 @@ object BindingAdapter {
         val scrollListener = object : EndlessRecyclerViewScrollListener(recyclerView.layoutManager as LinearLayoutManager){
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                 viewModel.loadPostMore()
+            }
+        }
+        recyclerView.addOnScrollListener(scrollListener)
+        //recyclerView.adapter = recyclerView.adapter as HomeAdapter
+    }
+
+    // endless search scroll
+    @BindingAdapter("endlessSearchScroll")
+    @JvmStatic
+    fun setEndlessSearchScroll(recyclerView: RecyclerView, viewModel: SearchViewModel) {
+        val scrollListener = object : EndlessRecyclerViewScrollListener(recyclerView.layoutManager as LinearLayoutManager){
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.searchPostingMore()
             }
         }
         recyclerView.addOnScrollListener(scrollListener)

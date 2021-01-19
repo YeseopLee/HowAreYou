@@ -21,4 +21,7 @@ abstract class RepoBindModule {
 
     @Binds
     abstract fun bindNoti(notiRepo: NotiRepositoryImpl) : NotiRepository
+
+    @Binds
+    abstract fun bindSearch(searchRepo: SearchRepositoryImpl) : SearchRepository
 }

@@ -70,21 +70,7 @@ class HomeAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>
         } catch (e : Exception){
 
         }
-//
-//        var view = holder.itemView
-//        var text_content = postingDTO[position].content+"" // Null Exception을 막기위해 공백의 string 추가
-//        var pre_text_content : String
-//
-//        view.homeposting_textview_content.text = text_content
-//
-//        if(text_content.length >= 100){
-//            pre_text_content = text_content.substring(0,100) + "..."
-//            view.homeposting_textview_content.text = pre_text_content
-//        }
-//        else {
-//            view.homeposting_textview_content.text = text_content
-//        }
-//
+
         //get Code
         when(postingDTO[position].code?.id){
             App.prefs.codeFree -> postingDTO[position].code = Code("자유게시판")
@@ -93,11 +79,7 @@ class HomeAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>
             App.prefs.codeStudy -> postingDTO[position].code = Code("스터디모집")
             App.prefs.codeCourse -> postingDTO[position].code = Code("진로게시판")
         }
-//
-//        view.homeposting_textview_title.text = postingDTO[position].title
-//        view.homeposting_textview_author.text = postingDTO[position].author
-//        view.homeposting_textview_comment.text = postingDTO[position].comments?.size.toString()
-//        view.homeposting_textview_favorite.text = postingDTO[position].likeds?.size.toString()
+
         holder.itemView.homeposting_button_favorite.setBackgroundResource(R.drawable.ic_thumbsup_white)
 
 
@@ -109,12 +91,6 @@ class HomeAdapter(val context: Context) : RecyclerView.Adapter<CustomViewHolder>
             )
         }
 
-
-//        view.setOnClickListener{
-//            val intent = Intent(context, DetailActivity::class.java)
-//            intent.putExtra("board_id",postingDTO[position].id)
-//            context.startActivity(intent)
-//        }
 
 
     }
