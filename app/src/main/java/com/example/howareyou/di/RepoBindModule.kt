@@ -18,4 +18,7 @@ abstract class RepoBindModule {
 
     @Binds
     abstract fun bindDetail(detailRepo: DetailRepositoryImpl) : DetailRepository
+
+    @Binds
+    abstract fun bindNoti(notiRepo: NotiRepositoryImpl) : NotiRepository
 }

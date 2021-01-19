@@ -10,10 +10,12 @@ import com.bumptech.glide.Glide
 import com.example.howareyou.model.Comment
 import com.example.howareyou.model.ImageDTO
 import com.example.howareyou.model.LoadPostItem
+import com.example.howareyou.model.NotiItem
 import com.example.howareyou.views.detail.DetailCommentAdapter
 import com.example.howareyou.views.detail.DetailImageAdapter
 import com.example.howareyou.views.home.HomeAdapter
 import com.example.howareyou.views.home.HomePagerViewModel
+import com.example.howareyou.views.noti.NotiAdapter
 
 
 object BindingAdapter {
@@ -35,6 +37,16 @@ object BindingAdapter {
     @JvmStatic
     fun bindRecyclerView(recyclerView: RecyclerView, data: ArrayList<LoadPostItem>?) {
         val adapter = recyclerView.adapter as HomeAdapter
+        if (data != null) {
+            adapter.setItem(data)
+        }
+    }
+
+    // recyclerview noti
+    @BindingAdapter("loadNotiData")
+    @JvmStatic
+    fun bindNotiRecyclerView(recyclerView: RecyclerView, data: ArrayList<NotiItem>?) {
+        val adapter = recyclerView.adapter as NotiAdapter
         if (data != null) {
             adapter.setItem(data)
         }

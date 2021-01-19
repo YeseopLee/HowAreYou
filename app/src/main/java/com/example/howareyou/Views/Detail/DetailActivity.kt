@@ -41,7 +41,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
 //        setButton()
         initAdapter()
-        detailViewModel.getValue(board_id)
+        detailViewModel.getValue(board_id,alarm_id)
 
         alertDialog()
 

@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -22,12 +23,13 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.io.IOException
 
 
 class DetailViewModel @ViewModelInject constructor(
     private val detailRepository: DetailRepository,
     @ApplicationContext private val context: Context
-)  : ViewModel(), DetailCommentAdapter.ViewModelCallback {
+)  : ViewModel() {
 
     // posting contents
     var boardName = MutableLiveData<String>()
@@ -42,61 +44,44 @@ class DetailViewModel @ViewModelInject constructor(
     var commentImageUriList : ArrayList<Uri> = arrayListOf()
     var liveCommentImage = MutableLiveData<Uri>()
 
-    // posting handler
-    var commentImageUploaded = MutableLiveData<Boolean>()
-    var alarmIsRunning = MutableLiveData<Boolean>()
-
     // posting info
     lateinit var alarm_id : String
     lateinit var board_id : String
 
     // ui handler
     val isLoading = ObservableBoolean()
+    var commentImageUploaded = MutableLiveData<Boolean>()
+    var alarmIsRunning = MutableLiveData<Boolean>()
     private val _moveHome = MutableLiveData<Event<Boolean>>()
     val moveHome: LiveData<Event<Boolean>> = _moveHome
     val commentHint = MutableLiveData<String>()
     var recommentHandler : Boolean = false
+    var postLikedisRunning = MutableLiveData<Boolean>()
 
     init {
         commentHint.value = "댓글을 입력하세요."
         commentImageUploaded.value = false
         alarmIsRunning.value = false
+        postLikedisRunning.value = false
         isLoading.set(false)
 //        loadPostingContent(board_id)
     }
 
-    fun getValue(data: String) {
-        board_id = data
+    fun getValue(board_id: String, alarm_id: String) {
+        this.board_id = board_id
+        this.alarm_id = alarm_id
         loadPostingContent(board_id)
+        getAlarm(App.prefs.myId, board_id)
     }
-
-    fun postRecomment(callback: () -> Unit){
-        commentHint.value = "대댓글을 입력하세요."
-        callback.invoke()
-    }
-
-    override fun returnCallBack(data: Boolean) : Boolean {
-        super.returnCallBack(data)
-        return true
-    }
-
 
     fun onRefresh() {
         isLoading.set(true)
-//        commentArray.value = LoadPostDTO()
-//        when(App.prefs.myCode){
-//            App.prefs.key_all -> loadPostAll()
-//            else -> loadPost()
-//        }
+
         App.prefs.tempCommentId = "none"
         commentHint.value = "댓글을 입력하세요."
         commentArray.value?.clear()
         loadPostingContent(board_id)
         commentArray.notifyObserver()
-
-        /**
-         * Livedata.value.clear() 선언 후 notifyObserver() 실행해도 같은 동작
-         **/
 
         isLoading.set(false)
     }
@@ -112,6 +97,12 @@ class DetailViewModel @ViewModelInject constructor(
 
             var tempList: ArrayList<Comment> = arrayListOf()
             var tempList02 : ArrayList<Comment> = arrayListOf()
+
+            for (i in 0 until postInfo.likeds?.size!!) {
+                if (postInfo.likeds[i].user_id == App.prefs.myId) {
+                    postLikedisRunning.value = true
+                }
+            }
 
             if(postInfo.comments?.size != 0) {
 //                commentArray.value = postInfo.comments as ArrayList<Comment>?
@@ -147,8 +138,6 @@ class DetailViewModel @ViewModelInject constructor(
             }
 
             commentArray.value = tempList02
-            Log.e("ViewmodelCommentArray", commentArray.value?.size.toString())
-            Log.e("ViewmodelCommentArray", commentArray.value.toString())
 
             var tempImgArray: ArrayList<ImageDTO> = arrayListOf()
             if (postInfo.image?.isNotEmpty()!!) {
@@ -163,8 +152,6 @@ class DetailViewModel @ViewModelInject constructor(
                 }
                 imageArray.value = tempImgArray
             }
-            Log.e("imageArrayValue00", tempImgArray.toString())
-            Log.e("imageArrayValue", imageArray.value.toString())
             //commentArray.notifyObserver()
         }
     }
@@ -207,48 +194,6 @@ class DetailViewModel @ViewModelInject constructor(
         }
     }
 
-//    private fun attemptComment(board_id: String, comment_id: String?){
-//        //comment_id에 null이 아닌 값이 들어오면 대댓글
-//        detail_edittext_comment.error = null
-//        val content: String = detail_edittext_comment.text.toString()
-//        var cancel = false
-//        var focusView: View? = null
-//
-//        // 유효성 검사
-//        if (content.isEmpty()){
-//            detail_edittext_comment.error = "내용을 입력하세요."
-//            focusView = detail_edittext_comment
-//            cancel = true
-//        }
-//
-//        if(cancel){
-//            focusView?.requestFocus()
-//        } else {
-//            detail_edittext_comment.text = null
-//            detailViewModel.postComment(
-//                PostCommentDTO(
-//                    App.prefs.myEmail,
-//                    App.prefs.myName,
-//                    content,
-//                    App.prefs.myId,
-//                    board_id,
-//                    comment_id
-//                )
-//            )
-//            focusView = null
-//        }
-//    }
-
-//            if (response.isSuccessful) {
-//                val result: PostCommentResponseDTO = response.body()!!
-//                var comment_id = result._id
-//                if (commentImageUriList.isNotEmpty()) {
-//                    uploadImage(comment_id) // 이미지가 업로드 되었다면 이미지 post
-//                    detail_imageview_commentimage.visibility = View.GONE
-//                } else {
-//                    onRefresh()
-//                }
-
     /**
     *  Image Handling
     * */
@@ -280,7 +225,12 @@ class DetailViewModel @ViewModelInject constructor(
         commentImageUploaded.value = true // 이미지뷰 보여주고 X 표시 보여줌
     }
 
-    fun postAlarm(board_id: String) {
+    fun controlAlarm(board_id: String) {
+        if(alarmIsRunning.value!!) deleteAlarm(board_id)
+        else postAlarm(board_id)
+
+    }
+    fun postAlarm(board_id: String) { // 알람 받기
         viewModelScope.launch {
             detailRepository.postAlarm(
                 "Bearer " + App.prefs.myJwt, AlarmDTO(
@@ -288,20 +238,25 @@ class DetailViewModel @ViewModelInject constructor(
                     board_id
                 )
             )
+            alarmIsRunning.value = true
         }
+
+        Log.e("TestAlarm","postAlarm")
     }
 
-    fun deleteAlarm(board_id: String) {
+    fun deleteAlarm(board_id: String) { // 알람 안받기
         viewModelScope.launch {
             detailRepository.deleteAlarm("Bearer " + App.prefs.myJwt, alarm_id, board_id)
         }
+        alarmIsRunning.value = false
+        Log.e("TestAlarm","deleteAlarm")
     }
 
-    fun getAlarm(user_id: String, board_id: String){
+    fun getAlarm(user_id: String, board_id: String){ // 알람받고 있는지 여부 확인
         viewModelScope.launch {
             val alarmInfo = detailRepository.getAlarms()
             for ( i in 0 until alarmInfo.size) {
-                if (user_id == alarmInfo[i].user_id && board_id == alarmInfo[i].board._id) {
+                if (user_id == alarmInfo[i].user_id && board_id == alarmInfo[i].board._id) { // 이 글의 알람을 받고있는 상태라면
                     alarm_id = alarmInfo[i]._id
                     alarmIsRunning.value = true
 
@@ -320,14 +275,38 @@ class DetailViewModel @ViewModelInject constructor(
 
     fun postLiked(board_id: String) {
         viewModelScope.launch {
-            detailRepository.userLiked(
-                PostLikedDTO(
-                    App.prefs.myEmail,
-                    App.prefs.myId,
-                    board_id,
-                    null
+
+            try {
+                detailRepository.userLiked(
+                    PostLikedDTO(
+                        App.prefs.myEmail,
+                        App.prefs.myId,
+                        board_id,
+                        null
+                    )
                 )
-            )
+                postLikedisRunning.value = true
+                likeSize.value = likeSize.value?.plus(1)
+            }catch (e : IOException) {
+
+            }
+        }
+    }
+
+    fun postCommentLiked(comment_id: String) {
+        viewModelScope.launch {
+            try {
+                detailRepository.userLiked(
+                    PostLikedDTO(
+                        App.prefs.myEmail,
+                        App.prefs.myId,
+                        null,
+                        comment_id
+                    )
+                )
+            }catch (e: IOException) {
+                // 토스트 띄우기
+            }
         }
     }
 

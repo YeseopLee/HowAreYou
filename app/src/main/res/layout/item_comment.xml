@@ -45,7 +45,6 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginRight="5dp"
-            android:onClick="@{() -> viewModel01.postLiked(viewModel01.board_id)}"
             android:background="@drawable/ic_thumbsup_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/comment_textview_liked"

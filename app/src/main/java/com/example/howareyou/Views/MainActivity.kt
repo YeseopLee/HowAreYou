@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.example.howareyou.App
 import com.example.howareyou.R
-import com.example.howareyou.views.Noti.NotiFragment
+import com.example.howareyou.views.noti.NotiFragment
 import com.example.howareyou.views.Search.SearchFragment
 import com.example.howareyou.databinding.ActivityMainBinding
 import com.example.howareyou.views.Writing.WritingActivity

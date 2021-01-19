@@ -74,6 +74,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/ic_notification_gray"
+                android:onClick="@{() -> viewModel.controlAlarm(viewModel.board_id)}"
                 android:visibility="@{viewModel.alarmIsRunning? View.GONE:View.VISIBLE}"
                 app:layout_constraintBottom_toTopOf="@+id/detail_linearlayout_division"
                 app:layout_constraintEnd_toStartOf="@+id/detail_button_morevert"
@@ -87,6 +88,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/ic_notification"
+                android:onClick="@{() -> viewModel.controlAlarm(viewModel.board_id)}"
                 android:visibility="@{viewModel.alarmIsRunning? View.VISIBLE:View.GONE}"
                 app:layout_constraintBottom_toTopOf="@+id/detail_linearlayout_division"
                 app:layout_constraintEnd_toStartOf="@+id/detail_button_morevert"
@@ -183,6 +185,20 @@
                                         android:layout_marginRight="5dp"
                                         android:layout_marginBottom="5dp"
                                         android:background="@drawable/ic_thumbsup_white"
+                                        android:visibility="@{viewModel.postLikedisRunning? View.GONE:View.VISIBLE}"
+                                        android:onClick="@{() -> viewModel.postLiked(viewModel.board_id)}"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/detail_textview_liked"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <Button
+                                        android:id="@+id/detail_button_liked_color"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:visibility="@{viewModel.postLikedisRunning? View.VISIBLE:View.GONE}"
+                                        android:background="@drawable/ic_thumbsup"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toStartOf="@+id/detail_textview_liked"
                                         app:layout_constraintTop_toTopOf="parent" />

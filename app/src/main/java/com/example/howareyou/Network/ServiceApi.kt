@@ -47,7 +47,7 @@ interface ServiceApi {
     suspend fun userUpdatesetting(@Path("id")setting_id : String, @Body data: PostdeviceTokenDTO): Response<Unit>
 
     @PUT("/notifications/{noti_id}")
-    fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Call<Void>?
+    suspend fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Response<Unit>
 
     @PUT("boards/{board_id}")
     suspend fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String, @Body data: deleteDTO ): Response<Unit>
@@ -83,7 +83,7 @@ interface ServiceApi {
     fun getImage(@Path("url")url : String): Call<imageItem>?
 
     @GET("/notifications")
-    fun getNoti(): Call<NotiResponseDTO>?
+    suspend fun getNoti(): NotiResponseDTO
 
     @GET("/usersettings")
     suspend fun getUsersettings(): UpdateSetResponseDTO
@@ -92,7 +92,7 @@ interface ServiceApi {
     suspend fun getAlarms(): AlarmResponseDTO
 
     @DELETE("/notifications/{noti_id}")
-    fun deleteNoti(@Path("noti_id")noti_id: String): Call<Void>?
+    suspend fun deleteNoti(@Path("noti_id")noti_id: String): Response<Unit>
 
     @DELETE("/alarms/{alarm_id}")
     suspend fun deleteAlarm(@Header("authorization") authHeader: String, @Path("alarm_id")alarm_id : String, @Query("board")board: String): Response<Unit>

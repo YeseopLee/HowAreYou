@@ -29,10 +29,6 @@ class DetailCommentAdapter(val context: Context, val viewModel: DetailViewModel)
 
     var commentArray = ArrayList<Comment>()
 
-    var tempBoolean = false
-
-    private val myViewCallBack: ViewModelCallback? = null
-
     //클릭 인터페이스 정의
     interface ItemClickListener {
         fun onClick(view: View, position: Int, postArray: ArrayList<LoadPostItem>)
@@ -101,13 +97,11 @@ class DetailCommentAdapter(val context: Context, val viewModel: DetailViewModel)
         // Get the LayoutInflater from Context
         val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
-        Log.e("test0111",commentArray.size.toString())
-        Log.e("test0222",commentArray.toString())
-
-
         // 댓글
         //if (holder.itemViewType == 0){
         holder.onBind(commentArray[position])
+
+        Log.e("commentArrayTest", commentArray.toString())
 
 //            var view = holder.itemView
 //            view.comment_textview_content.text = commentArray[position].content
@@ -125,25 +119,7 @@ class DetailCommentAdapter(val context: Context, val viewModel: DetailViewModel)
 
         } catch (e: Exception) {
         }
-        // 좋아요
-//            view.comment_imageview_liked.setOnClickListener {
-//                postLiked(
-//                    PostLikedDTO(
-//                        App.prefs.myEmail,
-//                        App.prefs.myId,
-//                        null,
-//                        commentArray[position].id
-//                    ), view, holder
-//                )
-//            }
 
-        // 사용자 좋아요 상태 체크
-//            for (i in 0 until (commentArray[position].likeds?.size!!)) {
-//                if (commentArray[position].likeds!![i].user_id == App.prefs.myId) {
-//                    view.comment_imageview_liked.setBackgroundResource(R.drawable.ic_thumbsup)
-//                }
-//            }
-//
 //            //이미지
         if (holder.itemViewType == 0) {
             var tempUrl = commentArray[position].image?.formats?.thumbnail?.url
@@ -162,6 +138,18 @@ class DetailCommentAdapter(val context: Context, val viewModel: DetailViewModel)
                 builder.setView(dialogView)
                 builder.show()
 
+            }
+
+            // 좋아요
+            holder.itemView.comment_imageview_liked.setOnClickListener {
+                viewModel.postCommentLiked(commentArray[position].id)
+            }
+
+            // 사용자 좋아요 상태 체크
+            for (i in 0 until (commentArray[position].likeds?.size!!)) {
+                if (commentArray[position].likeds!![i].user_id == App.prefs.myId) {
+                    holder.itemView.comment_imageview_liked.setBackgroundResource(R.drawable.ic_thumbsup)
+                }
             }
 //
             //더보기 버튼
@@ -191,16 +179,6 @@ class DetailCommentAdapter(val context: Context, val viewModel: DetailViewModel)
             })
 
         }
-    }
-
-    interface ViewModelCallback {
-        fun returnCallBack(data: Boolean) : Boolean {
-            return data
-        }
-    }
-
-    fun foo() {
-        Log.e("CallbackTEst",myViewCallBack?.returnCallBack(true).toString())
     }
 
 //        else{ // 대댓글
