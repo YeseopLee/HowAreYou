@@ -1,161 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    tools:context=".views.Writing.WritingActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <Button
-        android:id="@+id/writing_button_back"
-        android:layout_width="30dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/ic_arrow_back_white"
-        app:layout_constraintBottom_toTopOf="@id/writing_division"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <data>
 
-
-    <TextView
-        android:id="@+id/writing_textview_writing"
-        android:fontFamily="@font/basic"
-        android:layout_width="wrap_content"
-        android:layout_height="50sp"
-        android:layout_marginLeft="10dp"
-        android:text="@string/board"
-        android:textColor="@color/colorBlack"
-        android:textSize="20sp"
-        android:gravity="center_vertical"
-        app:layout_constraintEnd_toStartOf="@id/writing_button_check"
-        app:layout_constraintBottom_toBottomOf="@+id/writing_division"
-        app:layout_constraintStart_toEndOf="@+id/writing_button_back"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Button
-        android:id="@+id/writing_button_menu"
-        android:layout_width="25dp"
-        android:layout_height="0dp"
-        android:background="@drawable/ic_arrow_down"
-        app:layout_constraintStart_toEndOf="@id/writing_textview_writing"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/writing_division"/>
-
-    <Button
-        android:id="@+id/writing_button_check"
-        android:layout_width="30dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/ic_check_black"
-        app:layout_constraintBottom_toTopOf="@id/writing_division"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/writing_division"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@color/colorDivision"
-        android:orientation="vertical"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/writing_textview_writing"></LinearLayout>
+        <variable
+            name="viewModel"
+            type="com.example.howareyou.views.writing.WritingViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/writing_division"
-        app:layout_constraintVertical_bias="0.0">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/writing_textinputlayout_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/writing_edittext_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/title" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <EditText
-            android:id="@+id/writing_edittext_content"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@null"
-            android:ems="1000"
-            android:gravity="start|top"
-            android:hint="@string/writing_guide"
-            android:inputType="textMultiLine"
-            android:textColorHint="@color/colorGray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/writing_textinputlayout_title" />
-
-        <ProgressBar
-            android:id="@+id/writing_progressbar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/writing_edittext_content" />
+        tools:context=".views.writing.WritingActivity">
 
         <Button
-            android:id="@+id/writing_button_imageupload"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="20dp"
+            android:id="@+id/writing_button_back"
+            android:layout_width="30dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_addphoto"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:background="@drawable/ic_arrow_back_white"
+            app:layout_constraintBottom_toTopOf="@id/writing_division"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/writing_recyclerview_image"
+
+        <TextView
+            android:id="@+id/writing_textview_writing"
+            android:fontFamily="@font/basic"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/board"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toStartOf="@id/writing_button_check"
+            app:layout_constraintBottom_toBottomOf="@+id/writing_division"
+            app:layout_constraintStart_toEndOf="@+id/writing_button_back"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/writing_button_menu"
+            android:layout_width="25dp"
+            android:layout_height="0dp"
+            android:background="@drawable/ic_arrow_down"
+            app:layout_constraintStart_toEndOf="@id/writing_textview_writing"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/writing_division" />
+
+        <Button
+            android:id="@+id/writing_button_check"
+            android:layout_width="30dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_check_black"
+            android:onClick="@{() -> viewModel.attemptPost()}"
+            app:layout_constraintBottom_toTopOf="@id/writing_division"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/writing_division"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorDivision"
+            android:orientation="vertical"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/writing_textview_writing"></LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/writing_edittext_content"
-            app:layout_constraintBottom_toTopOf="@+id/writing_button_imageupload"
+            android:background="@color/colorWhite"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/writing_division"
+            app:layout_constraintVertical_bias="0.0">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/writing_textinputlayout_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/writing_edittext_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewModel.title}"
+                    android:hint="@string/title" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
+            <EditText
+                android:id="@+id/writing_edittext_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@null"
+                android:ems="1000"
+                android:text="@={viewModel.content}"
+                android:gravity="start|top"
+                android:hint="@string/writing_guide"
+                android:inputType="textMultiLine"
+                android:textColorHint="@color/colorGray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/writing_textinputlayout_title" />
+
+            <ProgressBar
+                android:id="@+id/writing_progressbar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/writing_edittext_content" />
+
+            <Button
+                android:id="@+id/writing_button_imageupload"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_addphoto"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/writing_recyclerview_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:loadWritingData="@{viewModel.uriList}"
+                app:layout_constraintTop_toBottomOf="@id/writing_edittext_content"
+                app:layout_constraintBottom_toTopOf="@+id/writing_button_imageupload"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

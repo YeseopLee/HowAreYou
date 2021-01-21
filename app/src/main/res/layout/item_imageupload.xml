@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="5dp"
-    android:layout_width="wrap_content"
-    android:layout_height="100dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/imageupload_imageview"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+    <data>
+        <variable
+            name="imageItem"
+            type="android.net.Uri" />
 
-    <Button
-        android:id="@+id/imageupload_button_close"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@drawable/ic_close"
-        app:layout_constraintEnd_toEndOf="@id/imageupload_imageview"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp">
+
+        <ImageView
+            android:id="@+id/imageupload_imageview"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:imgUriRes="@{imageItem}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/imageupload_button_close"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="@id/imageupload_imageview"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

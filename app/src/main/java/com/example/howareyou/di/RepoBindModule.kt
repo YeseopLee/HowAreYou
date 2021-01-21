@@ -24,4 +24,7 @@ abstract class RepoBindModule {
 
     @Binds
     abstract fun bindSearch(searchRepo: SearchRepositoryImpl) : SearchRepository
+
+    @Binds
+    abstract fun bindWriting(writingRepo: WritingRepositoryImpl) : WritingRepository
 }

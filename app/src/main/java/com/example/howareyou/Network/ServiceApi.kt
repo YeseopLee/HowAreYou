@@ -21,7 +21,7 @@ interface ServiceApi {
     suspend fun userLogin(@Body data: SigninDTO?): SigninResponseDTO
 
     @POST("/boards")
-    fun userPost(@Header("authorization") authHeader :String, @Body data: PostingDTO?): Call<PostingResponseDTO?>?
+    suspend fun userPost(@Header("authorization") authHeader :String, @Body data: PostingDTO?): PostingResponseDTO
 
     @POST("/comments")
     suspend fun userComment(@Header("authorization") authHeader: String, @Body data: PostCommentDTO): PostCommentResponseDTO

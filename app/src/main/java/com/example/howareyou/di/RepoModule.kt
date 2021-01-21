@@ -36,6 +36,10 @@ object RepoModule {
     @Provides
     fun provideSearchRepo(serviceApi: ServiceApi) = SearchRepositoryImpl(serviceApi)
 
+    @Singleton
+    @Provides
+    fun provideWritingRepo(serviceApi: ServiceApi) = WritingRepositoryImpl(serviceApi)
+
 //    @Provides
 //    fun provideDetailViewModel(context: Context) = DetailViewModel()
 

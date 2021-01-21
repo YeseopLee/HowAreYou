@@ -11,7 +11,7 @@ import com.example.howareyou.R
 import com.example.howareyou.views.noti.NotiFragment
 import com.example.howareyou.views.search.SearchFragment
 import com.example.howareyou.databinding.ActivityMainBinding
-import com.example.howareyou.views.Writing.WritingActivity
+import com.example.howareyou.views.writing.WritingActivity
 import com.example.howareyou.views.home.HomeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomnavigation.LabelVisibilityMode

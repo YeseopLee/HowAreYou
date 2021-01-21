@@ -11,6 +11,7 @@ import com.example.howareyou.model.Comment
 import com.example.howareyou.model.ImageDTO
 import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.model.NotiItem
+import com.example.howareyou.views.writing.WritingAdapter
 import com.example.howareyou.views.detail.DetailCommentAdapter
 import com.example.howareyou.views.detail.DetailImageAdapter
 import com.example.howareyou.views.home.HomeAdapter
@@ -60,6 +61,16 @@ object BindingAdapter {
         val adapter = recyclerView.adapter as NotiAdapter
         if (data != null) {
             adapter.setItem(data)
+        }
+    }
+
+    // recyclerview noti
+    @BindingAdapter("loadWritingData")
+    @JvmStatic
+    fun bindWritingRecyclerView(recyclerView: RecyclerView, data: ArrayList<Uri>?) {
+        val adapter = recyclerView.adapter as WritingAdapter?
+        if (data != null) {
+            adapter?.setItem(data)
         }
     }
 
