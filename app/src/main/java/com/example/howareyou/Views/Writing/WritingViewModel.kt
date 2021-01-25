@@ -12,6 +12,7 @@ import com.example.howareyou.App
 import com.example.howareyou.R
 import com.example.howareyou.model.PostingDTO
 import com.example.howareyou.repository.WritingRepository
+import com.example.howareyou.util.CoroutineHandler
 import dagger.hilt.android.qualifiers.ApplicationContext
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
@@ -61,7 +62,7 @@ class WritingViewModel @ViewModelInject constructor(
     }
 
     fun userPost(data: PostingDTO){
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             Log.e("attemptPost22","attempt")
             try {
                 if(data.code == "" || data.code == "code") {
@@ -98,7 +99,7 @@ class WritingViewModel @ViewModelInject constructor(
         val refId = RequestBody.create(MediaType.parse("text/plain"),board_id)
         val field = RequestBody.create(MediaType.parse("text/plain"),"image")
 
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val imageInfo = writingRepository.uploadFile(images,ref, refId, field)
         }
 

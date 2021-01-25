@@ -15,6 +15,7 @@ import com.example.howareyou.App
 import com.example.howareyou.model.*
 import com.example.howareyou.network.ServiceApi
 import com.example.howareyou.repository.DetailRepository
+import com.example.howareyou.util.CoroutineHandler
 import com.example.howareyou.util.Event
 import dagger.hilt.android.qualifiers.ApplicationContext
 import gun0912.tedimagepicker.builder.TedImagePicker
@@ -87,7 +88,7 @@ class DetailViewModel @ViewModelInject constructor(
     }
 
     fun loadPostingContent(board_id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val postInfo = detailRepository.getPostContent(board_id)
             postContent.value = postInfo.content
             postTitle.value = postInfo.title
@@ -180,7 +181,7 @@ class DetailViewModel @ViewModelInject constructor(
     }
 
     fun postComment(data: PostCommentDTO) {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val commentInfo = detailRepository.userComment("Bearer " + App.prefs.myJwt, data)
             var comment_id = commentInfo._id
 
@@ -214,7 +215,7 @@ class DetailViewModel @ViewModelInject constructor(
         val ref = RequestBody.create(MediaType.parse("text/plain"), "comment")
         val refId = RequestBody.create(MediaType.parse("text/plain"), comment_id)
         val field = RequestBody.create(MediaType.parse("text/plain"), "image")
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val uploadInfo = detailRepository.uploadFile(images, ref, refId, field)
         }
     }
@@ -231,7 +232,7 @@ class DetailViewModel @ViewModelInject constructor(
 
     }
     fun postAlarm(board_id: String) { // 알람 받기
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             detailRepository.postAlarm(
                 "Bearer " + App.prefs.myJwt, AlarmDTO(
                     App.prefs.myId,
@@ -245,7 +246,7 @@ class DetailViewModel @ViewModelInject constructor(
     }
 
     fun deleteAlarm(board_id: String) { // 알람 안받기
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             detailRepository.deleteAlarm("Bearer " + App.prefs.myJwt, alarm_id, board_id)
         }
         alarmIsRunning.value = false
@@ -253,7 +254,7 @@ class DetailViewModel @ViewModelInject constructor(
     }
 
     fun getAlarm(user_id: String, board_id: String){ // 알람받고 있는지 여부 확인
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val alarmInfo = detailRepository.getAlarms()
             for ( i in 0 until alarmInfo.size) {
                 if (user_id == alarmInfo[i].user_id && board_id == alarmInfo[i].board._id) { // 이 글의 알람을 받고있는 상태라면
@@ -266,7 +267,7 @@ class DetailViewModel @ViewModelInject constructor(
     }
 
     fun deletePost(board_id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             detailRepository.deletePost("Bearer " + App.prefs.myJwt, board_id, deleteDTO(true))
         } // 실패시 글쓴이가 아님
         // activit 전환
@@ -274,7 +275,7 @@ class DetailViewModel @ViewModelInject constructor(
     }
 
     fun postLiked(board_id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
 
             try {
                 detailRepository.userLiked(
@@ -294,7 +295,7 @@ class DetailViewModel @ViewModelInject constructor(
     }
 
     fun postCommentLiked(comment_id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             try {
                 detailRepository.userLiked(
                     PostLikedDTO(

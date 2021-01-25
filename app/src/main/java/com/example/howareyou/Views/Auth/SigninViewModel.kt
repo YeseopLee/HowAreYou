@@ -1,5 +1,8 @@
 package com.example.howareyou.views.auth
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,10 +12,14 @@ import com.example.howareyou.App
 import com.example.howareyou.model.*
 import com.example.howareyou.util.Event
 import com.example.howareyou.repository.AuthRepository
+import com.example.howareyou.util.CoroutineHandler
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class SigninViewModel @ViewModelInject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _moveMainPage = MutableLiveData<Event<Boolean>>()
@@ -23,6 +30,10 @@ class SigninViewModel @ViewModelInject constructor(
 
     var email = MutableLiveData<String>()
     var password = MutableLiveData<String>()
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Toast.makeText(context.applicationContext, "로그인 정보를 확인해주세요.", Toast.LENGTH_SHORT).show()
+    }
 
     init {
         email.value = ""
@@ -35,9 +46,10 @@ class SigninViewModel @ViewModelInject constructor(
 
     }
 
+
     fun startLogin(data: SigninDTO) {
 
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionHandler) {
             val loginInfo = authRepository.login(data)
 
             // 유저 정보 sharedpref 저장
@@ -51,12 +63,12 @@ class SigninViewModel @ViewModelInject constructor(
 
     }
 
-
-    fun postDeviceToken(data: PostdeviceTokenDTO) {
-        viewModelScope.launch {
-            authRepository.postDeviceToken(data)
-        }
-    }
+    //기존 회원이 기기변경 했을때
+//    fun postDeviceToken(data: PostdeviceTokenDTO) {
+//        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
+//            authRepository.postDeviceToken(data)
+//        }
+//    }
 
     fun moveMainPage() {
         _moveMainPage.value = Event(true)

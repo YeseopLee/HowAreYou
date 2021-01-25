@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.activity.viewModels
@@ -38,6 +39,7 @@ class DetailActivity : BaseActivity<ActivityDetailBinding>(R.layout.activity_det
 
         // home fragment에서 클릭한 게시물의 id를 받아온다
         board_id = intent.getStringExtra("board_id")
+        Log.e("boardIdTest",board_id)
 
 //        setButton()
         initAdapter()

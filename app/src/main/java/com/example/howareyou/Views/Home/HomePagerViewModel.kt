@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.howareyou.App
 import com.example.howareyou.model.*
 import com.example.howareyou.repository.HomeRepository
+import com.example.howareyou.util.CoroutineHandler
 import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 
@@ -35,7 +36,7 @@ class HomePagerViewModel @ViewModelInject constructor(
     }
 
     fun loadPostAll() {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val postInfo = homeRepository.getAllPost("Bearer " + App.prefs.myJwt)
             for (i in 0 until postInfo.size) {
                 if(!postInfo[i].is_deleted) {
@@ -48,7 +49,7 @@ class HomePagerViewModel @ViewModelInject constructor(
     }
 
     fun loadPost() {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val postInfo = homeRepository.getPost(App.prefs.myCode)
             for (i in 0 until postInfo.size) {
                 if(!postInfo[i].is_deleted) postArray.value?.add(postInfo[i]) // isDeleted가 아닌 게시물만 불러온다.
@@ -76,7 +77,7 @@ class HomePagerViewModel @ViewModelInject constructor(
 
     fun loadPostAllMore() {
 
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val postInfo = homeRepository.getAllPostMore("Bearer " + App.prefs.myJwt, last_id, 30)
             for (i in 0 until postInfo.size) {
                 if(!postInfo[i].is_deleted) postArray.value?.add(postInfo[i])
@@ -87,7 +88,7 @@ class HomePagerViewModel @ViewModelInject constructor(
     }
 
     fun loadPostMore() {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val postInfo:LoadPostDTO
             if(App.prefs.myCode == App.prefs.key_all) {
                 postInfo = homeRepository.getAllPostMore("Bearer " + App.prefs.myJwt, last_id, 30)

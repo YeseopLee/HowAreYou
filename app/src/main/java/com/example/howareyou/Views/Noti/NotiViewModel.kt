@@ -10,6 +10,7 @@ import com.example.howareyou.App
 import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.model.NotiItem
 import com.example.howareyou.repository.NotiRepository
+import com.example.howareyou.util.CoroutineHandler
 import kotlinx.coroutines.launch
 
 
@@ -26,7 +27,7 @@ class NotiViewModel @ViewModelInject constructor(
 
 
     private fun loadNotification() {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val notiInfo = notiRepository.getNoti()
             Log.e("Notitest0",notiInfo.toString())
             for ( i in 0 until notiInfo.size ){

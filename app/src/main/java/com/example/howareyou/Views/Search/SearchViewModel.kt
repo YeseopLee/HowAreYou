@@ -10,6 +10,7 @@ import com.example.howareyou.App
 import com.example.howareyou.model.LoadPostDTO
 import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.repository.SearchRepository
+import com.example.howareyou.util.CoroutineHandler
 import kotlinx.coroutines.launch
 
 class SearchViewModel @ViewModelInject constructor(
@@ -34,7 +35,7 @@ class SearchViewModel @ViewModelInject constructor(
 
     fun searchPosting() {
         Log.e("searched","searched")
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val searchInfo = searchRepository.getSearchPost()
             for (i in 0 until searchInfo.size) {
                 if(searchInfo[i].title == target || searchInfo[i].content.contains(target)) {
@@ -66,7 +67,7 @@ class SearchViewModel @ViewModelInject constructor(
     }
 
     fun searchPostingMore() {
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val searchInfo = searchRepository.getSearchPostMore("Bearer "+App.prefs.myJwt, last_id, 100)
             for (i in 0 until searchInfo.size) {
                 if(searchInfo[i].title == target || searchInfo[i].content.contains(target)) {
@@ -97,7 +98,7 @@ class SearchViewModel @ViewModelInject constructor(
 }
 
 //fun loadPostMore() {
-//    viewModelScope.launch {
+//    viewModelScope.launch(CoroutineHandler().exceptionHandler) {
 //        val postInfo:LoadPostDTO
 //        if(App.prefs.myCode == App.prefs.key_all) {
 //            postInfo = homeRepository.getAllPostMore("Bearer " + App.prefs.myJwt, last_id, 30)
@@ -114,7 +115,7 @@ class SearchViewModel @ViewModelInject constructor(
 
 
 //fun loadPost() {
-//    viewModelScope.launch {
+//    viewModelScope.launch(CoroutineHandler().exceptionHandler) {
 //        val postInfo = homeRepository.getPost(App.prefs.myCode)
 //        for (i in 0 until postInfo.size) {
 //            if(!postInfo[i].is_deleted) postArray.value?.add(postInfo[i]) // isDeleted가 아닌 게시물만 불러온다.

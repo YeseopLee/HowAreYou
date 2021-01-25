@@ -10,6 +10,7 @@ import com.example.howareyou.model.PostdeviceTokenDTO
 import com.example.howareyou.model.StatuscodeResponse
 import com.example.howareyou.model.UpdateSetResponseDTO
 import com.example.howareyou.repository.HomeRepository
+import com.example.howareyou.util.CoroutineHandler
 import com.google.gson.Gson
 import com.google.gson.TypeAdapter
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ class MainViewModel @ViewModelInject constructor(
 
 
     fun getCode(){ //현재 게시판 코드 불러오기
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val codeInfo = homeRepository.getCode()
             for (i in 0 until codeInfo.size) {
                 var temp = codeInfo[i].id
@@ -46,7 +47,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun getUserSet(user_id: String){ // 로그인한 사용자 id 기반 탐색
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val userSetInfo = homeRepository.getUserSet()
             for (i in 0 until userSetInfo.size){
                 if(userSetInfo[i].user_id == user_id){
@@ -56,8 +57,9 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
+
     fun updateDeviceToken(setting_id : String){
-        viewModelScope.launch {
+        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             homeRepository.updateUserSet(setting_id, PostdeviceTokenDTO(App.prefs.myId, App.prefs.myDevice, true))
         }
     }
