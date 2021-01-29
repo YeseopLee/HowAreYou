@@ -33,8 +33,8 @@ class MainViewModel @ViewModelInject constructor(
         viewModelScope.launch(CoroutineHandler().exceptionHandler) {
             val codeInfo = homeRepository.getCode()
             for (i in 0 until codeInfo.size) {
-                var temp = codeInfo[i].id
-                when(codeInfo[i].id){
+                var temp = codeInfo[i]._id
+                when(codeInfo[i].code){
                     "01" -> App.prefs.codeFree = temp
                     "02" -> App.prefs.codeQA = temp
                     "03" -> App.prefs.codeTips = temp

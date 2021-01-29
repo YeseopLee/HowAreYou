@@ -16,6 +16,7 @@ import com.example.howareyou.repository.AuthRepository
 import com.example.howareyou.util.CoroutineHandler
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.android.synthetic.main.activity_signup.*
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 
@@ -34,6 +35,10 @@ class SignupViewModel @ViewModelInject constructor(
     lateinit var _email : String
     lateinit var _password : String
     lateinit var _username : String
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        Toast.makeText(context.applicationContext, "이미 가입된 정보입니다.", Toast.LENGTH_SHORT).show()
+    }
 
     init {
         email.value = ""
@@ -56,41 +61,44 @@ class SignupViewModel @ViewModelInject constructor(
             Toast.makeText(context.applicationContext, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             cancel = true
         }
-//        else if (!isPasswordValid(password)) {
-//            signup_edittext_password.error = "6자 이상의 비밀번호를 입력해주세요."
-//            focusView = signup_edittext_password
-//            cancel = true
-//        }
-//        // 이메일의 유효성 검사
-//        if (email.isEmpty()) {
-//            signup_edittext_email.error = "아이디를 입력해주세요."
-//            focusView = signup_edittext_email
-//            cancel = true
-//        } else if (!isEmailValid(email)) {
-//            signup_edittext_email.setError("@를 포함한 유효한 이메일을 입력해주세요.")
-//            focusView = signup_edittext_email
-//            cancel = true
-//        }
-//
-//        // 닉네임의 유효성 검사
-//        if (username.isEmpty()){
-//            signup_edittext_username.error = "닉네임을 입력해주세요."
-//            focusView = signup_edittext_username
-//            cancel = true
-//        }
+        else if (!isPasswordValid(password.value!!)) {
+            Toast.makeText(context.applicationContext, "6자 이상의 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            cancel = true
+        }
+        // 이메일의 유효성 검사
+        if (email.value?.isEmpty()!!) {
+            Toast.makeText(context.applicationContext, "아이디를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            cancel = true
+        } else if (!isEmailValid(email.value!!)) {
+            Toast.makeText(context.applicationContext, "유효한 이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            cancel = true
+        }
 
+        // 닉네임의 유효성 검사
+        if (username.value?.isEmpty()!!){
+            Toast.makeText(context.applicationContext, "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            cancel = true
+        }
         if (cancel) {
             focusView?.requestFocus()
         } else {
+            Toast.makeText(context.applicationContext, "해당 이메일로 인증을 완료하세요.", Toast.LENGTH_SHORT).show()
             startJoin(SignupDTO(email.value!!, username.value!!, password.value!!))
-            //showProgress(true)
         }
+    }
+
+    private fun isEmailValid(email: String): Boolean {
+        return email.contains("@")
+    }
+
+    private fun isPasswordValid(password: String): Boolean {
+        return password.length >= 6
     }
 
 
     fun startJoin(data: SignupDTO) {
 
-        viewModelScope.launch(CoroutineHandler().exceptionHandler) {
+        viewModelScope.launch(exceptionHandler) {
             val signupInfo = authRepository.signup(data)
             postDeviceToken(PostdeviceTokenDTO(signupInfo.user._id, App.prefs.myDevice, true))
         }

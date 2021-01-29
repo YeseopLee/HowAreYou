@@ -54,8 +54,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/viewpager_layout_loading"
+            android:visibility="@{viewModel.initLoading? View.VISIBLE:View.GONE}"
             android:background="@color/colorBackground"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

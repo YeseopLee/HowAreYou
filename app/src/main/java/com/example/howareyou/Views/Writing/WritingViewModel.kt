@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import com.example.howareyou.R
 import com.example.howareyou.model.PostingDTO
 import com.example.howareyou.repository.WritingRepository
 import com.example.howareyou.util.CoroutineHandler
+import com.example.howareyou.util.Event
 import dagger.hilt.android.qualifiers.ApplicationContext
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.coroutines.launch
@@ -27,6 +29,9 @@ class WritingViewModel @ViewModelInject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
+    private val _moveMainPage = MutableLiveData<Event<Boolean>>()
+    val  moveMainPage: LiveData<Event<Boolean>> = _moveMainPage
+
     lateinit var board_id : String
     var uriList = MutableLiveData<ArrayList<Uri>>()
     var _uriList = ArrayList<Uri>()
@@ -38,6 +43,10 @@ class WritingViewModel @ViewModelInject constructor(
 
     init {
 
+    }
+
+    fun moveMainPage() {
+        _moveMainPage.value = Event(true)
     }
 
     fun addImage() {
@@ -63,22 +72,16 @@ class WritingViewModel @ViewModelInject constructor(
 
     fun userPost(data: PostingDTO){
         viewModelScope.launch(CoroutineHandler().exceptionHandler) {
-            Log.e("attemptPost22","attempt")
             try {
-                if(data.code == "" || data.code == "code") {
-                    Log.e("attemptPost223","attempt")
+                if(data.code == "" || data.code == "all") {
                     Toast.makeText(context.applicationContext, "게시판을 선택하세요.", Toast.LENGTH_SHORT).show()
                 } else {
-                    Log.e("attemptPost225","attempt")
-                    Log.e("TestCodeWhat2",data.code)
-                    Log.e("TestCodeWhat3",App.prefs.myCode)
                     val postInfo = writingRepository.userPost("Bearer " + App.prefs.myJwt, data)
                     board_id = postInfo._id
                     if(_uriList.isNotEmpty()) {
                         uploadImage(board_id)
-                        Log.e("attemptPost224","attempt")
-
-                    } else {}
+                    }
+                    moveMainPage()
                 }
             } catch (e : IOException) {
 

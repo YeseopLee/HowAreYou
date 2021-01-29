@@ -1,6 +1,7 @@
 package com.example.howareyou.views.writing
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MotionEvent
@@ -10,11 +11,14 @@ import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.example.howareyou.R
 import com.example.howareyou.App
 import com.example.howareyou.databinding.ActivityWritingBinding
 import com.example.howareyou.util.OnSingleClickListener
 import com.example.howareyou.views.BaseActivity
+import com.example.howareyou.views.MainActivity
+import com.example.howareyou.views.detail.DetailActivity
 import com.example.howareyou.views.detail.DetailCommentAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_writing.*
@@ -36,6 +40,7 @@ class WritingActivity : BaseActivity<ActivityWritingBinding>(R.layout.activity_w
 
         initAdapter()
         initListener()
+        moveMainPage()
     }
 
     private fun initAdapter() {
@@ -100,6 +105,17 @@ class WritingActivity : BaseActivity<ActivityWritingBinding>(R.layout.activity_w
             App.prefs.codeTips -> writing_textview_writing.text = "Tips"
             App.prefs.codeStudy -> writing_textview_writing.text = "스터디/모임"
         }
+    }
+
+    private fun moveMainPage() {
+        writingViewModel.moveMainPage.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                val intent = Intent(this, DetailActivity::class.java)
+                intent.putExtra("board_id",writingViewModel.board_id)
+                startActivity(intent)
+                finish()
+            }
+        })
     }
 
 //    private fun attemptPost() {

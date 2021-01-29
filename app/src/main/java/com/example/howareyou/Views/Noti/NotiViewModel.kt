@@ -18,13 +18,24 @@ class NotiViewModel @ViewModelInject constructor(
     private val notiRepository: NotiRepository
 ) : ViewModel() {
 
+    val isLoading = ObservableBoolean()
+    val initLoading = ObservableBoolean()
     var _notiArray = ArrayList<NotiItem>()
     var notiArray = MutableLiveData<ArrayList<NotiItem>>()
 
     init {
+        initLoading.set(true)
         loadNotification()
     }
 
+    fun onRefresh() {
+        isLoading.set(true)
+
+        notiArray.value?.clear()
+        notiArray.notifyObserver()
+
+        isLoading.set(false)
+    }
 
     private fun loadNotification() {
         viewModelScope.launch(CoroutineHandler().exceptionHandler) {
@@ -35,7 +46,7 @@ class NotiViewModel @ViewModelInject constructor(
             }
             notiArray.value = _notiArray
 
-            Log.e("NotiTEst",notiArray.value.toString())
+            initLoading.set(false)
         }
     }
 

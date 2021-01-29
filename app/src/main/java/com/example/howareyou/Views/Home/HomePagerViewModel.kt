@@ -1,5 +1,6 @@
 package com.example.howareyou.views.home
 
+import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
@@ -19,16 +20,20 @@ class HomePagerViewModel @ViewModelInject constructor(
 
     lateinit var last_id: String
     val isLoading = ObservableBoolean()
+    val initLoading = ObservableBoolean()
     var postArray = MutableLiveData<ArrayList<LoadPostItem>>()
 
     init {
+        initLoading.set(true)
         postArray.value = LoadPostDTO()
         boardBranch()
+        Log.e("CodeTest",App.prefs.myCode)
     }
 
 
     fun boardBranch() {
         postArray.value?.clear()
+        initLoading.set(true)
         when(App.prefs.myCode){
             App.prefs.key_all -> loadPostAll()
             else -> loadPost()
@@ -45,7 +50,9 @@ class HomePagerViewModel @ViewModelInject constructor(
             }
             postArray.notifyObserver()
             last_id = postInfo[postInfo.size - 1].id
+            initLoading.set(false)
         }
+
     }
 
     fun loadPost() {
@@ -56,6 +63,7 @@ class HomePagerViewModel @ViewModelInject constructor(
             }
             if (postInfo.size > 0) last_id = postInfo[postInfo.size - 1].id
             postArray.notifyObserver()
+            initLoading.set(false)
         }
     }
 

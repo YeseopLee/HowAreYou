@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="viewModel"
             type="com.example.howareyou.views.noti.NotiViewModel" />
@@ -85,6 +87,8 @@
                     android:id="@+id/notification_swipelayout"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    app:refreshing="@{viewModel.isLoading()}"
+                    app:onRefreshListener="@{() -> viewModel.onRefresh()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -103,7 +107,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/notification_layout_loading"
-                android:visibility="gone"
+                android:visibility="@{viewModel.initLoading? View.VISIBLE:View.GONE}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorBackground">

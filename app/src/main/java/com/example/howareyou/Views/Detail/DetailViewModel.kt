@@ -59,6 +59,7 @@ class DetailViewModel @ViewModelInject constructor(
     var recommentHandler : Boolean = false
     var postLikedisRunning = MutableLiveData<Boolean>()
 
+
     init {
         commentHint.value = "댓글을 입력하세요."
         commentImageUploaded.value = false
