@@ -26,6 +26,7 @@ class SigninActivity : BaseActivity<ActivitySigninBinding>(R.layout.activity_sig
 
         moveMainPage()
         moveSignupPage()
+        moveFindPage()
     }
 
     private fun moveMainPage() {
@@ -40,6 +41,14 @@ class SigninActivity : BaseActivity<ActivitySigninBinding>(R.layout.activity_sig
         signInViewModel.moveSignupPage.observe(this, Observer {
             it.getContentIfNotHandled()?.let {
                 startActivity(Intent(this, SignupActivity::class.java))
+            }
+        })
+    }
+
+    private fun moveFindPage() {
+        signInViewModel.moveFindPage.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                startActivity(Intent(this, FindPwActivity::class.java))
             }
         })
     }

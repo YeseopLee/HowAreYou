@@ -12,6 +12,10 @@ interface AuthRepository {
         data: SignupDTO
     ) : SignupResponseDTO
 
+    suspend fun findPw(
+        data: FindPasswordDTO
+    )
+
     suspend fun postDeviceToken(
         data: PostdeviceTokenDTO
     )

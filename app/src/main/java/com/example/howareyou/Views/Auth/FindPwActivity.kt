@@ -26,13 +26,14 @@ class FindPwActivity : BaseActivity<ActivityFindpwBinding>(R.layout.activity_fin
         binding.lifecycleOwner = this
         binding.viewModel = findPwViewModel
 
-        moveMainPage()
+        moveSigninPage()
     }
 
-    private fun moveMainPage() {
-        findPwViewModel.moveMainPage.observe(this, Observer {
+    private fun moveSigninPage() {
+        findPwViewModel.moveSigninPage.observe(this, Observer {
             it.getContentIfNotHandled()?.let {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, SigninActivity::class.java))
+                finish()
             }
         })
     }

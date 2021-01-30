@@ -28,6 +28,9 @@ class SigninViewModel @ViewModelInject constructor(
     private val _moveSignupPage = MutableLiveData<Event<Boolean>>()
     val  moveSignupPage: LiveData<Event<Boolean>> = _moveSignupPage
 
+    private val _moveFindPage = MutableLiveData<Event<Boolean>>()
+    val  moveFindPage: LiveData<Event<Boolean>> = _moveFindPage
+
     var email = MutableLiveData<String>()
     var password = MutableLiveData<String>()
 
@@ -76,6 +79,10 @@ class SigninViewModel @ViewModelInject constructor(
 
     fun moveSignupPage() {
         _moveSignupPage.value = Event(true)
+    }
+
+    fun moveFindPage() {
+        _moveFindPage.value = Event(true)
     }
 
 }

@@ -16,6 +16,10 @@ class AuthRepositoryImpl @Inject constructor (
         return service.userJoin(data)
     }
 
+    override suspend fun findPw(data: FindPasswordDTO) {
+        service.findPw(data)
+    }
+
     override suspend fun postDeviceToken(data: PostdeviceTokenDTO) {
         service.userSetting(data)
     }

@@ -89,7 +89,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:onClick="@{() -> viewModel.moveSignupPage()}"
+            android:onClick="@{() -> viewModel.moveFindPage()}"
             android:text="@string/findpw"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

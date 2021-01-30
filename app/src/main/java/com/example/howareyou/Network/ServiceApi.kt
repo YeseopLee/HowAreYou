@@ -20,6 +20,9 @@ interface ServiceApi {
     @POST("/auth/local")
     suspend fun userLogin(@Body data: SigninDTO?): SigninResponseDTO
 
+    @POST("/auth/forgot-password")
+    suspend fun findPw(@Body data: FindPasswordDTO): Response<Unit>
+
     @POST("/boards")
     suspend fun userPost(@Header("authorization") authHeader :String, @Body data: PostingDTO?): PostingResponseDTO
 
