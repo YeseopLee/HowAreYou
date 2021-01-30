@@ -8,6 +8,7 @@
     <string name="password">Password</string>
     <string name="signin">로그인</string>
     <string name="signup">회원가입</string>
+    <string name="findpw">비밀번호 찾기</string>
     <string name="author">닉네임</string>
 
     <!-- BoardName -->

@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="viewModel"
@@ -16,6 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="50dp"
         tools:context=".views.auth.SigninActivity">
 
         <ImageView
@@ -29,61 +30,46 @@
             app:layout_constraintVertical_bias="0.2"
             app:srcCompat="@drawable/howareyou" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/signin_textinputlayout_id"
+        <EditText
+            android:id="@+id/signin_edittext_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="100dp"
-
-            app:hintTextAppearance="@color/colorGray"
+            android:layout_marginRight="10dp"
+            android:hint="@string/email"
+            android:text="@={viewModel.email}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signin_imageview_logo">
+            app:layout_constraintTop_toBottomOf="@+id/signin_imageview_logo" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signin_edittext_id"
-                android:textColorHint="@color/colorGray"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={viewModel.email}"
-                android:hint="@string/email" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/signin_textinputlayout_password"
+        <EditText
+            android:id="@+id/signin_edittext_password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:text="@={viewModel.password}"
             app:boxStrokeColor="@color/colorGray"
-
             app:hintTextAppearance="@color/colorGray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signin_textinputlayout_id">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signin_edittext_password"
-                android:textColorHint="@color/colorGray"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={viewModel.password}"
-                android:hint="@string/password" />
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@+id/signin_edittext_email" />
 
         <Button
             android:id="@+id/signin_button_signin"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="10dp"
-            android:text="@string/signin"
             android:onClick="@{() -> viewModel.attemptLogin()}"
+            android:text="@string/signin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signin_textinputlayout_password" />
+            app:layout_constraintTop_toBottomOf="@+id/signin_edittext_password" />
 
         <Button
             android:id="@+id/signin_button_signup"
@@ -91,48 +77,34 @@
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="@string/signup"
             android:onClick="@{() -> viewModel.moveSignupPage()}"
+            android:text="@string/signup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signin_button_signin" />
 
         <Button
-            android:id="@+id/signin_button_google"
+            android:id="@+id/signin_button_findpw"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_signin_google"
-            android:text="sign in with google"
-            app:layout_constraintBottom_toTopOf="@+id/signin_button_facebook"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/signin_button_facebook"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            app:layout_constraintVertical_bias="0.85"
-            android:background="@drawable/btn_signin_facebook"
-            android:text="Sign in with facebook"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:onClick="@{() -> viewModel.moveSignupPage()}"
+            android:text="@string/findpw"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/signin_button_signup" />
+
 
         <ProgressBar
             android:id="@+id/signin_progressbar"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signin_button_signup"
-            android:visibility="gone" />
+            app:layout_constraintTop_toBottomOf="@+id/signin_button_signup" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
