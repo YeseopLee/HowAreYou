@@ -29,7 +29,6 @@ class NotiFragment : BaseFragment<FragmentNotificationBinding>(R.layout.fragment
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewModel = notiViewModel
-
         initAdapter()
 
     }
@@ -43,11 +42,17 @@ class NotiFragment : BaseFragment<FragmentNotificationBinding>(R.layout.fragment
 //        notification_swipelayout.isRefreshing = false
 //    }
 
+    override fun onResume() {
+        super.onResume()
+
+        notiViewModel.initData()
+
+    }
 
     private fun initAdapter(){
 
         //어댑터 연결
-        val notiAdapter = NotiAdapter(requireActivity())
+        val notiAdapter = NotiAdapter(requireActivity(),notiViewModel)
         notification_recyclerview.adapter = notiAdapter
         val lm = LinearLayoutManager(activity)
         notification_recyclerview.layoutManager = lm

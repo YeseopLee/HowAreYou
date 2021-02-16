@@ -11,7 +11,7 @@ import retrofit2.http.*
 interface ServiceApi {
 
     companion object {
-        const val BASE_URL = "http://211.208.220.233:1337"
+        const val BASE_URL = "http://124.55.8.123:1337"
     }
 
     @POST("/auth/local/register")
@@ -49,8 +49,6 @@ interface ServiceApi {
     @PUT("/usersettings/{id}")
     suspend fun userUpdatesetting(@Path("id")setting_id : String, @Body data: PostdeviceTokenDTO): Response<Unit>
 
-    @PUT("/notifications/{noti_id}")
-    suspend fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Response<Unit>
 
     @PUT("boards/{board_id}")
     suspend fun deletePost(@Header("authorization") authHeader: String, @Path("board_id")board_id: String, @Body data: deleteDTO ): Response<Unit>
@@ -87,6 +85,12 @@ interface ServiceApi {
 
     @GET("/notifications")
     suspend fun getNoti(): NotiResponseDTO
+
+    @PUT("/notifications/{noti_id}")
+    suspend fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Response<Unit>
+
+//    @PUT("/notifications")
+//    suspend fun updateNoti() : Response<Unit>
 
     @GET("/usersettings")
     suspend fun getUsersettings(): UpdateSetResponseDTO

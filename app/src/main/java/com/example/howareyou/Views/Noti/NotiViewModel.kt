@@ -1,6 +1,7 @@
 package com.example.howareyou.views.noti
 
 import android.util.Log
+import androidx.compose.ui.viewinterop.viewModel
 import androidx.databinding.ObservableBoolean
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
@@ -9,9 +10,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.howareyou.App
 import com.example.howareyou.model.LoadPostItem
 import com.example.howareyou.model.NotiItem
+import com.example.howareyou.model.updateNotiDTO
 import com.example.howareyou.repository.NotiRepository
 import com.example.howareyou.util.CoroutineHandler
 import kotlinx.coroutines.launch
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 
 class NotiViewModel @ViewModelInject constructor(
@@ -23,16 +29,16 @@ class NotiViewModel @ViewModelInject constructor(
     var _notiArray = ArrayList<NotiItem>()
     var notiArray = MutableLiveData<ArrayList<NotiItem>>()
 
+    lateinit var notiId : String
+
     init {
         initLoading.set(true)
-        loadNotification()
     }
 
     fun onRefresh() {
         isLoading.set(true)
 
-        notiArray.value?.clear()
-        notiArray.notifyObserver()
+        initData()
 
         isLoading.set(false)
     }
@@ -48,6 +54,21 @@ class NotiViewModel @ViewModelInject constructor(
 
             initLoading.set(false)
         }
+    }
+
+//    @PUT("/notifications/{noti_id}")
+//    suspend fun updateNoti(@Path("noti_id")noti_id: String, @Body data: updateNotiDTO): Response<Unit>
+
+    fun updateNoti(notiId: String) {
+        viewModelScope.launch {
+            notiRepository.updateNoti(notiId,updateNotiDTO(true))
+        }
+    }
+
+    fun initData() {
+        _notiArray.clear()
+        notiArray.notifyObserver()
+        loadNotification()
     }
 
     fun <T> MutableLiveData<T>.notifyObserver() {

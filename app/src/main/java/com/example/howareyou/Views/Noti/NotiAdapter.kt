@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.example.howareyou.views.detail.DetailActivity
 import com.example.howareyou.model.*
@@ -27,7 +28,7 @@ import retrofit2.Response
 import java.io.IOException
 import kotlin.collections.ArrayList
 
-class NotiAdapter(val context: Context) : RecyclerView.Adapter<NotiViewHolder>(){
+class NotiAdapter(val context: Context, val viewMdoel: NotiViewModel) : RecyclerView.Adapter<NotiViewHolder>(){
 
     var notiDTOList = ArrayList<NotiItem>()
 
@@ -78,6 +79,9 @@ class NotiAdapter(val context: Context) : RecyclerView.Adapter<NotiViewHolder>()
         holder.itemView.notification_textview_date.text = convtime.showTime(notiDTOList[position].createdAt)
 
         holder.itemView.setOnClickListener {
+
+            viewMdoel.updateNoti(notiDTOList[position]._id)
+
             // 이동
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("board_id",notiDTOList[position].board._id)

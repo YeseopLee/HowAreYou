@@ -190,7 +190,8 @@ class DetailViewModel @ViewModelInject constructor(
                 uploadImage(comment_id)
                 commentImageUploaded.value = false
             }
-
+            commentContent.value = ""
+            commentContent.notifyObserver()
             onRefresh()
 
         }
